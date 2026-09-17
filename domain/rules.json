@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "semantics": "open-world forward chaining",
+    "conflict_resolution": "higher priority first, then rule id"
+  },
+  "rules": [
+    {
+      "id": "R-CUSTODY-READY-001",
+      "description": "Institutional custody evidence is bridge-ready only when identity, entitlement, control, and legal authority are all evidenced.",
+      "priority": 100,
+      "when": {"all": [
+        {"fact": "identity_evidenced", "equals": true},
+        {"fact": "asset_entitlement_evidenced", "equals": true},
+        {"fact": "wallet_control_evidenced", "equals": true},
+        {"fact": "legal_authority_evidenced", "equals": true}
+      ]},
+      "then": [{"fact": "custody_bridge_ready", "value": true}],
+      "source_ids": ["occ-safekeeping"]
+    },
+    {
+      "id": "R-AUTHORITY-GAP-001",
+      "description": "Cryptographic control without evidence of legal authority leaves a legal-authority gap.",
+      "priority": 90,
+      "when": {"all": [
+        {"fact": "wallet_control_evidenced", "equals": true},
+        {"fact": "legal_authority_evidenced", "equals": false}
+      ]},
+      "then": [{"fact": "legal_authority_gap", "value": true}],
+      "source_ids": ["bip-322", "icaew-audit"]
+    },
+    {
+      "id": "R-RESERVES-INCOMPLETE-001",
+      "description": "Asset evidence without liability evidence cannot establish reserve coverage or solvency.",
+      "priority": 80,
+      "when": {"all": [
+        {"fact": "bitcoin_assets_evidenced", "equals": true},
+        {"fact": "liabilities_evidenced", "equals": false}
+      ]},
+      "then": [{"fact": "reserve_assurance_complete", "value": false}],
+      "source_ids": ["icaew-audit"]
+    }
+  ]
+}

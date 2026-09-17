@@ -4,6 +4,8 @@ An open, versioned research project mapping how capital governed by traditional 
 
 The repository is the research engine. Versioned PDF papers are compiled outputs.
 
+It now also contains the first expert-system kernel: explicit rules can infer assessments from supplied case facts and return a machine-readable proof trace.
+
 ## Research thesis
 
 Bitcoin provides narrow, machine-verifiable guarantees: signatures, script satisfaction, ledger state, and cryptographic commitments. Traditional finance and current law additionally require identity, authority, ownership records, liabilities, controls, succession, and remedies.
@@ -24,18 +26,21 @@ Structured research lives in [`domain/model.json`](domain/model.json). The valid
 
 ## Commands
 
-Requires Python 3.11 or later and has no third-party runtime dependencies.
+Requires Python 3.11 or later. Core validation and inference use only the standard library; PDF generation uses ReportLab as declared in `pyproject.toml`.
 
 ```bash
 python3 -m src.cli validate
 python3 -m src.cli build
 python3 -m src.cli build-pdf
+python3 -m src.cli infer examples/institutional-custody.json
 python3 -m unittest discover -s tests
 ```
 
 `build` produces [`generated/market-map.md`](generated/market-map.md), a human-readable view generated from the domain model.
 
 `build-pdf` produces [`output/pdf/domain-map.pdf`](output/pdf/domain-map.pdf) directly from the same model. This is a compact, reproducible research output rather than the separately authored long-form paper.
+
+`infer` evaluates a JSON case against [`domain/rules.json`](domain/rules.json). It uses open-world semantics: an absent fact is unknown, never silently false. See [`research/expert-system-architecture.md`](research/expert-system-architecture.md) for the design, quality criteria, safeguards, and roadmap.
 
 ## Publications
 
