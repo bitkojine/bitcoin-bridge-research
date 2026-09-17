@@ -64,7 +64,7 @@ flowchart LR
     WEB -->|reads embedded data, generated at build time| ART
     CLI -->|validates and reads| KB
     CLI -->|writes| ART
-    CLI -. python -m src.build_web .-> WEB
+    CLI -. "python -m src.build_web" .-> WEB
     CI -->|clone, validate, rebuild-and-diff, unittest| KB
     CI -->|compares| ART
 ```
