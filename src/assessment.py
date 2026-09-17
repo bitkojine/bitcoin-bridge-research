@@ -150,7 +150,7 @@ def derive_facts(case: dict) -> dict:
     return {"facts": facts, "traces": traces, "excluded": excluded, "errors": [], "conflicts": conflicts}
 
 
-def assess(profile: dict, case: dict[str, Any]) -> dict:
+def assess(profile: dict, case: dict[str, Any], rules: list[dict] | None = None) -> dict:
     derivation = derive_facts(case)
     facts = derivation["facts"]
     satisfied, failed, unknown = [], [], []
@@ -189,6 +189,25 @@ def assess(profile: dict, case: dict[str, Any]) -> dict:
         outcome = "insufficient_information"
     else:
         outcome = "ready_for_expert_review"
+
+    derived: dict[str, Any] = {}
+    if rules:
+        from src.expert import ExpertSystem
+
+        rule_input = {item["fact"]: True for item in satisfied}
+        rule_input.update({item["fact"]: False for item in failed})
+        inference = ExpertSystem(rules).infer(rule_input)
+        conclusions = {
+            name: [entry["value"] for entry in assertions if entry["source"] == "derived"]
+            for name, assertions in inference["facts"].items()
+        }
+        derived = {
+            "input_facts": dict(sorted(rule_input.items())),
+            "conclusions": {k: v for k, v in conclusions.items() if v},
+            "status": inference["status"],
+            "trace": inference["trace"],
+            "conflicts": inference["conflicts"],
+        }
     return {
         "assessment": profile["id"],
         "version": profile["version"],
@@ -206,6 +225,7 @@ def assess(profile: dict, case: dict[str, Any]) -> dict:
         "invalid": derivation["errors"],
         "conflicts": derivation["conflicts"],
         "excluded_evidence": derivation["excluded"],
+        "derived": derived,
         "disclaimer": "Research pre-screen only. A qualified professional must validate the evidence, applicability, and conclusion.",
     }
 
@@ -240,6 +260,12 @@ def render_markdown(result: dict) -> str:
             reason = f" {item['reason']}" if item.get("reason") else ""
             lines.append(f"- **{item['label']}** (`{item['fact']}`).{evidence}{expected}{reason}")
         lines.append("")
+    derived = result.get("derived") or {}
+    if derived.get("conclusions"):
+        lines += ["## Derived conclusions", ""]
+        for fact, values in sorted(derived["conclusions"].items()):
+            lines.append(f"- `{fact}` = {', '.join(str(v) for v in values)}. Rules: {', '.join(step['rule_id'] for step in derived['trace'])}.")
+        lines.append("")
     lines += ["## Limitation", "", result["disclaimer"], ""]
     return "\n".join(lines)
 
@@ -248,7 +274,7 @@ def load_profile(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def validate_profile(profile: dict, source_ids: set[str]) -> list[str]:
+def validate_profile(profile: dict, source_ids: set[str], fact_registry: set[str] | None = None) -> list[str]:
     errors = []
     seen = set()
     for requirement in profile.get("requirements", []):
@@ -256,6 +282,11 @@ def validate_profile(profile: dict, source_ids: set[str]) -> list[str]:
         if not fact or fact in seen:
             errors.append(f"assessment has missing or duplicate requirement fact: {fact}")
         seen.add(fact)
+        if fact_registry is not None and fact not in fact_registry:
+            errors.append(f"assessment requirement {fact} is not registered in the fact registry")
+        applies_when = requirement.get("applies_when")
+        if applies_when and fact_registry is not None and applies_when.get("fact") not in fact_registry:
+            errors.append(f"assessment requirement {fact} control fact {applies_when.get('fact')} is not registered in the fact registry")
         if not requirement.get("label"):
             errors.append(f"assessment requirement {fact} has no label")
         if not requirement.get("evidence_expected"):

@@ -2,8 +2,8 @@ window.KNOWLEDGE = {
   "model": {
     "meta": {
       "title": "Bitcoin Bridge Market Map",
-      "version": "0.1.0",
-      "verified_on": "2026-09-17",
+      "version": "0.2.0",
+      "generated_on": "2026-09-18",
       "thesis": "Commercial territory forms where companies connect Bitcoin's verifiable state and signing rules to the institutional facts required by finance and law."
     },
     "bitcoin_capabilities": [
@@ -334,49 +334,57 @@ window.KNOWLEDGE = {
         "id": "bip-322",
         "title": "BIP-322 Generic Signed Message Format",
         "url": "https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki",
-        "level": 5
+        "level": 5,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "bitcoin-transactions",
         "title": "Bitcoin Developer Guide - Transactions",
         "url": "https://developer.bitcoin.org/devguide/transactions.html",
-        "level": 5
+        "level": 5,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "occ-safekeeping",
         "title": "Crypto-Asset Safekeeping by Banking Organizations",
         "url": "https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf",
-        "level": 3
+        "level": 3,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "icaew-audit",
         "title": "Considerations for Auditing Cryptocurrencies",
         "url": "https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies",
-        "level": 4
+        "level": 4,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "nydfs-custody-2025",
         "title": "Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency",
         "url": "https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures",
-        "level": 3
+        "level": 3,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "occ-il-1184",
         "title": "Interpretive Letter 1184: Crypto-Asset Custody and Execution Services",
         "url": "https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf",
-        "level": 3
+        "level": 3,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "w3c-prov-o",
         "title": "PROV-O: The PROV Ontology",
         "url": "https://www.w3.org/TR/prov-o/",
-        "level": 2
+        "level": 2,
+        "checked_on": "2026-09-17"
       },
       {
         "id": "w3c-vc-data-model",
         "title": "Verifiable Credentials Data Model v2.0",
         "url": "https://www.w3.org/TR/vc-data-model/",
-        "level": 2
+        "level": 2,
+        "checked_on": "2026-09-17"
       }
     ],
     "claims": [
@@ -392,7 +400,7 @@ window.KNOWLEDGE = {
       {
         "id": "custody-needs-law",
         "text": "Institutional crypto safekeeping remains subject to existing custody, fiduciary, information-security, and legal requirements.",
-        "status": "corroborated",
+        "status": "supported",
         "source_ids": [
           "occ-safekeeping"
         ]
@@ -401,9 +409,10 @@ window.KNOWLEDGE = {
   },
   "rules": {
     "meta": {
-      "version": "0.1.0",
+      "version": "0.2.0",
       "semantics": "open-world forward chaining",
-      "conflict_resolution": "higher priority first, then rule id"
+      "conflict_resolution": "higher priority first, then rule id",
+      "fact_registry": "domain/facts.json"
     },
     "rules": [
       {
@@ -413,15 +422,15 @@ window.KNOWLEDGE = {
         "when": {
           "all": [
             {
-              "fact": "identity_evidenced",
+              "fact": "customer_identity_evidenced",
               "equals": true
             },
             {
-              "fact": "asset_entitlement_evidenced",
+              "fact": "asset_scope_approved",
               "equals": true
             },
             {
-              "fact": "wallet_control_evidenced",
+              "fact": "exclusive_control_evidenced",
               "equals": true
             },
             {
@@ -447,7 +456,7 @@ window.KNOWLEDGE = {
         "when": {
           "all": [
             {
-              "fact": "wallet_control_evidenced",
+              "fact": "exclusive_control_evidenced",
               "equals": true
             },
             {
@@ -499,7 +508,7 @@ window.KNOWLEDGE = {
     "id": "us-institutional-bitcoin-custody-readiness",
     "title": "US Institutional Bitcoin Custody Readiness Assessment",
     "version": "0.2.0",
-    "verified_on": "2026-09-17",
+    "checked_on": "2026-09-17",
     "scope": "Research pre-screen informed by US federal banking guidance and New York virtual-currency custody guidance. It is not a determination of compliance or legal advice.",
     "outcomes": [
       "ready_for_expert_review",

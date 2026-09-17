@@ -1,8 +1,8 @@
 {
-  "identity_evidenced": true,
-  "asset_entitlement_evidenced": true,
-  "wallet_control_evidenced": true,
+  "customer_identity_evidenced": true,
   "legal_authority_evidenced": true,
+  "exclusive_control_evidenced": true,
+  "asset_scope_approved": true,
   "bitcoin_assets_evidenced": true,
   "liabilities_evidenced": false,
   "threshold_policy_evidenced": true,

@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "title": "Companies named in the v0.1.0 research paper",
+    "paper": "publications/v0.1.0/bitcoin-bridge-market-research-draft.pdf",
+    "purpose": "Machine-checkable inventory of the market participants named in the paper. Entries with in_model true must exist in domain/model.json. Entries with in_model false are flagged illustrative_only: the paper names them, but the repository record holds no claim, source, or evidence for them. Including a name here is not due diligence.",
+    "checked_on": "2026-09-18"
+  },
+  "companies": [
+    {"name": "Coinbase Prime", "in_model": false, "illustrative_only": true, "notes": "The paper names the broader Coinbase Prime platform; the model registers Coinbase Custody."},
+    {"name": "Coinbase Custody", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Kraken", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "River", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "NYDIG", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "Galaxy", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "BlackRock iShares", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "Fidelity", "in_model": false, "illustrative_only": true, "notes": "Investment-wrapper context; the model registers Fidelity Digital Assets."},
+    {"name": "Grayscale", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "Bitwise", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "ARK/21Shares", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "BitGo", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Anchorage Digital", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Fidelity Digital Assets", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Komainu", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "Copper", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Unchained", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Casa", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Nunchuk", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Theya", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "Keeper", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "Fireblocks", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Fordefi", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Chainalysis", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "TRM Labs", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Elliptic", "in_model": true, "illustrative_only": false, "notes": ""},
+    {"name": "Crystal", "in_model": false, "illustrative_only": true, "notes": ""},
+    {"name": "DACS", "in_model": false, "illustrative_only": true, "notes": ""}
+  ]
+}

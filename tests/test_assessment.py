@@ -46,6 +46,17 @@ class CustodyReadinessTests(unittest.TestCase):
         self.assertEqual(result["outcome"], "conflict")
         self.assertIn("raw Boolean fact maps", result["invalid"][0])
 
+    def test_rules_derive_conclusions_from_accepted_evidence(self):
+        from src.expert import load_rules
+
+        rules = load_rules(ROOT / "domain/rules.json")
+        complete = assess(self.profile, evidence_case("TEST-READY", "Complete", ALL_FACTS), rules)
+        self.assertEqual(complete["derived"]["conclusions"].get("custody_bridge_ready"), [True])
+        gap_facts = {**ALL_FACTS, "legal_authority_evidenced": False}
+        gap = assess(self.profile, evidence_case("TEST-GAP", "Authority gap", gap_facts), rules)
+        self.assertEqual(gap["derived"]["conclusions"].get("legal_authority_gap"), [True])
+        self.assertNotIn("custody_bridge_ready", gap["derived"]["conclusions"])
+
     def test_expired_evidence_is_excluded(self):
         case = evidence_case("TEST-EXPIRED", "Expired", {"legal_authority_evidenced": True})
         case["evidence"][0]["scope"]["valid_until"] = "2026-01-02T00:00:00Z"

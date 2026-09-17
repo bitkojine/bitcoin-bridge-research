@@ -2,7 +2,7 @@
   "id": "us-institutional-bitcoin-custody-readiness",
   "title": "US Institutional Bitcoin Custody Readiness Assessment",
   "version": "0.2.0",
-  "verified_on": "2026-09-17",
+  "checked_on": "2026-09-17",
   "scope": "Research pre-screen informed by US federal banking guidance and New York virtual-currency custody guidance. It is not a determination of compliance or legal advice.",
   "outcomes": ["ready_for_expert_review", "not_ready", "insufficient_information", "conflict"],
   "requirements": [

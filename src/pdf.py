@@ -135,7 +135,7 @@ def build_pdf(model: dict) -> Path:
         Spacer(1, 10 * mm),
         p("Generation contract", "h2"),
         p("Every capability, equation, definition, bridge, company and evidence link on the following pages was read from the repository's structured domain model. Editing the model and rebuilding changes this document."),
-        p(f"Model version: <b>{model['meta']['version']}</b><br/>Verified on: <b>{model['meta']['verified_on']}</b>", "small"),
+        p(f"Model version: <b>{model['meta']['version']}</b><br/>Snapshot generated on: <b>{model['meta']['generated_on']}</b>", "small"),
         PageBreak(),
         p("1. The mathematical map", "h1"),
         p("Bitcoin supplies narrow, machine-verifiable guarantees. The model requires every equation to define its terms and state both what it establishes and what it does not establish."),

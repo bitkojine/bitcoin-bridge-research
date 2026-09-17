@@ -1,6 +1,6 @@
 # v0.1.0 - Initial research map
 
-Verified through 2026-09-17.
+Snapshot recorded through 2026-09-17. Per-source `checked_on` dates are metadata, not proof that every record was rechecked on that date. See [`NOTICE.md`](NOTICE.md) for the relationship between the paper and the model.
 
 ## Included
 

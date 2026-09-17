@@ -5,9 +5,10 @@
 1. Separate what Bitcoin proves from what institutions infer or record.
 2. Define every mathematical term in plain language.
 3. Prefer primary sources and current official documentation.
-4. Distinguish company claims from independently corroborated facts.
+4. Distinguish company claims from independently corroborated facts; `corroborated` requires at least two distinct sources.
 5. Preserve disagreement: contested claims should be marked, not silently removed.
-6. Update `verified_on` dates when rechecking market participants.
+6. Update `checked_on` dates when rechecking a source, company, or assessment; the snapshot is rebuilt from the model.
+7. Register any new fact name used by rules or assessment requirements in `domain/facts.json`; shared vocabulary is enforced by validation.
 
 ## Adding a company
 

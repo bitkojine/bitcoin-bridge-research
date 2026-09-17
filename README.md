@@ -16,12 +16,13 @@ This is an early prototype, not a decision system. “Expert system” describes
 | Bridge categories | 7 | An unvalidated research taxonomy |
 | Companies | 15 | Coarse category assignments, not due diligence |
 | Material claims | 2 | Insufficient for broad conclusions |
-| Sources | 8 | A small evidence base |
+| Sources | 8 | A small evidence base with recorded check dates |
 | Inference rules | 3 | Demonstrate mechanics, not domain coverage |
+| Fact registry | 20 | Shared vocabulary enforced across rules and assessment |
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 19 | Software tests, not professional validation |
+| Automated tests | 38 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
@@ -31,10 +32,13 @@ The interface is more substantial than the knowledge base behind it.
 - Checks for some duplicate identifiers, broken references, missing definitions, invalid statuses, and malformed or unsourced rules and assessment requirements.
 - Deterministic forward chaining with open-world semantics: missing is not false.
 - Proof traces, conflict reporting, and a basic explanation of unmet prerequisites.
+- A shared fact registry (`domain/facts.json`) that inference rules and the assessment must both use; validation fails on vocabulary drift.
+- An evidence-backed pre-review that passes its accepted, applicable facts into the inference rules and reports derived conclusions such as `custody_bridge_ready` and `legal_authority_gap`. A rule never fires on missing facts.
 - A custody pre-review that separates supported requirements, explicit gaps, missing facts, invalid values, and conditional sub-custodian requirements.
 - Evidence records that separate assertions, artifacts, issuers, provenance, jurisdiction and time scope, review activities, and reviewers.
 - Fact derivation only from structurally valid, accepted, applicable, unexpired evidence; incompatible accepted assertions produce a conflict.
-- Generated Markdown, PDF, and static web views.
+- Semantic claim-status validation: a claim marked `corroborated` must carry at least two distinct sources; a single source can support but not corroborate.
+- Generated Markdown, PDF, and static web views, with regression tests that the generated snapshots are fresh, the web UI boots, and versions agree across knowledge files.
 - Client-side search and an interactive custody questionnaire.
 
 ### Not established or implemented
@@ -59,7 +63,7 @@ The generated PDF is research output, not a certification, audit opinion, proof 
 
 The web UI is a static application in `dist/`. It has no server, database, accounts, API, persistence, semantic search, RAG, or LLM. It reads a generated snapshot; run `python3 -m src.build_web` after changing the domain files.
 
-Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. Source links open external pages, but the repository does not archive or hash their contents. The global `verified_on` field is metadata, not evidence that every record was rechecked on that date.
+Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. Source links open external pages, but the repository does not archive or hash their contents. The `Snapshot generated on` date shown by the UI is the snapshot build point; the `checked_on` dates recorded on sources and the assessment are metadata, not evidence that every record was rechecked on that date.
 
 ## Research thesis
 
@@ -225,14 +229,17 @@ python3 -m unittest discover -s tests
 - `build` writes `generated/market-map.md`.
 - `build-pdf` writes `output/pdf/domain-map.pdf` from the model.
 - `infer` evaluates JSON facts against the rules and returns a trace.
-- `assess` runs the custody pre-review.
+- `assess` runs the custody pre-review and then passes accepted, applicable evidence facts into the inference rules, reporting derived conclusions such as `custody_bridge_ready` and `legal_authority_gap`.
 - `build_example_cases` regenerates the explicitly synthetic evidence cases.
 - `build_web` refreshes `dist/knowledge.js` for the static UI.
+
+Validation now enforces the honesty standards as fail-fast checks: claim statuses cannot exceed their sources, rules and assessment requirements must use the shared fact registry, and the model, rules, assessment, and registry versions must agree.
 
 ## Publications
 
 - [`v0.1.0 research paper`](publications/v0.1.0/bitcoin-bridge-market-research-draft.pdf)
 - [`v0.1.0 release notes`](publications/v0.1.0/RELEASE_NOTES.md)
+- [`v0.1.0 paper notice`](publications/v0.1.0/NOTICE.md) — states which paper claims the model supports and which names are illustrative only.
 
 ## Evidence policy
 

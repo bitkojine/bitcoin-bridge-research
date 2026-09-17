@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "title": "Shared fact registry",
+    "version": "0.2.0",
+    "purpose": "Single vocabulary for the evidence-backed assessment and the inference rules. Rule conditions, rule conclusions, assessment requirements, and assessment control facts must all reference names registered here; validation fails otherwise."
+  },
+  "facts": [
+    {"name": "customer_identity_evidenced", "role": "requirement", "notes": "Pre-review requirement: customer identity and due diligence."},
+    {"name": "legal_authority_evidenced", "role": "requirement", "notes": "Pre-review requirement: legal authority and mandate."},
+    {"name": "asset_scope_approved", "role": "requirement", "notes": "Pre-review requirement: Bitcoin asset and ledger risk assessment."},
+    {"name": "exclusive_control_evidenced", "role": "requirement", "notes": "Pre-review requirement: control against unilateral transfer."},
+    {"name": "customer_assets_segregated", "role": "requirement", "notes": "Pre-review requirement: customer-asset segregation."},
+    {"name": "books_reconcile_to_chain", "role": "requirement", "notes": "Pre-review requirement: books and on-chain reconciliation."},
+    {"name": "key_lifecycle_controls_documented", "role": "requirement", "notes": "Pre-review requirement: key lifecycle controls."},
+    {"name": "recovery_and_compromise_plan_tested", "role": "requirement", "notes": "Pre-review requirement: tested recovery and compromise plans."},
+    {"name": "cybersecurity_controls_assessed", "role": "requirement", "notes": "Pre-review requirement: cybersecurity control assessment."},
+    {"name": "subcustodian_due_diligence_complete", "role": "requirement", "notes": "Pre-review requirement: sub-custodian and third-party due diligence."},
+    {"name": "customer_agreement_complete", "role": "requirement", "notes": "Pre-review requirement: customer agreement, duties, and disclosures."},
+    {"name": "independent_assurance_current", "role": "requirement", "notes": "Pre-review requirement: current independent assurance or audit."},
+    {"name": "subcustodian_used", "role": "control", "notes": "Controls whether sub-custodian due diligence applies."},
+    {"name": "bitcoin_assets_evidenced", "role": "input", "notes": "Rule input, not currently covered by the pre-review."},
+    {"name": "liabilities_evidenced", "role": "input", "notes": "Rule input, not currently covered by the pre-review."},
+    {"name": "threshold_policy_evidenced", "role": "input", "notes": "Rule input, not currently covered by the pre-review."},
+    {"name": "recovery_tested", "role": "input", "notes": "Rule input, not currently covered by the pre-review."},
+    {"name": "custody_bridge_ready", "role": "derived", "notes": "Derived by R-CUSTODY-READY-001."},
+    {"name": "legal_authority_gap", "role": "derived", "notes": "Derived by R-AUTHORITY-GAP-001."},
+    {"name": "reserve_assurance_complete", "role": "derived", "notes": "Derived by R-RESERVES-INCOMPLETE-001."}
+  ]
+}

@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_PATH = ROOT / "domain" / "model.json"
 RULES_PATH = ROOT / "domain" / "rules.json"
 ASSESSMENT_PATH = ROOT / "domain" / "assessments" / "custody-readiness.json"
+FACTS_PATH = ROOT / "domain" / "facts.json"
 OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 
 VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted"}
@@ -15,6 +16,14 @@ VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale
 
 def load_model() -> dict:
     return json.loads(MODEL_PATH.read_text(encoding="utf-8"))
+
+
+def claim_status_matches_sources(status: str, source_ids: list[str]) -> list[str]:
+    """The recorded status must not be stronger than the sources can support."""
+    distinct = len(set(source_ids))
+    if status == "corroborated" and distinct < 2:
+        return ["status corroborated requires at least two distinct sources"]
+    return []
 
 
 def duplicates(items: list[dict]) -> set[str]:
@@ -30,6 +39,10 @@ def duplicates(items: list[dict]) -> set[str]:
 
 def validate(model: dict) -> list[str]:
     errors: list[str] = []
+    meta = model.get("meta", {})
+    for field in ("title", "version", "generated_on"):
+        if not meta.get(field):
+            errors.append(f"meta.{field} is required")
     collections = [
         "bitcoin_capabilities", "finance_requirements", "legal_requirements",
         "bridges", "companies", "sources", "claims"
@@ -74,12 +87,19 @@ def validate(model: dict) -> list[str]:
     for source in model.get("sources", []):
         if source.get("level") not in {1, 2, 3, 4, 5}:
             errors.append(f"source {source['id']} has invalid evidence level")
+        if not source.get("checked_on"):
+            errors.append(f"source {source['id']} has no checked_on date")
 
     for claim in model.get("claims", []):
         if claim.get("status") not in VALID_STATUSES:
             errors.append(f"claim {claim['id']} has invalid status")
         if not claim.get("source_ids"):
             errors.append(f"claim {claim['id']} has no sources")
+        errors.extend(
+            f"claim {claim['id']} {problem}" for problem in claim_status_matches_sources(
+                claim.get("status", ""), claim.get("source_ids", [])
+            )
+        )
         for ref in claim.get("source_ids", []):
             if ref not in source_ids:
                 errors.append(f"claim {claim['id']} references unknown source {ref}")
@@ -91,7 +111,7 @@ def build_markdown(model: dict) -> str:
     lines = [
         f"# {model['meta']['title']}", "",
         f"Version: `{model['meta']['version']}`  ",
-        f"Verified on: `{model['meta']['verified_on']}`", "",
+        f"Snapshot generated on: `{model['meta']['generated_on']}`", "",
         model["meta"]["thesis"], "", "## Bitcoin capabilities", ""
     ]
     for item in model["bitcoin_capabilities"]:
@@ -108,8 +128,31 @@ def build_markdown(model: dict) -> str:
     lines += ["## Claims", ""]
     for claim in model["claims"]:
         lines.append(f"- **{claim['status']}** - {claim['text']} Sources: {', '.join(claim['source_ids'])}")
+    lines += ["", "## Sources", ""]
+    for source in model["sources"]:
+        lines.append(
+            f"- **{source['title']}** (`{source['id']}`, level {source['level']}). "
+            f"Checked on: `{source['checked_on']}`. {source['url']}"
+        )
     lines.append("")
     return "\n".join(lines)
+
+
+def load_facts() -> dict:
+    return json.loads(FACTS_PATH.read_text(encoding="utf-8"))
+
+
+def validate_versions(model: dict, rules_doc: dict, profile: dict) -> list[str]:
+    versions = {
+        "model": model.get("meta", {}).get("version"),
+        "rules": (rules_doc.get("meta") or {}).get("version"),
+        "assessment": profile.get("version"),
+        "fact registry": (load_facts().get("meta") or {}).get("version"),
+    }
+    distinct = {value for value in versions.values() if value}
+    if len(distinct) > 1:
+        return [f"version mismatch across knowledge files: {versions}"]
+    return []
 
 
 def main() -> int:
@@ -119,15 +162,18 @@ def main() -> int:
     args = parser.parse_args()
     model = load_model()
     errors = validate(model)
-    from src.expert import load_rules, validate_rules
+    from src.expert import validate_rules
 
-    rules = load_rules(RULES_PATH)
+    rules_doc = json.loads(RULES_PATH.read_text(encoding="utf-8"))
+    rules = rules_doc["rules"]
     source_ids = {item["id"] for item in model.get("sources", [])}
-    errors += validate_rules(rules, source_ids)
+    fact_names = {item["name"] for item in load_facts().get("facts", [])}
+    errors += validate_rules(rules, source_ids, fact_names)
     from src.assessment import load_profile, validate_profile
 
     profile = load_profile(ASSESSMENT_PATH)
-    errors += validate_profile(profile, source_ids)
+    errors += validate_profile(profile, source_ids, fact_names)
+    errors += validate_versions(model, rules_doc, profile)
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
@@ -150,7 +196,7 @@ def main() -> int:
         from src.assessment import assess, render_markdown
 
         facts = json.loads(Path(args.input).read_text(encoding="utf-8"))
-        result = assess(profile, facts)
+        result = assess(profile, facts, rules)
         print(render_markdown(result))
         return 0
     if args.command == "build-pdf":

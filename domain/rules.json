@@ -1,8 +1,9 @@
 {
   "meta": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "semantics": "open-world forward chaining",
-    "conflict_resolution": "higher priority first, then rule id"
+    "conflict_resolution": "higher priority first, then rule id",
+    "fact_registry": "domain/facts.json"
   },
   "rules": [
     {
@@ -10,9 +11,9 @@
       "description": "Institutional custody evidence is bridge-ready only when identity, entitlement, control, and legal authority are all evidenced.",
       "priority": 100,
       "when": {"all": [
-        {"fact": "identity_evidenced", "equals": true},
-        {"fact": "asset_entitlement_evidenced", "equals": true},
-        {"fact": "wallet_control_evidenced", "equals": true},
+        {"fact": "customer_identity_evidenced", "equals": true},
+        {"fact": "asset_scope_approved", "equals": true},
+        {"fact": "exclusive_control_evidenced", "equals": true},
         {"fact": "legal_authority_evidenced", "equals": true}
       ]},
       "then": [{"fact": "custody_bridge_ready", "value": true}],
@@ -23,7 +24,7 @@
       "description": "Cryptographic control without evidence of legal authority leaves a legal-authority gap.",
       "priority": 90,
       "when": {"all": [
-        {"fact": "wallet_control_evidenced", "equals": true},
+        {"fact": "exclusive_control_evidenced", "equals": true},
         {"fact": "legal_authority_evidenced", "equals": false}
       ]},
       "then": [{"fact": "legal_authority_gap", "value": true}],

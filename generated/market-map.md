@@ -1,7 +1,7 @@
 # Bitcoin Bridge Market Map
 
-Version: `0.1.0`  
-Verified on: `2026-09-17`
+Version: `0.2.0`  
+Snapshot generated on: `2026-09-18`
 
 Commercial territory forms where companies connect Bitcoin's verifiable state and signing rules to the institutional facts required by finance and law.
 
@@ -73,4 +73,15 @@ Companies: **Casa**, **Unchained**
 ## Claims
 
 - **corroborated** - A valid signature does not by itself establish legal ownership or lawful authority. Sources: bip-322, icaew-audit
-- **corroborated** - Institutional crypto safekeeping remains subject to existing custody, fiduciary, information-security, and legal requirements. Sources: occ-safekeeping
+- **supported** - Institutional crypto safekeeping remains subject to existing custody, fiduciary, information-security, and legal requirements. Sources: occ-safekeeping
+
+## Sources
+
+- **BIP-322 Generic Signed Message Format** (`bip-322`, level 5). Checked on: `2026-09-17`. https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki
+- **Bitcoin Developer Guide - Transactions** (`bitcoin-transactions`, level 5). Checked on: `2026-09-17`. https://developer.bitcoin.org/devguide/transactions.html
+- **Crypto-Asset Safekeeping by Banking Organizations** (`occ-safekeeping`, level 3). Checked on: `2026-09-17`. https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf
+- **Considerations for Auditing Cryptocurrencies** (`icaew-audit`, level 4). Checked on: `2026-09-17`. https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies
+- **Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency** (`nydfs-custody-2025`, level 3). Checked on: `2026-09-17`. https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures
+- **Interpretive Letter 1184: Crypto-Asset Custody and Execution Services** (`occ-il-1184`, level 3). Checked on: `2026-09-17`. https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf
+- **PROV-O: The PROV Ontology** (`w3c-prov-o`, level 2). Checked on: `2026-09-17`. https://www.w3.org/TR/prov-o/
+- **Verifiable Credentials Data Model v2.0** (`w3c-vc-data-model`, level 2). Checked on: `2026-09-17`. https://www.w3.org/TR/vc-data-model/

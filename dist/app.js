@@ -9,7 +9,7 @@ const byId = Object.fromEntries(allItems.map(x => [x.id, x]));
 const sourceById = Object.fromEntries(model.sources.map(x => [x.id, x]));
 
 document.querySelector('#version').textContent = `v${model.meta.version}`;
-document.querySelector('#verified').textContent = model.meta.verified_on;
+document.querySelector('#verified').textContent = model.meta.generated_on;
 document.querySelector('#assessment-scope').textContent = assessment.scope;
 document.querySelector('#metrics').innerHTML = [
   ['Capabilities', model.bitcoin_capabilities.length], ['Requirements', model.finance_requirements.length + model.legal_requirements.length],
@@ -71,7 +71,7 @@ function renderAssessment(){
 
 const levels={1:'Company marketing',2:'Official technical documentation',3:'Regulatory or legal filing',4:'Independent professional evidence',5:'Reproducible primary data'};
 document.querySelector('#source-legend').innerHTML=Object.entries(levels).map(([n,l])=>`<span class="legend-item"><b>${n}</b> ${l}</span>`).join('');
-document.querySelector('#source-grid').innerHTML=model.sources.sort((a,b)=>b.level-a.level).map(s=>`<article class="source-card"><span class="level">EVIDENCE LEVEL ${s.level}</span><h3>${s.title}</h3><a href="${s.url}" target="_blank" rel="noreferrer">Open primary source ↗</a></article>`).join('');
+document.querySelector('#source-grid').innerHTML=model.sources.sort((a,b)=>b.level-a.level).map(s=>`<article class="source-card"><span class="level">EVIDENCE LEVEL ${s.level} · CHECKED ${s.checked_on}</span><h3>${s.title}</h3><a href="${s.url}" target="_blank" rel="noreferrer">Open primary source ↗</a></article>`).join('');
 const can=['Represent the current domain as structured data','Search concepts, companies, claims and relationships','Trace claims and assessment requirements to sources','Run a deterministic custody-readiness pre-screen','Distinguish explicit gaps from missing information'];
 const cannot=['Authenticate the facts entered by a user','Determine legal ownership from key control','Give legal, compliance, tax or investment advice','Prove that every wallet, key copy or liability was disclosed','Track regulatory changes or news automatically','Claim expert-level coverage or professional validation'];
 document.querySelector('#can-list').innerHTML=can.map(x=>`<li>${x}</li>`).join('');document.querySelector('#cannot-list').innerHTML=cannot.map(x=>`<li>${x}</li>`).join('');

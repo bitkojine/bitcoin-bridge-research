@@ -117,7 +117,7 @@ def load_rules(path: Path) -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))["rules"]
 
 
-def validate_rules(rules: list[dict], source_ids: set[str]) -> list[str]:
+def validate_rules(rules: list[dict], source_ids: set[str], fact_registry: set[str] | None = None) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
     for rule in rules:
@@ -138,9 +138,13 @@ def validate_rules(rules: list[dict], source_ids: set[str]) -> list[str]:
         for item in conditions:
             if not item.get("fact") or not ({"equals", "known"} & item.keys()):
                 errors.append(f"rule {rule_id} has a malformed condition")
+            if fact_registry is not None and item.get("fact") not in fact_registry:
+                errors.append(f"rule {rule_id} condition references unregistered fact {item.get('fact')}")
         for item in conclusions:
             if not item.get("fact") or "value" not in item:
                 errors.append(f"rule {rule_id} has a malformed conclusion")
+            if fact_registry is not None and item.get("fact") not in fact_registry:
+                errors.append(f"rule {rule_id} conclusion references unregistered fact {item.get('fact')}")
         if not rule.get("source_ids"):
             errors.append(f"rule {rule_id} has no sources")
         for source_id in rule.get("source_ids", []):
