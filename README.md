@@ -16,12 +16,12 @@ This is an early prototype, not a decision system. “Expert system” describes
 | Bridge categories | 7 | An unvalidated research taxonomy |
 | Companies | 15 | Coarse category assignments, not due diligence |
 | Material claims | 2 | Insufficient for broad conclusions |
-| Sources | 6 | A small evidence base |
+| Sources | 8 | A small evidence base |
 | Inference rules | 3 | Demonstrate mechanics, not domain coverage |
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 15 | Software tests, not professional validation |
+| Automated tests | 19 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
@@ -32,6 +32,8 @@ The interface is more substantial than the knowledge base behind it.
 - Deterministic forward chaining with open-world semantics: missing is not false.
 - Proof traces, conflict reporting, and a basic explanation of unmet prerequisites.
 - A custody pre-review that separates supported requirements, explicit gaps, missing facts, invalid values, and conditional sub-custodian requirements.
+- Evidence records that separate assertions, artifacts, issuers, provenance, jurisdiction and time scope, review activities, and reviewers.
+- Fact derivation only from structurally valid, accepted, applicable, unexpired evidence; incompatible accepted assertions produce a conflict.
 - Generated Markdown, PDF, and static web views.
 - Client-side search and an interactive custody questionnaire.
 
@@ -45,7 +47,7 @@ The interface is more substantial than the knowledge base behind it.
 - Current licensing, qualification, legality, solvency, safety, or suitability of any company, product, or arrangement.
 - Material coverage of any complete body of law, regulation, accounting, audit, Bitcoin operations, or institutional policy.
 - Jurisdiction and applicability analysis, effective dates, amendment history, precedent, exceptions, safe harbors, or conflicting authorities.
-- Case-evidence provenance such as hashes, issuer identity, custody chain, observation method, reviewer, or expiry.
+- Authentication of recorded evidence metadata, issuers, reviewers, hashes, signatures, or chains of custody. The schema can record them; the software cannot prove them.
 - Full truth maintenance, calibrated uncertainty, expert approval, change-impact analysis, or signed releases.
 - Independently reviewed cases, external validation data, coverage measures, error rates, or usability evidence.
 - Production controls: authentication, authorization, audit logs, security design, backups, monitoring, or a threat model.
@@ -57,7 +59,7 @@ The generated PDF is research output, not a certification, audit opinion, proof 
 
 The web UI is a static application in `dist/`. It has no server, database, accounts, API, persistence, semantic search, RAG, or LLM. It reads a generated snapshot; run `python3 -m src.build_web` after changing the domain files.
 
-Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its JavaScript questionnaire duplicates the Python assessment logic and can drift from it; only the Python path is covered by the current tests. Source links open external pages, but the repository does not archive or hash their contents. The global `verified_on` field is metadata, not evidence that every record was rechecked on that date.
+Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. Source links open external pages, but the repository does not archive or hash their contents. The global `verified_on` field is metadata, not evidence that every record was rechecked on that date.
 
 ## Research thesis
 
@@ -89,7 +91,8 @@ The current model recognizes:
 | Claim | A proposition asserted by the project |
 | Source | A URL and metadata offered in support |
 | Rule | Conditions mapped to a derived conclusion |
-| Case fact | A supplied value, usually Boolean |
+| Evidence record | An assertion linked to an artifact, issuer, provenance, scope, and review activity |
+| Case fact | A Boolean value derived from accepted, applicable evidence records |
 | Assessment requirement | An evidence question in a pre-review |
 | Outcome | A computed label such as `not_ready` |
 
@@ -101,6 +104,7 @@ Company --------------assigned_to-> Bridge
 Claim ----------------supported_by-> Source
 Rule -----------------uses_facts---> Conclusion
 AssessmentRequirement-cites-------> Source
+EvidenceRecord -------supports-----> CaseFact
 ```
 
 Cryptographic control, legal ownership, beneficial entitlement, identity, authority, and consent are distinct. A valid signature establishes a cryptographic result, not legal title.
@@ -113,7 +117,7 @@ Current modeling defects:
 - `Source` is mainly a URL; passages, authors, issuing authority, publication history, jurisdiction, legal status, and supersession are incomplete.
 - Five general legal concepts stand in for statutes, regulations, cases, contracts, legal tests, exceptions, burdens, and remedies.
 - Jurisdiction and time are not first-class participants in inference.
-- A Boolean such as `legal_authority_evidenced: true` collapses the document, issuer, subject, reviewer, method, scope, date, authenticity, expiry, and exceptions into one bit.
+- The new evidence record preserves artifact, issuer, subject, reviewer, method, scope, jurisdiction, dates, integrity metadata, and review disposition. The final proposition is still Boolean, so contested degrees, partial scope, compound claims, and legal sufficiency remain flattened.
 - Persons, organizations, accounts, wallets, descriptors, keys, UTXOs, transactions, contracts, trusts, estates, beneficiaries, regulators, courts, and auditors are not fully typed.
 - There is no identity-resolution model for names, keys, accounts, subsidiaries, or documents.
 
@@ -126,7 +130,7 @@ The system draws on four kinds of input:
 1. Simplified Bitcoin verification rules and technical sources.
 2. External publications represented by URLs and metadata.
 3. Project-authored claims, classifications, requirements, and rules.
-4. Unauthenticated facts supplied by a user.
+4. User-supplied evidence records whose authenticity is not independently established.
 
 Claim statuses, evidence levels, rule traces, open-world handling, and conflict reporting improve inspectability. They do not establish that a premise is true, a source applies, a rule is valid, or a conclusion is correct. A trace establishes only that a particular rule version transformed accepted premises into an output.
 
@@ -158,7 +162,7 @@ Epistemic weaknesses:
 - Claims do not identify individual extractors, interpreters, or reviewers.
 - `corroborated` has no formal independence, relevance, or sufficiency test.
 - Company classifications generally lack claim-level citations and dates.
-- The assessment requests evidence but evaluates unchecked Boolean assertions.
+- The engine checks evidence-record structure, review disposition, jurisdiction, validity period, and conflicts, but it cannot authenticate the record or determine whether the review was competent.
 - Accuracy, recall, false-assurance risk, and reviewer agreement are unknown.
 
 The repository can show what it asserts, where it looked, and how code transformed inputs. It cannot yet defend its conclusions as professional knowledge.
@@ -213,6 +217,7 @@ python3 -m src.cli build-pdf
 python3 -m src.cli infer examples/institutional-custody.json
 python3 -m src.cli assess examples/custody-readiness-complete.json
 python3 -m src.cli assess examples/custody-readiness-gaps.json
+python3 -m src.build_example_cases
 python3 -m src.build_web
 python3 -m unittest discover -s tests
 ```
@@ -221,6 +226,7 @@ python3 -m unittest discover -s tests
 - `build-pdf` writes `output/pdf/domain-map.pdf` from the model.
 - `infer` evaluates JSON facts against the rules and returns a trace.
 - `assess` runs the custody pre-review.
+- `build_example_cases` regenerates the explicitly synthetic evidence cases.
 - `build_web` refreshes `dist/knowledge.js` for the static UI.
 
 ## Publications

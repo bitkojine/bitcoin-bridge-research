@@ -1,15 +1,558 @@
 {
-  "customer_identity_evidenced": true,
-  "legal_authority_evidenced": true,
-  "asset_scope_approved": true,
-  "exclusive_control_evidenced": true,
-  "customer_assets_segregated": true,
-  "books_reconcile_to_chain": true,
-  "key_lifecycle_controls_documented": true,
-  "recovery_and_compromise_plan_tested": true,
-  "cybersecurity_controls_assessed": true,
-  "subcustodian_used": true,
-  "subcustodian_due_diligence_complete": true,
-  "customer_agreement_complete": true,
-  "independent_assurance_current": true
+  "case": {
+    "schema_version": "1.0.0",
+    "id": "CASE-COMPLETE-SYNTHETIC",
+    "title": "Synthetic complete custody case",
+    "assessed_at": "2026-09-17T12:00:00Z",
+    "jurisdiction": "US-NY",
+    "subject_id": "ORG-EXAMPLE"
+  },
+  "evidence": [
+    {
+      "id": "EV-001",
+      "assertion": {
+        "fact": "customer_identity_evidenced",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for customer_identity_evidenced",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-002",
+      "assertion": {
+        "fact": "legal_authority_evidenced",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for legal_authority_evidenced",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-003",
+      "assertion": {
+        "fact": "asset_scope_approved",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for asset_scope_approved",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-004",
+      "assertion": {
+        "fact": "exclusive_control_evidenced",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for exclusive_control_evidenced",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-005",
+      "assertion": {
+        "fact": "customer_assets_segregated",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for customer_assets_segregated",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-006",
+      "assertion": {
+        "fact": "books_reconcile_to_chain",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for books_reconcile_to_chain",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-007",
+      "assertion": {
+        "fact": "key_lifecycle_controls_documented",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for key_lifecycle_controls_documented",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-008",
+      "assertion": {
+        "fact": "recovery_and_compromise_plan_tested",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for recovery_and_compromise_plan_tested",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-009",
+      "assertion": {
+        "fact": "cybersecurity_controls_assessed",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for cybersecurity_controls_assessed",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-010",
+      "assertion": {
+        "fact": "subcustodian_used",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for subcustodian_used",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-011",
+      "assertion": {
+        "fact": "subcustodian_due_diligence_complete",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for subcustodian_due_diligence_complete",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-012",
+      "assertion": {
+        "fact": "customer_agreement_complete",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for customer_agreement_complete",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    },
+    {
+      "id": "EV-013",
+      "assertion": {
+        "fact": "independent_assurance_current",
+        "value": true,
+        "subject_id": "ORG-EXAMPLE"
+      },
+      "artifact": {
+        "type": "synthetic-example-record",
+        "title": "Example evidence for independent_assurance_current",
+        "integrity_not_recorded_reason": "Synthetic example; no real artifact exists."
+      },
+      "issuer": {
+        "id": "ORG-EXAMPLE",
+        "name": "Example Custody Institution",
+        "type": "organization"
+      },
+      "provenance": {
+        "obtained_at": "2026-09-17T09:00:00Z",
+        "method": "Generated as non-production repository example",
+        "chain_of_custody": "None; synthetic data"
+      },
+      "scope": {
+        "jurisdictions": [
+          "US-NY"
+        ],
+        "description": "Synthetic institutional Bitcoin custody example",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2026-12-31T23:59:59Z"
+      },
+      "review": {
+        "status": "accepted",
+        "reviewed_at": "2026-09-17T10:00:00Z",
+        "method": "Synthetic example review; no professional validation",
+        "notes": "Demonstrates data shape and engine behavior only.",
+        "reviewer": {
+          "id": "PERSON-EXAMPLE",
+          "name": "Example Reviewer",
+          "role": "synthetic test reviewer"
+        }
+      }
+    }
+  ]
 }

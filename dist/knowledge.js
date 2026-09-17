@@ -365,6 +365,18 @@ window.KNOWLEDGE = {
         "title": "Interpretive Letter 1184: Crypto-Asset Custody and Execution Services",
         "url": "https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf",
         "level": 3
+      },
+      {
+        "id": "w3c-prov-o",
+        "title": "PROV-O: The PROV Ontology",
+        "url": "https://www.w3.org/TR/prov-o/",
+        "level": 2
+      },
+      {
+        "id": "w3c-vc-data-model",
+        "title": "Verifiable Credentials Data Model v2.0",
+        "url": "https://www.w3.org/TR/vc-data-model/",
+        "level": 2
       }
     ],
     "claims": [
@@ -486,7 +498,7 @@ window.KNOWLEDGE = {
   "assessment": {
     "id": "us-institutional-bitcoin-custody-readiness",
     "title": "US Institutional Bitcoin Custody Readiness Assessment",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "verified_on": "2026-09-17",
     "scope": "Research pre-screen informed by US federal banking guidance and New York virtual-currency custody guidance. It is not a determination of compliance or legal advice.",
     "outcomes": [

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitkojine/bitcoin-bridge-research/domain/schemas/evidence-case.schema.json",
+  "title": "Evidence-backed assessment case",
+  "type": "object",
+  "required": ["case", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "id", "title", "assessed_at", "jurisdiction", "subject_id"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "assessed_at": {"type": "string", "format": "date-time"},
+        "jurisdiction": {"type": "string", "minLength": 1},
+        "subject_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidenceRecord"}
+    }
+  },
+  "$defs": {
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "type": {"enum": ["person", "organization", "software"]}
+      }
+    },
+    "evidenceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "assertion", "artifact", "issuer", "provenance", "scope", "review"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "assertion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fact", "value", "subject_id"],
+          "properties": {
+            "fact": {"type": "string", "minLength": 1},
+            "value": {"type": "boolean"},
+            "subject_id": {"type": "string", "minLength": 1}
+          }
+        },
+        "artifact": {
+          "type": "object",
+          "required": ["type", "title"],
+          "properties": {
+            "type": {"type": "string", "minLength": 1},
+            "title": {"type": "string", "minLength": 1},
+            "uri": {"type": "string", "format": "uri"},
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "integrity_not_recorded_reason": {"type": "string", "minLength": 1}
+          },
+          "oneOf": [
+            {"required": ["sha256"]},
+            {"required": ["integrity_not_recorded_reason"]}
+          ]
+        },
+        "issuer": {"$ref": "#/$defs/agent"},
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["obtained_at", "method"],
+          "properties": {
+            "obtained_at": {"type": "string", "format": "date-time"},
+            "method": {"type": "string", "minLength": 1},
+            "chain_of_custody": {"type": "string"}
+          }
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["jurisdictions", "description"],
+          "properties": {
+            "jurisdictions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "description": {"type": "string", "minLength": 1},
+            "valid_from": {"type": "string", "format": "date-time"},
+            "valid_until": {"type": "string", "format": "date-time"}
+          }
+        },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reviewed_at", "method", "reviewer"],
+          "properties": {
+            "status": {"enum": ["accepted", "rejected", "contested"]},
+            "reviewed_at": {"type": "string", "format": "date-time"},
+            "method": {"type": "string", "minLength": 1},
+            "notes": {"type": "string"},
+            "reviewer": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "name", "role"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "name": {"type": "string", "minLength": 1},
+                "role": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

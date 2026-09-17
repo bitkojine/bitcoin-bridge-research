@@ -93,7 +93,9 @@
     {"id": "occ-safekeeping", "title": "Crypto-Asset Safekeeping by Banking Organizations", "url": "https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf", "level": 3},
     {"id": "icaew-audit", "title": "Considerations for Auditing Cryptocurrencies", "url": "https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies", "level": 4},
     {"id": "nydfs-custody-2025", "title": "Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency", "url": "https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures", "level": 3},
-    {"id": "occ-il-1184", "title": "Interpretive Letter 1184: Crypto-Asset Custody and Execution Services", "url": "https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf", "level": 3}
+    {"id": "occ-il-1184", "title": "Interpretive Letter 1184: Crypto-Asset Custody and Execution Services", "url": "https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf", "level": 3},
+    {"id": "w3c-prov-o", "title": "PROV-O: The PROV Ontology", "url": "https://www.w3.org/TR/prov-o/", "level": 2},
+    {"id": "w3c-vc-data-model", "title": "Verifiable Credentials Data Model v2.0", "url": "https://www.w3.org/TR/vc-data-model/", "level": 2}
   ],
   "claims": [
     {"id": "signature-not-title", "text": "A valid signature does not by itself establish legal ownership or lawful authority.", "status": "corroborated", "source_ids": ["bip-322", "icaew-audit"]},
