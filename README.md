@@ -22,7 +22,7 @@ This is an early prototype, not a decision system. “Expert system” describes
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 38 | Software tests, not professional validation |
+| Automated tests | 42 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
@@ -40,6 +40,7 @@ The interface is more substantial than the knowledge base behind it.
 - Semantic claim-status validation: a claim marked `corroborated` must carry at least two distinct sources; a single source can support but not corroborate.
 - Generated Markdown, PDF, and static web views, with regression tests that the generated snapshots are fresh, the web UI boots, and versions agree across knowledge files.
 - Client-side search and an interactive custody questionnaire.
+- A C4 architecture description (`docs/architecture-c4.md`) whose file references, Level 4 code anchors, CLI subcommands, and snapshot contract table are regression-tested so the document cannot drift from the code it describes.
 
 ### Not established or implemented
 

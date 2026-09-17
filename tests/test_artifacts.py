@@ -6,7 +6,8 @@ These encode the repository's honesty standards as failing tests:
 - versions must be consistent across knowledge files;
 - rule and assessment facts must come from one shared vocabulary;
 - claim statuses must not outrun their sources;
-- the research paper's named companies must be declared against the model.
+- the research paper's named companies must be declared against the model;
+- the C4 architecture document must not drift from the code it describes.
 """
 
 import json
@@ -159,6 +160,91 @@ class PaperConsistencyTests(unittest.TestCase):
         notice = ROOT / "publications/v0.1.0/NOTICE.md"
         self.assertTrue(notice.exists())
         self.assertIn("not generated", notice.read_text(encoding="utf-8"))
+
+
+class ArchitectureDocTests(unittest.TestCase):
+    """The C4 document (docs/architecture-c4.md) must not drift from the code.
+
+    Every backticked file path or glob must resolve, every Level 4 anchor must
+    point at the named function, the CLI subcommand list must match argparse
+    choices, and the snapshot contract table must equal the live knowledge.
+    """
+
+    DOC = ROOT / "docs" / "architecture-c4.md"
+
+    def read_doc(self) -> str:
+        return self.DOC.read_text(encoding="utf-8")
+
+    def test_referenced_files_and_globs_exist(self):
+        text = self.read_doc()
+        tokens = re.findall(r"`([A-Za-z0-9_./*-]+\.(?:py|json|yml|yaml|js|css|html|md|toml))`", text)
+        self.assertTrue(tokens, "expected backticked file references in the C4 document")
+        for token in tokens:
+            if "*" in token:
+                self.assertTrue(list(ROOT.glob(token)), f"C4 glob has no matches: {token}")
+            else:
+                self.assertTrue((ROOT / token).exists(), f"C4 references missing file: {token}")
+
+    def test_level4_anchors_resolve_to_the_named_function(self):
+        text = self.read_doc()
+        anchors = re.findall(
+            r"`(src/[a-zA-Z0-9_]+\.py):(\d+)`[^`]*`([a-zA-Z_][a-zA-Z0-9_]*(?:\(\))?)`", text
+        )
+        self.assertTrue(anchors, "expected src file:line anchors in the C4 Level 4 section")
+        for path, line_str, name in anchors:
+            line = int(line_str)
+            name = name.rstrip("()")
+            source = (ROOT / path).read_text(encoding="utf-8").splitlines()
+            message = f"anchor {path}:{line} ({name})"
+            self.assertLessEqual(line, len(source), f"{message} is past the end of the file")
+            self.assertIn(
+                f"def {name}(", source[line - 1],
+                f"{message} does not define the named function on that line",
+            )
+
+    def test_snapshot_contract_matches_live_knowledge(self):
+        text = self.read_doc()
+        match = re.search(r"\|\s*metric\s*\|\s*value\s*\|\n((?:\|[^\n]+\|\n)+)", text)
+        self.assertIsNotNone(match, "snapshot contract table not found in the C4 document")
+        expected = {}
+        for row in match.group(1).strip().splitlines():
+            cells = [cell.strip() for cell in row.split("|")[1:-1]]
+            if all(re.fullmatch(r":?-+:?", cell or "") for cell in cells):
+                continue  # markdown table separator row
+            self.assertEqual(len(cells), 2, f"malformed snapshot row: {row}")
+            expected[cells[0]] = cells[1]
+
+        model = load_model()
+        rules_doc = json.loads((ROOT / "domain/rules.json").read_text(encoding="utf-8"))
+        profile = load_profile(ROOT / "domain/assessments/custody-readiness.json")
+        live = {
+            "model version": model["meta"]["version"],
+            "bitcoin capabilities": len(model["bitcoin_capabilities"]),
+            "finance requirements": len(model["finance_requirements"]),
+            "legal requirements": len(model["legal_requirements"]),
+            "bridges": len(model["bridges"]),
+            "companies": len(model["companies"]),
+            "sources": len(model["sources"]),
+            "claims": len(model["claims"]),
+            "assessment requirements": len(profile["requirements"]),
+            "inference rules": len(rules_doc["rules"]),
+            "fact registry facts": len(load_facts()["facts"]),
+        }
+        self.assertEqual(set(expected), set(live), "snapshot metric names differ from live knowledge")
+        for metric, value in live.items():
+            self.assertEqual(expected[metric], str(value), f"snapshot metric is stale: {metric}")
+
+    def test_cli_subcommands_match_argparse_choices(self):
+        text = self.read_doc()
+        for line in text.splitlines():
+            if line.strip().startswith("- CLI subcommands:"):
+                break
+        else:
+            self.fail("CLI subcommands bullet not found in the C4 document")
+        from src.cli import COMMANDS
+
+        doc_commands = re.findall(r"`([^`]+)`", line)
+        self.assertEqual(doc_commands, COMMANDS)
 
 
 if __name__ == "__main__":

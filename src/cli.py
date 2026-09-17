@@ -12,6 +12,7 @@ FACTS_PATH = ROOT / "domain" / "facts.json"
 OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 
 VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted"}
+COMMANDS = ["validate", "build", "build-pdf", "infer", "assess"]
 
 
 def load_model() -> dict:
@@ -157,7 +158,7 @@ def validate_versions(model: dict, rules_doc: dict, profile: dict) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(prog="research")
-    parser.add_argument("command", choices=["validate", "build", "build-pdf", "infer", "assess"])
+    parser.add_argument("command", choices=COMMANDS)
     parser.add_argument("input", nargs="?", help="JSON facts file for the infer command")
     args = parser.parse_args()
     model = load_model()
