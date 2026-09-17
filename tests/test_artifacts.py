@@ -247,5 +247,33 @@ class ArchitectureDocTests(unittest.TestCase):
         self.assertEqual(doc_commands, COMMANDS)
 
 
+class RoadmapTests(unittest.TestCase):
+    """The roadmap (docs/roadmap.md) must not claim progress reality denies.
+
+    While evidence/claims/ is empty the only honest CURRENT-STAGE marker is
+    Seed. When real evidence records land, the marker must move to the next
+    stage; the test forces the document to track the repository, not the
+    other way around.
+    """
+
+    ROADMAP = ROOT / "docs" / "roadmap.md"
+
+    def test_current_stage_marker_matches_reality(self):
+        text = self.ROADMAP.read_text(encoding="utf-8")
+        marker = re.search(r"CURRENT-STAGE:\s*([A-Za-z]+)", text)
+        self.assertIsNotNone(marker, "roadmap must declare a CURRENT-STAGE marker")
+        observed = marker.group(1)
+        claims_dir = ROOT / "evidence" / "claims"
+        has_real_evidence = claims_dir.is_dir() and bool(list(claims_dir.rglob("*.json")))
+        expected = "Sprout" if has_real_evidence else "Seed"
+        self.assertEqual(observed, expected, "roadmap stage marker disagrees with the repository")
+
+    def test_roadmap_marks_seed_as_current_until_evidence_exists(self):
+        text = self.ROADMAP.read_text(encoding="utf-8")
+        self.assertIn("Stage 0", text)
+        self.assertIn("we are here today", text)
+        self.assertIn("None of the later stages exist yet", text)
+
+
 if __name__ == "__main__":
     unittest.main()

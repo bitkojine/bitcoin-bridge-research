@@ -6,6 +6,10 @@ An open, versioned research project about the interfaces between Bitcoin, tradit
 
 This is an early prototype, not a decision system. “Expert system” describes the intended architecture, not the present level of knowledge or validation. Do not rely on its output for legal, fiduciary, audit, accounting, investment, custody, compliance, or cybersecurity decisions.
 
+### Mission and roadmap
+
+Where this repository is today (seed), and the evidence-backed, decision-grade system it is trying to become, is tracked honestly in [`docs/roadmap.md`](docs/roadmap.md) — including the test that refuses to let that document claim progress the repository has not earned.
+
 ### Current inventory
 
 | Item | Count | Scope |
@@ -22,7 +26,7 @@ This is an early prototype, not a decision system. “Expert system” describes
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 42 | Software tests, not professional validation |
+| Automated tests | 44 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
