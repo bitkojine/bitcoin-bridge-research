@@ -1,0 +1,15 @@
+{
+  "customer_identity_evidenced": true,
+  "legal_authority_evidenced": true,
+  "asset_scope_approved": true,
+  "exclusive_control_evidenced": true,
+  "customer_assets_segregated": true,
+  "books_reconcile_to_chain": true,
+  "key_lifecycle_controls_documented": true,
+  "recovery_and_compromise_plan_tested": true,
+  "cybersecurity_controls_assessed": true,
+  "subcustodian_used": true,
+  "subcustodian_due_diligence_complete": true,
+  "customer_agreement_complete": true,
+  "independent_assurance_current": true
+}

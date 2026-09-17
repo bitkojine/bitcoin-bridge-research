@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_PATH = ROOT / "domain" / "model.json"
 RULES_PATH = ROOT / "domain" / "rules.json"
+ASSESSMENT_PATH = ROOT / "domain" / "assessments" / "custody-readiness.json"
 OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 
 VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted"}
@@ -113,7 +114,7 @@ def build_markdown(model: dict) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(prog="research")
-    parser.add_argument("command", choices=["validate", "build", "build-pdf", "infer"])
+    parser.add_argument("command", choices=["validate", "build", "build-pdf", "infer", "assess"])
     parser.add_argument("input", nargs="?", help="JSON facts file for the infer command")
     args = parser.parse_args()
     model = load_model()
@@ -121,7 +122,12 @@ def main() -> int:
     from src.expert import load_rules, validate_rules
 
     rules = load_rules(RULES_PATH)
-    errors += validate_rules(rules, {item["id"] for item in model.get("sources", [])})
+    source_ids = {item["id"] for item in model.get("sources", [])}
+    errors += validate_rules(rules, source_ids)
+    from src.assessment import load_profile, validate_profile
+
+    profile = load_profile(ASSESSMENT_PATH)
+    errors += validate_profile(profile, source_ids)
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
@@ -138,6 +144,15 @@ def main() -> int:
         result = ExpertSystem(rules).infer(facts)
         print(json.dumps(result, indent=2))
         return 2 if result["conflicts"] else 0
+    if args.command == "assess":
+        if not args.input:
+            parser.error("assess requires a JSON facts file")
+        from src.assessment import assess, render_markdown
+
+        facts = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        result = assess(profile, facts)
+        print(render_markdown(result))
+        return 0
     if args.command == "build-pdf":
         from src.pdf import build_pdf
 

@@ -1,0 +1,11 @@
+{
+  "customer_identity_evidenced": true,
+  "legal_authority_evidenced": false,
+  "asset_scope_approved": true,
+  "exclusive_control_evidenced": true,
+  "customer_assets_segregated": true,
+  "books_reconcile_to_chain": false,
+  "key_lifecycle_controls_documented": true,
+  "subcustodian_used": false,
+  "customer_agreement_complete": true
+}

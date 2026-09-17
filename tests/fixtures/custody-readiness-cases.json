@@ -1,0 +1,14 @@
+[
+  {"name":"all evidenced","facts":{"customer_identity_evidenced":true,"legal_authority_evidenced":true,"asset_scope_approved":true,"exclusive_control_evidenced":true,"customer_assets_segregated":true,"books_reconcile_to_chain":true,"key_lifecycle_controls_documented":true,"recovery_and_compromise_plan_tested":true,"cybersecurity_controls_assessed":true,"subcustodian_used":true,"subcustodian_due_diligence_complete":true,"customer_agreement_complete":true,"independent_assurance_current":true},"outcome":"ready_for_expert_review"},
+  {"name":"no facts","facts":{},"outcome":"insufficient_information"},
+  {"name":"identity only","facts":{"customer_identity_evidenced":true},"outcome":"insufficient_information"},
+  {"name":"authority failed","facts":{"legal_authority_evidenced":false},"outcome":"not_ready"},
+  {"name":"control failed","facts":{"exclusive_control_evidenced":false},"outcome":"not_ready"},
+  {"name":"segregation failed","facts":{"customer_assets_segregated":false},"outcome":"not_ready"},
+  {"name":"reconciliation failed","facts":{"books_reconcile_to_chain":false},"outcome":"not_ready"},
+  {"name":"recovery only","facts":{"recovery_and_compromise_plan_tested":true},"outcome":"insufficient_information"},
+  {"name":"agreement failed","facts":{"customer_agreement_complete":false},"outcome":"not_ready"},
+  {"name":"audit failed","facts":{"independent_assurance_current":false},"outcome":"not_ready"},
+  {"name":"mixed failed and unknown","facts":{"customer_identity_evidenced":true,"exclusive_control_evidenced":false},"outcome":"not_ready"},
+  {"name":"eleven satisfied one missing","facts":{"customer_identity_evidenced":true,"legal_authority_evidenced":true,"asset_scope_approved":true,"exclusive_control_evidenced":true,"customer_assets_segregated":true,"books_reconcile_to_chain":true,"key_lifecycle_controls_documented":true,"recovery_and_compromise_plan_tested":true,"cybersecurity_controls_assessed":true,"subcustodian_due_diligence_complete":true,"customer_agreement_complete":true},"outcome":"insufficient_information"}
+]

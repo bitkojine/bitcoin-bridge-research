@@ -21,7 +21,7 @@ This is a promising research scaffold and a functioning expert-system **kernel**
 - Keep missing information as `unknown` instead of silently treating it as `false`.
 - Return a proof trace showing which rule fired, which conditions matched, what it concluded, and which repository sources support the rule.
 - Surface incompatible values for the same fact as a conflict instead of silently choosing one.
-- Demonstrate these mechanics with one synthetic institutional-custody example and automated tests.
+- Run a twelve-area institutional-custody pre-review and demonstrate its boundary behavior with twelve scenario cases and automated tests.
 
 ### What it cannot do yet
 
@@ -32,7 +32,7 @@ This is a promising research scaffold and a functioning expert-system **kernel**
 - It cannot prove that all wallets, private-key copies, liabilities, agreements, beneficiaries, or relevant events have been disclosed.
 - It cannot know whether a signature was voluntary, contemporaneous, properly authorized, or made by the legally relevant person unless external evidence supplies those facts.
 - It cannot independently classify companies or keep product, licensing, regulatory, or market information current.
-- It has only a handful of rules and sources. Its present conclusions demonstrate the engine, not expert-level domain coverage.
+- It has only a handful of inference rules, one assessment profile, and a small source set. Its present conclusions demonstrate the engine and pre-review workflow, not expert-level domain coverage.
 - It has no jurisdiction or effective-date reasoning, no exception hierarchy, no treatment of precedent, and no mechanism for resolving conflicting legal authorities.
 - It has no calibrated uncertainty model. It can report explicit conflicts, but it cannot responsibly turn evidentiary strength or professional disagreement into a probability.
 - It cannot yet explain why a requested conclusion did **not** fire by listing every missing prerequisite.
@@ -72,6 +72,8 @@ python3 -m src.cli validate
 python3 -m src.cli build
 python3 -m src.cli build-pdf
 python3 -m src.cli infer examples/institutional-custody.json
+python3 -m src.cli assess examples/custody-readiness-complete.json
+python3 -m src.cli assess examples/custody-readiness-gaps.json
 python3 -m unittest discover -s tests
 ```
 
@@ -80,6 +82,8 @@ python3 -m unittest discover -s tests
 `build-pdf` produces [`output/pdf/domain-map.pdf`](output/pdf/domain-map.pdf) directly from the same model. This is a compact, reproducible research output rather than the separately authored long-form paper.
 
 `infer` evaluates a JSON case against [`domain/rules.json`](domain/rules.json). It uses open-world semantics: an absent fact is unknown, never silently false. See [`research/expert-system-architecture.md`](research/expert-system-architecture.md) for the design, quality criteria, safeguards, and roadmap.
+
+`assess` runs the first practical workflow: a US institutional Bitcoin custody pre-review covering twelve evidence areas. It returns `ready_for_expert_review`, `not_ready`, or `insufficient_information`, then lists blocking gaps and missing evidence. The profile is in [`domain/assessments/custody-readiness.json`](domain/assessments/custody-readiness.json). It is research software, not a compliance or legal determination.
 
 ## Publications
 

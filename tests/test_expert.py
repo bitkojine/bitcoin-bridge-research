@@ -39,6 +39,17 @@ class ExpertSystemTests(unittest.TestCase):
         self.assertNotIn("gap", result["facts"])
         self.assertEqual(result["trace"], [])
 
+    def test_why_not_lists_missing_prerequisite(self):
+        rules = [{
+            "id": "R-1", "description": "needs authority", "priority": 1,
+            "when": {"all": [{"fact": "authority", "equals": True}]},
+            "then": [{"fact": "ready", "value": True}], "source_ids": ["S-1"]
+        }]
+        result = ExpertSystem(rules).infer({}, targets=["ready"])
+        unmet = result["why_not"][0]["candidate_rules"][0]["unmet"][0]
+        self.assertEqual(unmet["required"]["fact"], "authority")
+        self.assertEqual(unmet["actual"], "unknown")
+
     def test_conflicting_conclusions_are_reported(self):
         rules = [
             {"id": "R-A", "description": "yes", "priority": 1,

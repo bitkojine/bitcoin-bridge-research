@@ -28,7 +28,7 @@ class ExpertSystem:
             return bool(assertions)
         raise ValueError(f"Unsupported condition: {condition}")
 
-    def infer(self, supplied_facts: dict[str, Any]) -> dict:
+    def infer(self, supplied_facts: dict[str, Any], targets: list[str] | None = None) -> dict:
         known: dict[str, list[Assertion]] = {
             name: [Assertion(value, "supplied")]
             for name, value in sorted(supplied_facts.items())
@@ -77,13 +77,40 @@ class ExpertSystem:
             ]
             for name, assertions in sorted(known.items())
         }
-        return {
+        result = {
             "status": "conflict" if conflicts else "complete",
             "facts": facts,
             "trace": trace,
             "conflicts": conflicts,
             "note": "Missing facts remain unknown; they are never treated as false.",
         }
+        if targets:
+            result["why_not"] = self.why_not(targets, known, fired)
+        return result
+
+    def why_not(
+        self, targets: list[str], known: dict[str, list[Assertion]], fired: set[str]
+    ) -> list[dict]:
+        explanations = []
+        for target in targets:
+            if target in known:
+                continue
+            candidates = []
+            for rule in self.rules:
+                if not any(item["fact"] == target for item in rule["then"]):
+                    continue
+                missing = []
+                for condition in rule["when"]["all"]:
+                    if not self._matches(condition, known):
+                        actual = [item.value for item in known.get(condition["fact"], [])]
+                        missing.append({"required": condition, "actual": actual or "unknown"})
+                candidates.append({
+                    "rule_id": rule["id"],
+                    "description": rule["description"],
+                    "unmet": missing,
+                })
+            explanations.append({"target": target, "candidate_rules": candidates})
+        return explanations
 
 
 def load_rules(path: Path) -> list[dict]:
