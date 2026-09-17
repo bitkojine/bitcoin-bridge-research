@@ -31,8 +31,9 @@ Seed ──────► Sprout ──────► Sapling ─────�
 ```
 
 **This stage means**
-- A working, versioned kernel: `src/expert.py` open-world forward chaining with proof traces; a validated domain model, shared fact registry, rules, and assessment profile; honest claim statuses; a C4 document that cannot drift; 44 tests that enforce all of it in CI.
+- A working, versioned kernel: `src/expert.py` open-world forward chaining with proof traces; a validated domain model, shared fact registry, rules, and assessment profile; citator-checked claim statuses; a C4 document that cannot drift; 52 tests that enforce all of it in CI.
 - The knowledge is deliberately small and honestly labeled: 3 Bitcoin capabilities, 7 bridge categories, 15 companies, 8 sources, 2 claims, 12 assessment requirements, 20 facts. Interface outruns knowledge; the docs say so.
+- Machinery is borrowed, never invented: claim statuses follow the treatment-signal model of legal citators, source currency follows "still good law" reporting, and future evidence grading will follow established audit and systematic-review standards. See `research/precedents.md`.
 - Sources are recorded as bare URLs (`Referenced`). Claims are mostly project-`Interpreted`. Nothing is archived, extracted at passage level, attested, or independently checked.
 
 **This stage does NOT mean**

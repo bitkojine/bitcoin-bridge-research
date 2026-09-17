@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Shared fact registry",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "purpose": "Single vocabulary for the evidence-backed assessment and the inference rules. Rule conditions, rule conclusions, assessment requirements, and assessment control facts must all reference names registered here; validation fails otherwise."
   },
   "facts": [

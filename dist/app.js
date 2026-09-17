@@ -44,11 +44,11 @@ function renderDetail(item){
   if(item.does_not_establish) body+=`<h3>What it does not establish</h3>${item.does_not_establish.map(x=>`<span class="chip">${x}</span>`).join('')}`;
   if(item.bitcoin_capabilities) body+=`<h3>Bitcoin capabilities</h3>${refs(item.bitcoin_capabilities)}<h3>Finance requirements</h3>${refs(item.finance_requirements)}<h3>Legal requirements</h3>${refs(item.legal_requirements)}`;
   if(item.bridges){body+=`<h3>Bridge territory</h3>${refs(item.bridges)}`;}
-  if(item.text){body+=`<p>${item.text}</p><h3>Status</h3><span class="chip">${item.status}</span><h3>Evidence</h3>${item.source_ids.map(id=>sourceLink(sourceById[id])).join('')}`;}
+  if(item.text){const t={supports:'<span class="chip" style="border-color:#2f8f5b;color:#2f8f5b">supports</span>',qualifies:'<span class="chip" style="border-color:#b7791f;color:#b7791f">qualifies</span>',contradicts:'<span class="chip" style="border-color:#b12121;color:#b12121">contradicts</span>'};body+=`<p>${item.text}</p><h3>Status</h3><span class="chip">${item.status}</span>${item.superseded_by?`<p class="detail-copy">Superseded by: ${refs(item.superseded_by)}</p>`:''}<h3>Treatment signals</h3>${item.treatments.map(x=>`<p>${t[x.treatment]||'<span class="chip">'+x.treatment+'</span>'} ${sourceLink(sourceById[x.source_id])}</p>`).join('')||'<p class="detail-copy">No treatments recorded.</p>'}`;}
   if(item._key==='bridges'){const cos=model.companies.filter(c=>c.bridges.includes(item.id));body+=`<h3>Companies occupying this territory</h3>${cos.map(c=>`<span class="chip company-chip">${c.name}</span>`).join('')||'<p>None recorded.</p>'}`;}
   d.innerHTML=body;
 }
-function sourceLink(s){return `<a class="source-link" href="${s.url}" target="_blank" rel="noreferrer">↗ ${s.title} <small>Level ${s.level}</small></a>`;}
+function sourceLink(s){return `<a class="source-link" href="${s.url}" target="_blank" rel="noreferrer">↗ ${s.title} <small>Level ${s.level} · ${s.currency}${s.currency==='superseded'&&s.superseded_by?` → ${s.superseded_by.join(', ')}`:''}</small></a>`;}
 const search=document.querySelector('#search');search.addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();renderCatalog();});
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();search.focus();}});
 
@@ -71,7 +71,7 @@ function renderAssessment(){
 
 const levels={1:'Company marketing',2:'Official technical documentation',3:'Regulatory or legal filing',4:'Independent professional evidence',5:'Reproducible primary data'};
 document.querySelector('#source-legend').innerHTML=Object.entries(levels).map(([n,l])=>`<span class="legend-item"><b>${n}</b> ${l}</span>`).join('');
-document.querySelector('#source-grid').innerHTML=model.sources.sort((a,b)=>b.level-a.level).map(s=>`<article class="source-card"><span class="level">EVIDENCE LEVEL ${s.level} · CHECKED ${s.checked_on}</span><h3>${s.title}</h3><a href="${s.url}" target="_blank" rel="noreferrer">Open primary source ↗</a></article>`).join('');
+document.querySelector('#source-grid').innerHTML=model.sources.sort((a,b)=>b.level-a.level).map(s=>`<article class="source-card"><span class="level">EVIDENCE LEVEL ${s.level} · ${s.currency.toUpperCase()}${s.currency==='superseded'&&s.superseded_by?` → ${s.superseded_by.join(', ')}`:''}${s.currency==='withdrawn'?' · WITHDRAWN':''} · CHECKED ${s.checked_on}</span><h3>${s.title}</h3><a href="${s.url}" target="_blank" rel="noreferrer">Open primary source ↗</a></article>`).join('');
 const can=['Represent the current domain as structured data','Search concepts, companies, claims and relationships','Trace claims and assessment requirements to sources','Run a deterministic custody-readiness pre-screen','Distinguish explicit gaps from missing information'];
 const cannot=['Authenticate the facts entered by a user','Determine legal ownership from key control','Give legal, compliance, tax or investment advice','Prove that every wallet, key copy or liability was disclosed','Track regulatory changes or news automatically','Claim expert-level coverage or professional validation'];
 document.querySelector('#can-list').innerHTML=can.map(x=>`<li>${x}</li>`).join('');document.querySelector('#cannot-list').innerHTML=cannot.map(x=>`<li>${x}</li>`).join('');

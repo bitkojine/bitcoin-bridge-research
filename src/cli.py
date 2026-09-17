@@ -11,7 +11,9 @@ ASSESSMENT_PATH = ROOT / "domain" / "assessments" / "custody-readiness.json"
 FACTS_PATH = ROOT / "domain" / "facts.json"
 OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 
-VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted"}
+VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted", "superseded"}
+TREATMENTS = {"supports", "qualifies", "contradicts"}
+SOURCE_CURRENCIES = {"current", "superseded", "withdrawn"}
 COMMANDS = ["validate", "build", "build-pdf", "infer", "assess"]
 
 
@@ -19,12 +21,46 @@ def load_model() -> dict:
     return json.loads(MODEL_PATH.read_text(encoding="utf-8"))
 
 
-def claim_status_matches_sources(status: str, source_ids: list[str]) -> list[str]:
-    """The recorded status must not be stronger than the sources can support."""
-    distinct = len(set(source_ids))
-    if status == "corroborated" and distinct < 2:
-        return ["status corroborated requires at least two distinct sources"]
-    return []
+def claim_status_matches_treatments(
+    status: str, treatments: list[dict], source_by_id: dict, superseded: bool = False
+) -> list[str]:
+    """The recorded status must match the citator treatment + currency semantics."""
+    problems: list[str] = []
+    if superseded:
+        if status != "superseded":
+            problems.append("status must be superseded when superseded_by names a replacement")
+        return problems
+    if status == "superseded":
+        problems.append("status superseded requires superseded_by naming the replacement claims")
+        return problems
+    treatments = treatments or []
+    if treatments and status == "unverified":
+        problems.append("status unverified but treatments are recorded")
+    contradicts = [t for t in treatments if t.get("treatment") == "contradicts"]
+    supports = [t for t in treatments if t.get("treatment") == "supports"]
+    withdrawn = [
+        t["source_id"] for t in treatments
+        if source_by_id.get(t["source_id"], {}).get("currency") == "withdrawn"
+    ]
+    current_support_ids = {
+        t["source_id"] for t in supports
+        if source_by_id.get(t["source_id"], {}).get("currency") == "current"
+    }
+    if contradicts:
+        if status != "contested":
+            problems.append("status must be contested while contradicting authority is cited")
+    elif withdrawn:
+        if status != "retracted":
+            problems.append("status must be retracted while a withdrawn source is cited")
+    elif not current_support_ids:
+        if status not in {"stale"}:
+            problems.append("status stale requires no current supporting authority")
+    else:
+        if status == "stale":
+            problems.append("status stale but a current supporting source is cited")
+        if status == "corroborated" and len(current_support_ids) < 2:
+            problems.append("status corroborated requires at least two distinct current supporting sources")
+    return problems
 
 
 def duplicates(items: list[dict]) -> set[str]:
@@ -60,6 +96,8 @@ def validate(model: dict) -> list[str]:
     legal_ids = {x["id"] for x in model.get("legal_requirements", [])}
     bridge_ids = {x["id"] for x in model.get("bridges", [])}
     source_ids = {x["id"] for x in model.get("sources", [])}
+    source_by_id = {x["id"]: x for x in model.get("sources", [])}
+    claim_ids = {x["id"] for x in model.get("claims", [])}
 
     for capability in model.get("bitcoin_capabilities", []):
         if not capability.get("formula"):
@@ -90,20 +128,44 @@ def validate(model: dict) -> list[str]:
             errors.append(f"source {source['id']} has invalid evidence level")
         if not source.get("checked_on"):
             errors.append(f"source {source['id']} has no checked_on date")
+        currency = source.get("currency")
+        if currency not in SOURCE_CURRENCIES:
+            errors.append(f"source {source['id']} has invalid currency")
+        replaced_by = source.get("superseded_by") or []
+        if replaced_by:
+            if currency != "superseded":
+                errors.append(f"source {source['id']} superseded_by requires superseded currency")
+            for ref in replaced_by:
+                if ref not in source_ids:
+                    errors.append(f"source {source['id']} superseded_by references unknown source {ref}")
+        elif currency == "superseded":
+            errors.append(f"source {source['id']} superseded currency requires superseded_by")
 
     for claim in model.get("claims", []):
         if claim.get("status") not in VALID_STATUSES:
             errors.append(f"claim {claim['id']} has invalid status")
-        if not claim.get("source_ids"):
-            errors.append(f"claim {claim['id']} has no sources")
+        treatments = claim.get("treatments") or []
+        if not treatments:
+            errors.append(f"claim {claim['id']} has no treatments")
+        for treatment in treatments:
+            if treatment.get("treatment") not in TREATMENTS:
+                errors.append(f"claim {claim['id']} has invalid treatment {treatment.get('treatment')}")
+            if treatment.get("source_id") not in source_ids:
+                errors.append(f"claim {claim['id']} references unknown source {treatment.get('source_id')}")
+        superseded_by = claim.get("superseded_by") or []
+        if superseded_by:
+            if claim.get("status") != "superseded":
+                errors.append(f"claim {claim['id']} status must be superseded when superseded_by is present")
+            for ref in superseded_by:
+                if ref not in claim_ids:
+                    errors.append(f"claim {claim['id']} superseded_by references unknown claim {ref}")
+        elif claim.get("status") == "superseded":
+            errors.append(f"claim {claim['id']} status superseded requires superseded_by")
         errors.extend(
-            f"claim {claim['id']} {problem}" for problem in claim_status_matches_sources(
-                claim.get("status", ""), claim.get("source_ids", [])
+            f"claim {claim['id']} {problem}" for problem in claim_status_matches_treatments(
+                claim.get("status", ""), treatments, source_by_id, superseded=bool(superseded_by)
             )
         )
-        for ref in claim.get("source_ids", []):
-            if ref not in source_ids:
-                errors.append(f"claim {claim['id']} references unknown source {ref}")
     return errors
 
 
@@ -128,12 +190,19 @@ def build_markdown(model: dict) -> str:
 
     lines += ["## Claims", ""]
     for claim in model["claims"]:
-        lines.append(f"- **{claim['status']}** - {claim['text']} Sources: {', '.join(claim['source_ids'])}")
+        treatments = ", ".join(
+            f"{t['source_id']} ({t['treatment']})" for t in claim["treatments"]
+        )
+        replaced = f" Superseded by: {', '.join(claim['superseded_by'])}." if claim.get("superseded_by") else ""
+        lines.append(f"- **{claim['status']}** - {claim['text']} Treatments: {treatments}.{replaced}")
     lines += ["", "## Sources", ""]
     for source in model["sources"]:
+        replaced = ""
+        if source.get("superseded_by"):
+            replaced = f" Superseded by: {', '.join(source['superseded_by'])}."
         lines.append(
-            f"- **{source['title']}** (`{source['id']}`, level {source['level']}). "
-            f"Checked on: `{source['checked_on']}`. {source['url']}"
+            f"- **{source['title']}** (`{source['id']}`, level {source['level']}, currency {source['currency']}). "
+            f"Checked on: `{source['checked_on']}`.{replaced} {source['url']}"
         )
     lines.append("")
     return "\n".join(lines)

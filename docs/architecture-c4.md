@@ -36,7 +36,7 @@ Checked by `ArchitectureDocTests` in `tests/test_artifacts.py`; this table must 
 
 | metric | value |
 |---|---|
-| model version | 0.2.0 |
+| model version | 0.3.0 |
 | bitcoin capabilities | 3 |
 | finance requirements | 6 |
 | legal requirements | 5 |
@@ -95,7 +95,7 @@ flowchart LR
     subgraph CLI["src/ (Python package)"]
         cli["cli.py
             argument dispatch, validate, validate_versions,
-            claim_status_matches_sources, build_markdown"]
+            claim_status_matches_treatments, build_markdown"]
         asm["assessment.py
             validate_case, derive_facts, assess,
             validate_profile, render_markdown"]
@@ -157,10 +157,10 @@ classDiagram
 
 The following anchors are verified by `ArchitectureDocTests`: each `file:line` must exist, and the named function must be defined at that line.
 
-- `src/cli.py:22` — `claim_status_matches_sources()`: a `corroborated` status requires at least two distinct sources.
-- `src/cli.py:41` — `validate()`: duplicate ids, reference integrity, evidence levels, and per-source `checked_on` dates.
-- `src/cli.py:110` — `build_markdown()`: the "Snapshot generated on" header and Sources appendix.
-- `src/cli.py:146` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
+- `src/cli.py:24` — `claim_status_matches_treatments()`: a `corroborated` status requires at least two distinct current supporting sources; `contested`, `retracted`, and `stale` must match the cited treatments and source currency.
+- `src/cli.py:77` — `validate()`: duplicate ids, reference integrity, evidence levels, per-source `checked_on` dates, source currency and `superseded_by`, and claim treatments.
+- `src/cli.py:172` — `build_markdown()`: the "Snapshot generated on" header and Sources appendix.
+- `src/cli.py:215` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
 - `src/assessment.py:20` — `validate_case()`: evidence records must carry artifact, issuer, provenance, scope, and review blocks.
 - `src/assessment.py:110` — `derive_facts()`: accepts evidence only if reviewed-accepted, jurisdiction-scoped, and time-valid; incompatible accepted assertions become a conflict.
 - `src/assessment.py:153` — `assess()`: outcome ladder (`conflict`, `not_ready`, `insufficient_information`, `ready_for_expert_review`), then feeds satisfied/failed evidence facts into rules for derived conclusions.

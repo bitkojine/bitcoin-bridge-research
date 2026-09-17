@@ -20,13 +20,13 @@ Where this repository is today (seed), and the evidence-backed, decision-grade s
 | Bridge categories | 7 | An unvalidated research taxonomy |
 | Companies | 15 | Coarse category assignments, not due diligence |
 | Material claims | 2 | Insufficient for broad conclusions |
-| Sources | 8 | A small evidence base with recorded check dates |
+| Sources | 8 | A small evidence base with recorded check dates and citator currency |
 | Inference rules | 3 | Demonstrate mechanics, not domain coverage |
 | Fact registry | 20 | Shared vocabulary enforced across rules and assessment |
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 44 | Software tests, not professional validation |
+| Automated tests | 52 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
@@ -41,7 +41,7 @@ The interface is more substantial than the knowledge base behind it.
 - A custody pre-review that separates supported requirements, explicit gaps, missing facts, invalid values, and conditional sub-custodian requirements.
 - Evidence records that separate assertions, artifacts, issuers, provenance, jurisdiction and time scope, review activities, and reviewers.
 - Fact derivation only from structurally valid, accepted, applicable, unexpired evidence; incompatible accepted assertions produce a conflict.
-- Semantic claim-status validation: a claim marked `corroborated` must carry at least two distinct sources; a single source can support but not corroborate.
+- Citator-style claim semantics borrowed from legal research (Shepard's/KeyCite): every citation records a treatment (`supports`, `qualifies`, `contradicts`), every source records whether it is still authoritative (`current`, `superseded`, `withdrawn`), and a claim's status is checked against those signals — `corroborated` needs two distinct current supporting sources, contradicting authority forces `contested`, a withdrawn source forces `retracted`, and `superseded` must name the replacement claims. The species and its precedents are recorded in [`research/precedents.md`](research/precedents.md).
 - Generated Markdown, PDF, and static web views, with regression tests that the generated snapshots are fresh, the web UI boots, and versions agree across knowledge files.
 - Client-side search and an interactive custody questionnaire.
 - A C4 architecture description (`docs/architecture-c4.md`) whose file references, Level 4 code anchors, CLI subcommands, and snapshot contract table are regression-tested so the document cannot drift from the code it describes.

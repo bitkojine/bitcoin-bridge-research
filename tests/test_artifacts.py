@@ -17,7 +17,7 @@ from pathlib import Path
 
 from src.assessment import load_profile, validate_profile
 from src.build_web import build as build_web
-from src.cli import build_markdown, claim_status_matches_sources, load_facts, load_model, validate
+from src.cli import build_markdown, claim_status_matches_treatments, load_facts, load_model, validate
 from src.expert import load_rules, validate_rules
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -109,19 +109,85 @@ class RegistryTests(unittest.TestCase):
 
 
 class ClaimHonestyTests(unittest.TestCase):
+    def setUp(self):
+        self.sources = {s["id"]: s for s in load_model().get("sources", [])}
+
     def test_current_claims_satisfy_semantic_checks(self):
         self.assertEqual(validate(load_model()), [])
 
-    def test_corroborated_requires_two_distinct_sources(self):
-        self.assertEqual(claim_status_matches_sources("corroborated", ["a"]), [
-            "status corroborated requires at least two distinct sources",
-        ])
-        self.assertEqual(claim_status_matches_sources("corroborated", ["a", "b"]), [])
-        self.assertEqual(claim_status_matches_sources("supported", ["a"]), [])
+    def test_corroborated_requires_two_distinct_current_supporting_sources(self):
+        src_a = {"currency": "current"}
+        self.assertEqual(claim_status_matches_treatments("corroborated", [
+            {"source_id": "a", "treatment": "supports"},
+        ], {"a": src_a}), ["status corroborated requires at least two distinct current supporting sources"])
+        self.assertEqual(claim_status_matches_treatments("corroborated", [
+            {"source_id": "a", "treatment": "supports"},
+            {"source_id": "b", "treatment": "supports"},
+        ], {"a": src_a, "b": src_a}), [])
+        self.assertEqual(claim_status_matches_treatments("supported", [
+            {"source_id": "a", "treatment": "supports"},
+        ], {"a": src_a}), [])
 
-    def test_every_source_records_a_checked_date(self):
+    def test_contested_requires_contradicting_authority(self):
+        treatments = [{"source_id": "a", "treatment": "contradicts"}]
+        self.assertIn("status must be contested", claim_status_matches_treatments("supported", treatments, {"a": {"currency": "current"}})[0])
+        self.assertEqual(claim_status_matches_treatments("contested", treatments, {"a": {"currency": "current"}}), [])
+
+    def test_retracted_requires_a_withdrawn_source(self):
+        treatments = [{"source_id": "a", "treatment": "supports"}]
+        self.assertIn("status must be retracted", claim_status_matches_treatments("supported", treatments, {"a": {"currency": "withdrawn"}})[0])
+        self.assertEqual(claim_status_matches_treatments("retracted", treatments, {"a": {"currency": "withdrawn"}}), [])
+
+    def test_stale_requires_no_current_support(self):
+        treatments = [{"source_id": "a", "treatment": "supports"}]
+        self.assertEqual(claim_status_matches_treatments("stale", treatments, {"a": {"currency": "superseded"}}), [])
+        self.assertIn("status stale but a current supporting source", claim_status_matches_treatments("stale", treatments, {"a": {"currency": "current"}})[0])
+
+    def test_unverified_has_no_treatments(self):
+        self.assertIn("status unverified but treatments", claim_status_matches_treatments("unverified", [{"source_id": "a", "treatment": "supports"}], {"a": {"currency": "current"}})[0])
+
+    def test_superseded_requires_superseded_by(self):
+        self.assertIn("status superseded requires superseded_by",
+                      claim_status_matches_treatments("superseded", [{"source_id": "a", "treatment": "supports"}], {"a": {"currency": "current"}})[0])
+        self.assertEqual(claim_status_matches_treatments("superseded", [], {}, superseded=True), [])
+
+    def test_source_currency_rules_enforced_by_validate(self):
+        model = load_model()
+        model["sources"].append({"id": "x", "level": 3, "checked_on": "2026-09-17", "currency": "superseded"})
+        errors = validate(model)
+        self.assertTrue(any("superseded currency requires superseded_by" in e for e in errors))
+        model["sources"][-1]["superseded_by"] = ["does-not-exist"]
+        errors = validate(model)
+        self.assertTrue(any("references unknown source" in e for e in errors))
+        model["sources"][-1]["superseded_by"] = ["bip-322"]
+        errors = validate(model)
+        self.assertTrue(all("source x" not in e for e in errors))
+
+    def test_claim_treatment_rules_enforced_by_validate(self):
+        model = load_model()
+        model["claims"][0]["status"] = "superseded"
+        errors = validate(model)
+        self.assertTrue(any("status superseded requires superseded_by" in e for e in errors))
+        model["claims"][0]["superseded_by"] = ["custody-needs-law"]
+        errors = validate(model)
+        self.assertTrue(all("claim signature-not-title" not in e for e in errors))
+        model["claims"][0]["superseded_by"] = ["does-not-exist"]
+        errors = validate(model)
+        self.assertTrue(any("references unknown claim" in e for e in errors))
+
+    def test_every_source_records_checked_date_and_currency(self):
         for source in load_model().get("sources", []):
             self.assertTrue(source.get("checked_on"), f"{source['id']} has no checked_on date")
+            self.assertIn(source.get("currency"), {"current", "superseded", "withdrawn"})
+
+    def test_every_claim_cites_only_known_sources_through_treatments(self):
+        model = load_model()
+        source_ids = {s["id"] for s in model["sources"]}
+        for claim in model["claims"]:
+            self.assertTrue(claim.get("treatments"), f"{claim['id']} has no treatments")
+            for treatment in claim["treatments"]:
+                self.assertIn(treatment["source_id"], source_ids)
+                self.assertIn(treatment["treatment"], {"supports", "qualifies", "contradicts"})
 
 
 class PaperConsistencyTests(unittest.TestCase):

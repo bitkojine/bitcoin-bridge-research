@@ -179,8 +179,12 @@ def build_pdf(model: dict) -> Path:
 
     claim_rows = []
     for claim in model["claims"]:
-        linked = "<br/>".join(f"<b>{sources[s]['title']}</b><br/>{sources[s]['url']}" for s in claim["source_ids"])
-        claim_rows.append([f"<b>{claim['status'].upper()}</b>", claim["text"], linked])
+        linked = "<br/>".join(
+            f"<b>{sources[t['source_id']]['title']}</b> ({t['treatment']})<br/>{sources[t['source_id']]['url']}"
+            for t in claim["treatments"]
+        )
+        replaced = f"<br/>Superseded by: {', '.join(claim['superseded_by'])}" if claim.get("superseded_by") else ""
+        claim_rows.append([f"<b>{claim['status'].upper()}</b>", claim["text"] + replaced, linked])
     story += [matrix(["Status", "Claim", "Sources"], claim_rows, [29 * mm, 76 * mm, 65 * mm]),
               Spacer(1, 8 * mm), p("Current scope", "h2"),
               p(f"The model currently contains <b>{len(model['bitcoin_capabilities'])}</b> Bitcoin capabilities, "
