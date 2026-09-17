@@ -74,6 +74,7 @@ python3 -m src.cli build-pdf
 python3 -m src.cli infer examples/institutional-custody.json
 python3 -m src.cli assess examples/custody-readiness-complete.json
 python3 -m src.cli assess examples/custody-readiness-gaps.json
+python3 -m src.build_web
 python3 -m unittest discover -s tests
 ```
 
@@ -84,6 +85,8 @@ python3 -m unittest discover -s tests
 `infer` evaluates a JSON case against [`domain/rules.json`](domain/rules.json). It uses open-world semantics: an absent fact is unknown, never silently false. See [`research/expert-system-architecture.md`](research/expert-system-architecture.md) for the design, quality criteria, safeguards, and roadmap.
 
 `assess` runs the first practical workflow: a US institutional Bitcoin custody pre-review covering twelve evidence areas. It returns `ready_for_expert_review`, `not_ready`, or `insufficient_information`, then lists blocking gaps and missing evidence. The profile is in [`domain/assessments/custody-readiness.json`](domain/assessments/custody-readiness.json). It is research software, not a compliance or legal determination.
+
+`build_web` refreshes the static browser interface in [`dist/`](dist/) from the current domain model, rules, and assessment profile. Serve that directory locally to explore the knowledge base and run the assessment interactively.
 
 ## Publications
 

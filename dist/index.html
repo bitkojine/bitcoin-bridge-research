@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the evidence, concepts, companies, rules and gaps in the Bitcoin Bridge Research expert system.">
+  <title>Bitcoin Bridge · Evidence Desk</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23081217'/%3E%3Cpath d='M11 40h42M18 40c3-17 25-17 28 0M26 40V24m12 16V24' stroke='%23f4b942' stroke-width='5' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="rail">
+    <a class="brand" href="#" aria-label="Bitcoin Bridge home"><span class="brand-mark">₿</span><span>BRIDGE<br><small>EVIDENCE DESK</small></span></a>
+    <nav aria-label="Main navigation">
+      <button class="nav-item active" data-view="explore"><span>01</span> Explore</button>
+      <button class="nav-item" data-view="assessment"><span>02</span> Assess</button>
+      <button class="nav-item" data-view="sources"><span>03</span> Sources</button>
+      <button class="nav-item" data-view="system"><span>04</span> System</button>
+    </nav>
+    <div class="scope-note"><strong>Research scope</strong><br>Bitcoin × finance × law<br><span id="version"></span></div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div><p class="eyebrow">DOMAIN-AS-CODE RESEARCH</p><h1 id="page-title">Explore what the system knows</h1></div>
+      <div class="freshness"><span></span> Verified <time id="verified"></time></div>
+    </header>
+
+    <section id="explore" class="view active">
+      <div class="search-wrap">
+        <label for="search">Search the knowledge base</label>
+        <input id="search" type="search" placeholder="Try “ownership”, “custody”, “signature”, or a company…" autocomplete="off">
+        <kbd>⌘ K</kbd>
+      </div>
+      <div class="metrics" id="metrics"></div>
+      <div class="workspace">
+        <div class="catalog-panel">
+          <div class="filter-row" id="filters"></div>
+          <div id="catalog" class="catalog"></div>
+        </div>
+        <article id="detail" class="detail-panel" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section id="assessment" class="view">
+      <div class="section-intro"><p class="eyebrow">EXECUTABLE CHECKLIST</p><h2>Institutional custody readiness</h2><p id="assessment-scope"></p></div>
+      <div class="assessment-layout">
+        <form id="assessment-form" class="question-list"></form>
+        <aside class="result-panel" id="assessment-result"></aside>
+      </div>
+    </section>
+
+    <section id="sources" class="view">
+      <div class="section-intro"><p class="eyebrow">EVIDENCE REGISTER</p><h2>Sources and references</h2><p>Open the primary material behind the system’s claims and requirements. Evidence level describes source type—not whether every interpretation is correct.</p></div>
+      <div class="source-legend" id="source-legend"></div>
+      <div class="source-grid" id="source-grid"></div>
+      <div class="empty-state"><strong>News is not tracked yet.</strong><span>The repository has no dated news-ingestion or change-detection pipeline. This is a known gap, not an empty feed.</span></div>
+    </section>
+
+    <section id="system" class="view">
+      <div class="section-intro"><p class="eyebrow">SYSTEM CARD</p><h2>What this system is—and is not</h2><p>A transparent kernel with a small knowledge base. The rules are inspectable; the knowledge is not yet professionally complete.</p></div>
+      <div class="truth-grid">
+        <article><span class="truth-label can">CAN</span><h3>Demonstrated now</h3><ul id="can-list"></ul></article>
+        <article><span class="truth-label cannot">CANNOT</span><h3>Not established yet</h3><ul id="cannot-list"></ul></article>
+      </div>
+      <div class="rule-section"><div><p class="eyebrow">RULE REGISTER</p><h2>Executable reasoning</h2></div><div id="rule-list" class="rule-list"></div></div>
+    </section>
+  </main>
+
+  <script src="knowledge.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
