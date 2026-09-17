@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Bitcoin Bridge Market Map",
+    "version": "0.1.0",
+    "verified_on": "2026-09-17",
+    "thesis": "Commercial territory forms where companies connect Bitcoin's verifiable state and signing rules to the institutional facts required by finance and law."
+  },
+  "bitcoin_capabilities": [
+    {
+      "id": "signature-validity",
+      "name": "Signature validity",
+      "formula": "Verify(pk, m, sig) = 1",
+      "terms": {
+        "pk": "public key",
+        "m": "exact message or transaction",
+        "sig": "signature",
+        "1": "the verification rule accepts the signature"
+      },
+      "establishes": "The cryptographic verification rule accepted the signature for the supplied data.",
+      "does_not_establish": ["legal identity", "legal ownership", "lawful authority", "voluntary intent"]
+    },
+    {
+      "id": "threshold-control",
+      "name": "Threshold control",
+      "formula": "valid signers >= t of n",
+      "terms": {
+        "valid signers": "participants satisfying the signing policy",
+        "t": "minimum number required",
+        "n": "total configured participants",
+        ">=": "at least"
+      },
+      "establishes": "The configured cryptographic threshold was satisfied.",
+      "does_not_establish": ["organizational authority", "fiduciary compliance"]
+    },
+    {
+      "id": "ledger-state",
+      "name": "Ledger state",
+      "formula": "Balance(U, h) = sum(value(u))",
+      "terms": {
+        "U": "selected set of unspent outputs",
+        "h": "block height",
+        "u": "one unspent output",
+        "sum": "addition of the selected output values"
+      },
+      "establishes": "The selected unspent outputs existed in the accepted ledger state at the specified height.",
+      "does_not_establish": ["beneficial ownership", "completeness of disclosure"]
+    }
+  ],
+  "finance_requirements": [
+    {"id": "identity", "name": "Client and beneficial-owner identity"},
+    {"id": "asset-entitlement", "name": "Account-level asset entitlement"},
+    {"id": "authorization", "name": "Authenticated institutional authorization"},
+    {"id": "accounting", "name": "Accounting, valuation, and reconciliation"},
+    {"id": "solvency", "name": "Asset and liability coverage"},
+    {"id": "recourse", "name": "Contractual and regulated recourse"}
+  ],
+  "legal_requirements": [
+    {"id": "legal-ownership", "name": "Legal ownership or beneficial entitlement"},
+    {"id": "legal-capacity", "name": "Capacity and legal personality"},
+    {"id": "lawful-authority", "name": "Authority under mandate, office, trust, or court order"},
+    {"id": "succession", "name": "Death, probate, trust, and beneficiary succession"},
+    {"id": "remedies", "name": "Enforceable remedies after fraud, error, or breach"}
+  ],
+  "bridges": [
+    {"id": "access-execution", "name": "Access and execution", "bitcoin_capabilities": ["ledger-state"], "finance_requirements": ["accounting"], "legal_requirements": []},
+    {"id": "regulated-custody", "name": "Regulated custody", "bitcoin_capabilities": ["signature-validity", "threshold-control", "ledger-state"], "finance_requirements": ["identity", "asset-entitlement", "authorization", "recourse"], "legal_requirements": ["legal-ownership", "legal-capacity", "lawful-authority", "remedies"]},
+    {"id": "collaborative-custody", "name": "Collaborative custody", "bitcoin_capabilities": ["threshold-control"], "finance_requirements": ["authorization"], "legal_requirements": ["lawful-authority", "succession"]},
+    {"id": "wallet-governance", "name": "Wallet governance", "bitcoin_capabilities": ["signature-validity", "threshold-control"], "finance_requirements": ["authorization"], "legal_requirements": ["lawful-authority"]},
+    {"id": "reserve-evidence", "name": "Reserve and audit evidence", "bitcoin_capabilities": ["ledger-state", "signature-validity"], "finance_requirements": ["accounting", "solvency"], "legal_requirements": ["legal-ownership"]},
+    {"id": "attribution", "name": "Blockchain attribution", "bitcoin_capabilities": ["ledger-state"], "finance_requirements": ["identity"], "legal_requirements": ["legal-capacity"]},
+    {"id": "succession-bridge", "name": "Succession and continuity", "bitcoin_capabilities": ["threshold-control"], "finance_requirements": ["identity", "asset-entitlement"], "legal_requirements": ["legal-ownership", "lawful-authority", "succession"]}
+  ],
+  "companies": [
+    {"id": "coinbase-custody", "name": "Coinbase Custody", "bridges": ["access-execution", "regulated-custody"]},
+    {"id": "bitgo", "name": "BitGo", "bridges": ["regulated-custody", "wallet-governance", "collaborative-custody"]},
+    {"id": "anchorage-digital", "name": "Anchorage Digital", "bridges": ["access-execution", "regulated-custody"]},
+    {"id": "fidelity-digital-assets", "name": "Fidelity Digital Assets", "bridges": ["access-execution", "regulated-custody"]},
+    {"id": "fireblocks", "name": "Fireblocks", "bridges": ["wallet-governance"]},
+    {"id": "copper", "name": "Copper", "bridges": ["regulated-custody", "wallet-governance"]},
+    {"id": "fordefi", "name": "Fordefi", "bridges": ["wallet-governance"]},
+    {"id": "unchained", "name": "Unchained", "bridges": ["collaborative-custody", "succession-bridge"]},
+    {"id": "casa", "name": "Casa", "bridges": ["collaborative-custody", "succession-bridge"]},
+    {"id": "nunchuk", "name": "Nunchuk", "bridges": ["collaborative-custody"]},
+    {"id": "river", "name": "River", "bridges": ["access-execution", "reserve-evidence"]},
+    {"id": "kraken", "name": "Kraken", "bridges": ["access-execution", "reserve-evidence"]},
+    {"id": "chainalysis", "name": "Chainalysis", "bridges": ["attribution"]},
+    {"id": "trm-labs", "name": "TRM Labs", "bridges": ["attribution"]},
+    {"id": "elliptic", "name": "Elliptic", "bridges": ["attribution"]}
+  ],
+  "sources": [
+    {"id": "bip-322", "title": "BIP-322 Generic Signed Message Format", "url": "https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki", "level": 5},
+    {"id": "bitcoin-transactions", "title": "Bitcoin Developer Guide - Transactions", "url": "https://developer.bitcoin.org/devguide/transactions.html", "level": 5},
+    {"id": "occ-safekeeping", "title": "Crypto-Asset Safekeeping by Banking Organizations", "url": "https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf", "level": 3},
+    {"id": "icaew-audit", "title": "Considerations for Auditing Cryptocurrencies", "url": "https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies", "level": 4}
+  ],
+  "claims": [
+    {"id": "signature-not-title", "text": "A valid signature does not by itself establish legal ownership or lawful authority.", "status": "corroborated", "source_ids": ["bip-322", "icaew-audit"]},
+    {"id": "custody-needs-law", "text": "Institutional crypto safekeeping remains subject to existing custody, fiduciary, information-security, and legal requirements.", "status": "corroborated", "source_ids": ["occ-safekeeping"]}
+  ]
+}
+
