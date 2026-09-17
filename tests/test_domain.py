@@ -1,4 +1,7 @@
 import unittest
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+from pathlib import Path
 
 from src.cli import build_markdown, load_model, validate
 
@@ -20,7 +23,17 @@ class DomainModelTests(unittest.TestCase):
             self.assertTrue(capability["formula"])
             self.assertTrue(capability["terms"])
 
+    def test_pdf_builds_from_model(self):
+        from src import pdf
+
+        with TemporaryDirectory() as folder:
+            target = Path(folder) / "domain-map.pdf"
+            with patch.object(pdf, "OUTPUT", target):
+                result = pdf.build_pdf(self.model)
+            self.assertEqual(result, target)
+            self.assertTrue(target.exists())
+            self.assertGreater(target.stat().st_size, 1000)
+
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -29,10 +29,13 @@ Requires Python 3.11 or later and has no third-party runtime dependencies.
 ```bash
 python3 -m src.cli validate
 python3 -m src.cli build
+python3 -m src.cli build-pdf
 python3 -m unittest discover -s tests
 ```
 
 `build` produces [`generated/market-map.md`](generated/market-map.md), a human-readable view generated from the domain model.
+
+`build-pdf` produces [`output/pdf/domain-map.pdf`](output/pdf/domain-map.pdf) directly from the same model. This is a compact, reproducible research output rather than the separately authored long-form paper.
 
 ## Publications
 
@@ -60,4 +63,3 @@ The market map is representative, not exhaustive. Company classifications change
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md). Contributions should improve the model, evidence, or interpretation—not merely add prose.
-

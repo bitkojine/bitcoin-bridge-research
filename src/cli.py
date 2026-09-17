@@ -112,7 +112,7 @@ def build_markdown(model: dict) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(prog="research")
-    parser.add_argument("command", choices=["validate", "build"])
+    parser.add_argument("command", choices=["validate", "build", "build-pdf"])
     args = parser.parse_args()
     model = load_model()
     errors = validate(model)
@@ -123,6 +123,12 @@ def main() -> int:
     if args.command == "validate":
         print("Domain model is valid.")
         return 0
+    if args.command == "build-pdf":
+        from src.pdf import build_pdf
+
+        output = build_pdf(model)
+        print(f"Built {output.relative_to(ROOT)}")
+        return 0
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(build_markdown(model), encoding="utf-8")
     print(f"Built {OUTPUT_PATH.relative_to(ROOT)}")
@@ -131,4 +137,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
