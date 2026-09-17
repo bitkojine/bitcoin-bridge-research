@@ -1,282 +1,210 @@
 # Bitcoin Bridge Research
 
-An open, versioned research project mapping how capital governed by traditional finance and law can move onto the Bitcoin blockchain.
+An open, versioned research project about the interfaces between Bitcoin, traditional finance, and law. The repository stores a domain model, a small rule engine, a custody pre-review, generated research outputs, and a local browser interface.
 
-The repository is the research engine. Versioned PDF papers are compiled outputs.
+## Status
 
-It now also contains the first expert-system kernel: explicit rules can infer assessments from supplied case facts and return a machine-readable proof trace.
+This is an early prototype, not a decision system. “Expert system” describes the intended architecture, not the present level of knowledge or validation. Do not rely on its output for legal, fiduciary, audit, accounting, investment, custody, compliance, or cybersecurity decisions.
 
-## Brutal truth: the current state
+### Current inventory
 
-This repository is an early research prototype with a small rule engine and a useful local browser. Calling it an “expert system” describes the architecture we are building toward; it does **not** mean the repository currently contains the breadth, validation, maintenance process, or professional judgment of an expert.
-
-No lawyer, fiduciary, auditor, financial institution, custodian, investor, or beneficiary should rely on its output for a real decision.
-
-### The entire knowledge inventory
-
-As of version `0.1.0`, the structured model contains:
-
-| Item | Count | Honest interpretation |
+| Item | Count | Scope |
 | --- | ---: | --- |
-| Bitcoin capabilities | 3 | Signature validity, threshold control, and selected ledger state—not a complete Bitcoin model |
-| Finance requirements | 6 | Headline categories, not an institutional control framework |
-| Legal requirements | 5 | General concepts, not the law of any jurisdiction |
-| Bridge categories | 7 | A research taxonomy that has not been independently validated |
-| Companies | 15 | Representative names with coarse category assignments, not current due diligence |
-| Material claims | 2 | Far too few to support broad conclusions |
-| Sources | 6 | A tiny evidence base; source-level labels do not validate our interpretation |
-| Executable inference rules | 3 | A demonstration of reasoning mechanics, not domain coverage |
-| Assessment profiles | 1 | A US-oriented custody pre-review assembled from limited federal banking and New York guidance |
-| Assessment requirements | 12 | Research prompts, not a complete compliance checklist |
-| Scenario cases | 12 | Authored regression examples, not independently reviewed real cases |
-| Automated tests | 15 | Software checks; none prove legal or professional correctness |
+| Bitcoin capabilities | 3 | Signature validity, threshold control, selected ledger state |
+| Finance requirements | 6 | Headline categories, not a control framework |
+| Legal requirements | 5 | General concepts, not the law of a jurisdiction |
+| Bridge categories | 7 | An unvalidated research taxonomy |
+| Companies | 15 | Coarse category assignments, not due diligence |
+| Material claims | 2 | Insufficient for broad conclusions |
+| Sources | 6 | A small evidence base |
+| Inference rules | 3 | Demonstrate mechanics, not domain coverage |
+| Assessment profiles | 1 | US-oriented custody pre-review |
+| Assessment requirements | 12 | Research prompts, not a compliance checklist |
+| Scenario cases | 12 | Project-authored regressions, not reviewed cases |
+| Automated tests | 15 | Software tests, not professional validation |
 
-Those numbers matter. The interface may look substantial, but the underlying knowledge is still small.
+The interface is more substantial than the knowledge base behind it.
 
-### What demonstrably works
+### Implemented
 
-- Structured JSON connects Bitcoin capabilities, financial and legal requirements, bridge categories, companies, claims, and sources through stable identifiers.
-- Validation catches some duplicate identifiers, broken references, missing definitions, invalid statuses, and malformed or unsourced rules and assessment requirements.
-- A deterministic forward-chaining engine can match supplied facts, derive conclusions, record which rule fired, retain source identifiers, and expose contradictory values.
-- Missing facts remain `unknown`; they are not silently converted to `false`.
-- The engine has a basic “why not?” mechanism that can list unmet prerequisites for a requested conclusion.
-- The custody pre-review separates evidenced requirements, explicit gaps, missing information, invalid values, and conditional sub-custodian requirements.
-- Markdown and compact PDF outputs can be generated from the domain model.
-- The static web interface lets a human search the present model, inspect relationships and source links, read the system's limits, and interact with the custody questionnaire.
-- Given the same repository version and inputs, the code produces repeatable outputs.
+- Structured links among Bitcoin capabilities, finance and legal requirements, bridge categories, companies, claims, and sources.
+- Checks for some duplicate identifiers, broken references, missing definitions, invalid statuses, and malformed or unsourced rules and assessment requirements.
+- Deterministic forward chaining with open-world semantics: missing is not false.
+- Proof traces, conflict reporting, and a basic explanation of unmet prerequisites.
+- A custody pre-review that separates supported requirements, explicit gaps, missing facts, invalid values, and conditional sub-custodian requirements.
+- Generated Markdown, PDF, and static web views.
+- Client-side search and an interactive custody questionnaire.
 
-### What the web interface really is
+### Not established or implemented
 
-- It is a static HTML, CSS, and JavaScript application served from `dist/`. There is no application server, database, account system, or API.
-- It reads a generated snapshot of repository JSON. Changes to the domain files do not appear until `python3 -m src.build_web` is run again.
-- Its search is simple client-side text matching, not semantic search, retrieval-augmented generation, or an LLM.
-- It does not save assessments. Refreshing or closing the page loses the user's selections.
-- It does not accept evidence files, verify documents, execute Bitcoin signature checks, query a node, inspect transactions, or authenticate people.
-- The browser questionnaire currently reimplements the assessment decision logic in JavaScript instead of calling the Python assessment engine. Tests cover the Python implementation, so the two implementations could drift.
-- Source links leave the application and open the publisher's page. The repository does not archive source text or prove that a linked page still says what our model claims.
-- “Verified on” is repository metadata, not proof that every fact and company classification was rechecked on that date.
-- There is no news feed. There is no crawler, regulator monitor, change detector, alerting system, or automatic update process.
+- Input truth. A supplied `true` value is accepted, not verified.
+- Authentication of documents, identities, signatures, balances, authority, or provenance.
+- Legal ownership, beneficial entitlement, identity, capacity, authority, consent, death, succession, negligence, or compliance from a Bitcoin key, address, balance, or signature.
+- Completeness of wallet, key-copy, liability, agreement, beneficiary, transaction, or event disclosure.
+- Exclusive control from a single key or signature demonstration; undisclosed copies may exist.
+- Current licensing, qualification, legality, solvency, safety, or suitability of any company, product, or arrangement.
+- Material coverage of any complete body of law, regulation, accounting, audit, Bitcoin operations, or institutional policy.
+- Jurisdiction and applicability analysis, effective dates, amendment history, precedent, exceptions, safe harbors, or conflicting authorities.
+- Case-evidence provenance such as hashes, issuer identity, custody chain, observation method, reviewer, or expiry.
+- Full truth maintenance, calibrated uncertainty, expert approval, change-impact analysis, or signed releases.
+- Independently reviewed cases, external validation data, coverage measures, error rates, or usability evidence.
+- Production controls: authentication, authorization, audit logs, security design, backups, monitoring, or a threat model.
+- Continuous integration, link checking, source freshness, regulatory monitoring, news ingestion, or alerts.
 
-### What the system cannot establish
+The generated PDF is research output, not a certification, audit opinion, proof of reserves, legal instrument, compliance report, or regulatory filing.
 
-- It cannot establish that a user-supplied fact is true. At present, `true` means only that someone entered `true`.
-- It cannot establish legal ownership, beneficial entitlement, legal identity, capacity, authority, consent, voluntariness, death, succession, negligence, or compliance from a Bitcoin key, address, balance, or signature.
-- It cannot prove that every wallet, key copy, liability, agreement, beneficiary, transaction, side arrangement, or relevant event was disclosed.
-- It cannot prove that “exclusive control” exists merely because one key or signature was demonstrated. Undisclosed copies may exist.
-- It cannot determine whether a custodian, trust company, bank, adviser, product, or arrangement is licensed, qualified, lawful, solvent, safe, or suitable now.
-- It cannot give legal, tax, accounting, audit, investment, custody, compliance, cybersecurity, or fiduciary advice.
-- Its PDF is not a certification, audit opinion, proof of reserves, legal instrument, compliance report, or regulatory filing.
+### Web interface
 
-### Missing expert-system capabilities
+The web UI is a static application in `dist/`. It has no server, database, accounts, API, persistence, semantic search, RAG, or LLM. It reads a generated snapshot; run `python3 -m src.build_web` after changing the domain files.
 
-- No meaningful coverage of any complete body of law, regulation, accounting standards, audit standards, Bitcoin operations, or institutional policy.
-- No jurisdiction engine, applicability analysis, effective-date logic, amendment history, precedent hierarchy, exceptions, safe harbors, or conflicting-authority resolution.
-- No evidentiary provenance for case inputs: no document hashes, issuer identity, signatures, custody chain, observation method, reviewer, or expiry.
-- No full truth-maintenance system. The engine does not maintain a live session that retracts every dependent conclusion when premises change.
-- No calibrated uncertainty model. Source quality, factual confidence, legal ambiguity, and expert disagreement are not yet represented separately.
-- No expert knowledge-acquisition or approval workflow, named reviewers, rule ownership, four-eyes approval, change impact analysis, or signed releases.
-- No independently reviewed golden cases, real-world validation set, coverage measurement, error-rate measurement, or usability evidence.
-- No production controls: authentication, authorization, encryption design, audit log, rate limiting, backup, monitoring, incident response, or threat model.
-- No continuous integration or automated freshness checks against external sources.
-
-### Known research weaknesses
-
-- Company classifications are broad and can become stale quickly. They should be treated as hypotheses to verify, not vendor recommendations.
-- The evidence-level scale describes the kind of source, but it is crude. A regulator's document can be authoritative about one institution and irrelevant to another; reproducibility does not automatically mean legal weight.
-- The custody assessment combines US federal banking guidance with New York virtual-currency guidance. That combination is useful for research but does not automatically apply to a particular institution, state, customer, product, or transaction.
-- A requirement marked “evidenced” says nothing about the quality, completeness, freshness, authenticity, or legal sufficiency of the evidence unless a qualified reviewer has actually checked it.
-- The existing scenario cases were written by the project, for the project. Passing them proves internal consistency, not external validity.
-
-### The honest achievement—and the next bottleneck
-
-The repository proves that a small amount of domain knowledge can be represented, linked to sources, checked structurally, executed deterministically, explained, tested, published, and explored in one codebase.
-
-It does **not** prove that the encoded knowledge is complete, applicable, current, or professionally correct. The primary bottleneck is now expert-reviewed knowledge and evidence provenance—not more interface polish, more rules written by a model, or a larger language model.
+Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its JavaScript questionnaire duplicates the Python assessment logic and can drift from it; only the Python path is covered by the current tests. Source links open external pages, but the repository does not archive or hash their contents. The global `verified_on` field is metadata, not evidence that every record was rechecked on that date.
 
 ## Research thesis
 
-Bitcoin provides narrow, machine-verifiable guarantees: signatures, script satisfaction, ledger state, and cryptographic commitments. Traditional finance and current law additionally require identity, authority, ownership records, liabilities, controls, succession, and remedies.
+Bitcoin supplies narrow, machine-verifiable guarantees: signature validity, script satisfaction, ledger state, and cryptographic commitments. Finance and law also require facts about identity, authority, ownership, liabilities, controls, succession, and remedies. Products and institutions operate at the interfaces between those systems.
 
-The market forms at the bridges between those systems.
+This framing assumes that moving traditionally governed capital onto Bitcoin is worth studying. It does not establish that such a move is desirable in a particular case.
 
-## Philosophical audit: ontology, epistemology, and axiology
+## Ontology, epistemology, and axiology
 
-These terms are not decorative research language. They expose three different ways this system can be wrong:
+These identify different failure modes:
 
-- **Ontological error:** the model contains the wrong kinds of things or relationships.
-- **Epistemic error:** the system claims more than its evidence justifies.
-- **Axiological error:** the system optimizes for the wrong values, people, or harms.
+- **Ontology:** the model contains the wrong entities or relationships.
+- **Epistemology:** a claim exceeds its evidence.
+- **Axiology:** the system gives priority to the wrong values, people, or harms.
 
-The shorthand is useful but incomplete: ontology asks what exists; epistemology asks what can be known and on what grounds; axiology asks what is valuable and how values compare. Epistemology is not merely “methodology,” and axiology is not merely “bias.” For background, see the Stanford Encyclopedia of Philosophy on [metaphysics and ontology](https://plato.stanford.edu/entries/plato-metaphysics/), [epistemology](https://plato.stanford.edu/archives/fall2018/entries/epistemology/), [the analysis of knowledge](https://plato.stanford.edu/entries/knowledge-analysis/), and [value theory](https://plato.stanford.edu/archives/spr2023/entries/value-theory/).
+Ontology concerns what exists; epistemology concerns knowledge and justification; axiology concerns value. Epistemology is not merely methodology, and axiology is not merely bias. Background: [metaphysics and ontology](https://plato.stanford.edu/entries/plato-metaphysics/), [epistemology](https://plato.stanford.edu/archives/fall2018/entries/epistemology/), [knowledge](https://plato.stanford.edu/entries/knowledge-analysis/), and [value theory](https://plato.stanford.edu/archives/spr2023/entries/value-theory/).
 
-### Ontology: what this repository says exists
+### Ontology
 
-The repository's current operational ontology recognizes these types of things:
+The current model recognizes:
 
-| Entity | What the repository currently means by it |
+| Entity | Meaning here |
 | --- | --- |
-| Bitcoin capability | A narrow property that Bitcoin's verification rules can establish, such as signature validity, threshold satisfaction, or selected ledger state |
-| Finance requirement | A fact or control an institutional financial arrangement may require beyond native Bitcoin verification |
-| Legal requirement | A legally relevant concept such as ownership, capacity, authority, succession, or remedy |
-| Bridge | A product or institutional function connecting Bitcoin capabilities to financial or legal requirements |
-| Company | A named market participant assigned to one or more bridge categories |
-| Claim | A proposition asserted by the research project |
-| Source | A URL and metadata record offered in support of claims, rules, or requirements |
-| Rule | An explicit conditional mapping from supplied facts to a derived conclusion |
-| Case fact | A value supplied to the inference or assessment code; currently usually a Boolean |
-| Assessment requirement | An evidence question used by one pre-review workflow |
-| Outcome | A computed label such as `not_ready` or `insufficient_information` |
-
-The principal modeled relationships are:
+| Bitcoin capability | A property established by Bitcoin verification rules |
+| Finance requirement | A financial fact or control not supplied by Bitcoin alone |
+| Legal requirement | A concept such as ownership, capacity, authority, succession, or remedy |
+| Bridge | A product or function connecting Bitcoin capabilities to financial or legal requirements |
+| Company | A named market participant assigned to bridge categories |
+| Claim | A proposition asserted by the project |
+| Source | A URL and metadata offered in support |
+| Rule | Conditions mapped to a derived conclusion |
+| Case fact | A supplied value, usually Boolean |
+| Assessment requirement | An evidence question in a pre-review |
+| Outcome | A computed label such as `not_ready` |
 
 ```text
-BitcoinCapability ---supports---> Bridge
-FinanceRequirement --required_by-> Bridge
-LegalRequirement ----required_by-> Bridge
-Company -------------assigned_to-> Bridge
-Claim -------------supported_by-> Source
-Rule -----------------uses_facts-> Conclusion
-AssessmentRequirement-cites-----> Source
+BitcoinCapability ----supports----> Bridge
+FinanceRequirement ---required_by-> Bridge
+LegalRequirement -----required_by-> Bridge
+Company --------------assigned_to-> Bridge
+Claim ----------------supported_by-> Source
+Rule -----------------uses_facts---> Conclusion
+AssessmentRequirement-cites-------> Source
 ```
 
-The most important ontological commitment is that **cryptographic control, legal ownership, beneficial entitlement, identity, authority, and consent are different relationships**. A valid Bitcoin signature belongs to the ontology of cryptographic verification. It is not transformed into legal title merely by attaching a person's name to it.
+Cryptographic control, legal ownership, beneficial entitlement, identity, authority, and consent are distinct. A valid signature establishes a cryptographic result, not legal title.
 
-#### Ontological limits and category problems
+Current modeling defects:
 
-- The JSON schema is a software vocabulary, not proof that its categories correspond perfectly to reality.
-- `Bridge` is a project-created analytical category. It is not a standard legal, accounting, or Bitcoin category, and its seven subcategories have not been validated by independent experts.
-- `Company` is radically under-modeled. A brand may contain several legal entities, licenses, jurisdictions, products, custody models, and changing contractual roles; the repository currently collapses these into one name.
-- `Source` is modeled mostly as a URL. The actual document, author, issuing authority, publication history, relevant passage, jurisdiction, legal status, and supersession relationships are not fully modeled.
-- Law is under-modeled as five general nouns. Statutes, regulations, cases, contracts, guidance, legal tests, exceptions, burdens of proof, remedies, and conflicts of law are not represented as distinct entities.
-- Time is under-modeled. A global verification date is not a temporal model for individual facts, rules, products, licenses, or authorities.
-- Jurisdiction is described in prose but is not a first-class entity participating in inference.
-- Evidence is not yet a first-class case object. A Boolean such as `legal_authority_evidenced: true` collapses the document, issuer, subject, reviewer, review method, scope, date, authenticity, expiry, and unresolved exceptions into one bit.
-- Persons, organizations, accounts, wallets, descriptors, keys, UTXOs, transactions, contracts, trusts, estates, beneficiaries, regulators, courts, and auditors are discussed but not yet fully represented as typed entities.
-- The system has no identity-resolution model. It cannot know whether two names, keys, accounts, subsidiaries, or documents refer to the same real-world entity.
+- The schema is a project vocabulary, not evidence that its categories match reality.
+- `Bridge` is not a standard legal, accounting, or Bitcoin category. Its seven categories have not been independently reviewed.
+- `Company` collapses brands, legal entities, licenses, jurisdictions, products, contracts, and custody models into one record.
+- `Source` is mainly a URL; passages, authors, issuing authority, publication history, jurisdiction, legal status, and supersession are incomplete.
+- Five general legal concepts stand in for statutes, regulations, cases, contracts, legal tests, exceptions, burdens, and remedies.
+- Jurisdiction and time are not first-class participants in inference.
+- A Boolean such as `legal_authority_evidenced: true` collapses the document, issuer, subject, reviewer, method, scope, date, authenticity, expiry, and exceptions into one bit.
+- Persons, organizations, accounts, wallets, descriptors, keys, UTXOs, transactions, contracts, trusts, estates, beneficiaries, regulators, courts, and auditors are not fully typed.
+- There is no identity-resolution model for names, keys, accounts, subsidiaries, or documents.
 
-The brutal conclusion: this is presently a **taxonomy with a few executable propositions**, not a mature domain ontology.
+The current model is a taxonomy with a few executable propositions, not a mature ontology.
 
-### Epistemology: what this repository can claim to know
+### Epistemology
 
-The repository currently has four possible epistemic inputs:
+The system draws on four kinds of input:
 
-1. **Bitcoin verification rules**, represented by simplified formulas and technical sources.
-2. **External publications**, represented by source metadata and URLs.
-3. **Project-authored interpretation**, represented by claims, category assignments, assessment requirements, and rules.
-4. **User-supplied case facts**, accepted as inputs without authentication.
+1. Simplified Bitcoin verification rules and technical sources.
+2. External publications represented by URLs and metadata.
+3. Project-authored claims, classifications, requirements, and rules.
+4. Unauthenticated facts supplied by a user.
 
-Its current epistemic mechanisms are limited:
+Claim statuses, evidence levels, rule traces, open-world handling, and conflict reporting improve inspectability. They do not establish that a premise is true, a source applies, a rule is valid, or a conclusion is correct. A trace establishes only that a particular rule version transformed accepted premises into an output.
 
-- Claim statuses distinguish `unverified`, `supported`, `corroborated`, `contested`, `stale`, and `retracted`.
-- Evidence levels classify the general kind of source.
-- Rules expose their conditions, conclusions, and source identifiers.
-- Open-world handling prevents a missing fact from becoming a negative fact.
-- Conflict reporting preserves incompatible values instead of silently overwriting them.
-- Proof traces explain how a conclusion was mechanically derived from the accepted premises.
-
-Those mechanisms improve transparency, but they do not establish knowledge. A proof trace proves only:
-
-> Given these encoded premises and this rule version, the program produced this conclusion.
-
-It does **not** prove that the premises are true, that the rule is legally valid, that its sources apply, or that the conclusion is correct in the world.
-
-#### Current epistemic ladder
-
-The system should distinguish these levels, but does not yet enforce all of them:
+The intended evidence ladder is:
 
 ```text
-Referenced     A source URL was recorded.
-Extracted      A specific passage was captured accurately.
-Interpreted    The project stated what that passage means.
-Applicable     Jurisdiction, entity, product, role, and date were matched.
-Corroborated   Independent relevant evidence supports the proposition.
-Case-evidenced Authentic evidence supports the proposition in this case.
-Expert-reviewed A qualified reviewer accepted the reasoning within a stated scope.
-Decision-grade The evidence, rules, controls, and accountability meet a defined use standard.
+Referenced       A source URL is recorded.
+Extracted        A specific passage is captured accurately.
+Interpreted      The project states what the passage means.
+Applicable       Jurisdiction, entity, product, role, and date match.
+Corroborated     Independent relevant evidence supports the proposition.
+Case-evidenced   Authentic case evidence supports the proposition.
+Expert-reviewed  A qualified reviewer accepts the scoped reasoning.
+Decision-grade   Evidence, rules, controls, and accountability meet a defined use standard.
 ```
 
-Today, much of the repository is only at **referenced** or **project-interpreted**. The interface can make that material easy to browse, but presentation quality must not be confused with epistemic maturity.
+Most current material is only referenced or project-interpreted.
 
-#### Epistemic weaknesses
+Epistemic weaknesses:
 
-- Most citations point to whole documents or pages, not exact passages, sections, quotations, or archived versions.
-- A source identifier attached to a rule does not demonstrate that the source entails the rule.
-- The source-level hierarchy mixes authority, independence, and reproducibility into one number. Those are different epistemic properties.
-- A primary source can be authoritative about what an institution said while still being weak evidence that the statement is true.
-- Company self-description may be the best source for a product feature and a poor source for safety, solvency, effectiveness, or legal status.
-- Regulatory guidance may be highly relevant but nonbinding, jurisdiction-limited, superseded, or addressed only to specific regulated entities.
-- The system records little contrary evidence and has no systematic source-disagreement model.
-- It has no source snapshots, content hashes, passage-level citations, automated link checking, or supersession detection.
-- It has no named researcher, extractor, interpreter, legal reviewer, or approval record attached to individual propositions.
-- `corroborated` is not backed by a formal test for independence, relevance, or sufficiency.
-- Company-to-bridge assignments generally lack claim-by-claim citations and verification dates.
-- The assessment accepts unchecked Boolean assertions. It does not inspect the evidence it tells the user to obtain.
-- The system has not been tested against external expert judgments, so accuracy, recall, false-assurance risk, and inter-reviewer agreement are unknown.
+- Citations usually identify whole documents, not passages or archived versions.
+- Attaching a source ID does not show that the source entails the claim or rule.
+- The evidence-level number conflates authority, independence, relevance, and reproducibility.
+- Primary sources establish what an institution said, not necessarily that it is true.
+- Company material may describe features while remaining poor evidence of safety, solvency, effectiveness, or legal status.
+- Regulatory guidance may be nonbinding, jurisdiction-limited, superseded, or addressed only to particular entities.
+- Contrary evidence and source disagreement are not modeled systematically.
+- There are no source snapshots, hashes, passage citations, link checks, or supersession detection.
+- Claims do not identify individual extractors, interpreters, or reviewers.
+- `corroborated` has no formal independence, relevance, or sufficiency test.
+- Company classifications generally lack claim-level citations and dates.
+- The assessment requests evidence but evaluates unchecked Boolean assertions.
+- Accuracy, recall, false-assurance risk, and reviewer agreement are unknown.
 
-The brutal conclusion: the repository can currently show **what it asserts, where it looked, and how code transformed inputs**. It cannot yet show that it knows its conclusions in a professionally defensible sense.
+The repository can show what it asserts, where it looked, and how code transformed inputs. It cannot yet defend its conclusions as professional knowledge.
 
-### Axiology: what this repository values
+### Axiology
 
-This project is not value-neutral. Its founding purpose is to study how money governed by traditional finance and law can move onto Bitcoin. That framing already treats such movement as worth investigating and focuses attention on enabling bridges rather than asking only whether the movement should happen.
+The project is not neutral. It studies how traditionally governed capital can move onto Bitcoin, which directs attention toward enabling institutional bridges.
 
-The repository currently expresses these values:
+Declared priorities:
 
-- **Truth over persuasion:** expose missing knowledge and contradictory evidence rather than manufacture certainty.
-- **Restraint over fluent guessing:** prefer `unknown` and `insufficient_information` to an unsupported affirmative conclusion.
-- **Traceability over authority theater:** conclusions should expose their facts, rules, and sources.
-- **Reproducibility over discretionary opacity:** the same versioned inputs should produce the same mechanical result.
-- **Separation of powers:** cryptography should not silently decide legal ownership, and legal language should not pretend to alter Bitcoin's verification rules.
-- **Protection against false assurance:** an explicit failed requirement currently produces `not_ready`; missing evidence prevents `ready_for_expert_review`.
-- **Human accountability:** consequential conclusions should remain reviewable by identifiable qualified people.
-- **Open criticism:** the public repository should make assumptions and errors inspectable.
+- Report missing or conflicting information instead of filling gaps.
+- Prefer `unknown` or `insufficient_information` to unsupported approval.
+- Expose facts, rules, and sources behind conclusions.
+- Produce repeatable results from versioned inputs.
+- Keep cryptographic control separate from legal ownership.
+- Avoid false assurance: a failed requirement yields `not_ready`; missing evidence prevents readiness.
+- Leave consequential judgment with accountable, qualified people.
+- Keep assumptions and errors open to criticism.
 
-#### Hidden and contestable value choices
+Contestable choices:
 
-- The project privileges an institutional lens: custodians, banks, lawyers, trustees, auditors, and regulators. Individual self-custody, privacy, permissionlessness, resistance to seizure, and people excluded by traditional finance receive less representation.
-- The first assessment privileges US federal banking and New York regulatory perspectives. This is a scope choice, not a universal hierarchy of values.
-- The system treats institutional readiness as desirable enough to measure. It does not yet model whether a proposed arrangement is desirable for customers, beneficiaries, society, or Bitcoin's decentralization.
-- Conservative abstention reduces false assurance but may increase false negatives, cost, delay, and exclusion. The repository has not formally chosen or measured that tradeoff.
-- The source hierarchy implicitly privileges institutions and formal publications. Lived experience, operational knowledge, open-source investigation, whistleblowers, and affected users are not adequately represented.
-- The company map can confer legitimacy merely by inclusion and visual prominence, even when the repository has performed no due diligence.
-- “Compliance,” “safety,” “customer protection,” “privacy,” “autonomy,” “recoverability,” and “censorship resistance” can conflict. The system has no explicit value-conflict procedure.
-- The project has not defined whose welfare controls when the interests of asset owners, beneficiaries, fiduciaries, custodians, regulators, creditors, and the wider Bitcoin network diverge.
-- A public system can educate and improve accountability, but it can also be used for compliance theater or to make weak arrangements look formally reviewed.
+- The institutional focus privileges custodians, banks, lawyers, trustees, auditors, and regulators. Self-custody, privacy, permissionlessness, resistance to seizure, and people excluded by traditional finance receive less attention.
+- The first assessment privileges US federal banking and New York regulatory perspectives.
+- Measuring institutional readiness does not establish that an arrangement benefits customers, beneficiaries, society, or Bitcoin's decentralization.
+- Conservative abstention may reduce false assurance while increasing false negatives, cost, delay, and exclusion; this tradeoff is not measured.
+- The source hierarchy privileges institutions and formal publications. Operational knowledge, open-source investigation, whistleblowers, lived experience, and affected users are underrepresented.
+- Inclusion in the company map can imply legitimacy despite the absence of due diligence.
+- Compliance, safety, customer protection, privacy, autonomy, recoverability, and censorship resistance can conflict. No value-conflict procedure exists.
+- The project has not decided whose welfare controls when owners, beneficiaries, fiduciaries, custodians, regulators, creditors, and the Bitcoin network have different interests.
+- The system could support education and accountability, or be misused as compliance theater.
 
-The brutal conclusion: the repository favors transparent, conservative, institution-compatible movement onto Bitcoin. That is a defensible research stance, but it is still a stance. It must be declared, challenged, and prevented from masquerading as neutral truth.
+The present stance favors transparent, conservative, institution-compatible movement onto Bitcoin. It should be treated as a declared position, not neutral fact.
 
-### How the three constrain one another
+Every future rule or assessment should answer:
 
-| If we get this wrong | Resulting failure |
-| --- | --- |
-| Ontology without epistemology | The system models elegant entities but cannot justify claims about real cases |
-| Epistemology without ontology | Evidence is collected against vague or conflated concepts such as control, custody, and ownership |
-| Ontology and epistemology without axiology | The system can classify and infer without examining whose interests or harms guide the classifications |
-| Axiology without epistemology | Desired outcomes are presented as facts |
-| Axiology without ontology | Values attach to abstractions that omit the affected people, rights, institutions, and power relationships |
-
-For every future rule or assessment, the repository should therefore require three answers:
-
-1. **Ontology:** What exact entities, relationships, jurisdiction, role, and time does this rule concern?
-2. **Epistemology:** What evidence would justify the premises and conclusion, what would defeat them, and who reviewed the interpretation?
-3. **Axiology:** Which value or harm does the rule prioritize, who benefits, who bears the cost, and how are conflicts escalated?
-
-Until the repository can answer those questions at the level of individual claims and cases, its output remains structured research—not expertise.
+1. **Ontology:** Which entities, relationships, jurisdiction, role, and time does it concern?
+2. **Epistemology:** What supports or defeats its premises and conclusion, and who reviewed the interpretation?
+3. **Axiology:** Which value or harm does it prioritize, who benefits, who bears the cost, and how are conflicts escalated?
 
 ## Domain model
 
-```text
-BitcoinCapability ---supports---> Bridge
-FinanceRequirement --requires---> Bridge
-LegalRequirement ----requires---> Bridge
-Company -------------provides---> Bridge
-Claim -------------supported_by-> Source
-```
-
-Structured research lives in [`domain/model.json`](domain/model.json). The validator checks identifiers, relationships, equations, term definitions, company references, and evidence links.
+Structured research lives in [`domain/model.json`](domain/model.json). Rules are in [`domain/rules.json`](domain/rules.json); the current assessment is in [`domain/assessments/custody-readiness.json`](domain/assessments/custody-readiness.json).
 
 ## Commands
 
-Requires Python 3.11 or later. Core validation and inference use only the standard library; PDF generation uses ReportLab as declared in `pyproject.toml`.
+Python 3.11 or later is required. Core validation and inference use the standard library; PDF generation uses ReportLab.
 
 ```bash
 python3 -m src.cli validate
@@ -289,15 +217,11 @@ python3 -m src.build_web
 python3 -m unittest discover -s tests
 ```
 
-`build` produces [`generated/market-map.md`](generated/market-map.md), a human-readable view generated from the domain model.
-
-`build-pdf` produces [`output/pdf/domain-map.pdf`](output/pdf/domain-map.pdf) directly from the same model. This is a compact, reproducible research output rather than the separately authored long-form paper.
-
-`infer` evaluates a JSON case against [`domain/rules.json`](domain/rules.json). It uses open-world semantics: an absent fact is unknown, never silently false. See [`research/expert-system-architecture.md`](research/expert-system-architecture.md) for the design, quality criteria, safeguards, and roadmap.
-
-`assess` runs the first practical workflow: a US institutional Bitcoin custody pre-review covering twelve evidence areas. It returns `ready_for_expert_review`, `not_ready`, or `insufficient_information`, then lists blocking gaps and missing evidence. The profile is in [`domain/assessments/custody-readiness.json`](domain/assessments/custody-readiness.json). It is research software, not a compliance or legal determination.
-
-`build_web` refreshes the static browser interface in [`dist/`](dist/) from the current domain model, rules, and assessment profile. Serve that directory locally to explore the knowledge base and run the assessment interactively.
+- `build` writes `generated/market-map.md`.
+- `build-pdf` writes `output/pdf/domain-map.pdf` from the model.
+- `infer` evaluates JSON facts against the rules and returns a trace.
+- `assess` runs the custody pre-review.
+- `build_web` refreshes `dist/knowledge.js` for the static UI.
 
 ## Publications
 
@@ -306,11 +230,9 @@ python3 -m unittest discover -s tests
 
 ## Evidence policy
 
-Every material claim should identify its source and carry both a status and evidence level.
+Material claims should identify sources and carry a status: `unverified`, `supported`, `corroborated`, `contested`, `stale`, or `retracted`.
 
-Statuses: `unverified`, `supported`, `corroborated`, `contested`, `stale`, `retracted`.
-
-Evidence levels:
+The current evidence levels are:
 
 1. Company marketing
 2. Official technical documentation
@@ -318,10 +240,8 @@ Evidence levels:
 4. Independent professional evidence
 5. Reproducible primary data
 
-## Scope
+This scale is provisional and conflates properties that should be modeled separately.
 
-The market map is representative, not exhaustive. Company classifications change as products, laws, and institutions evolve. Each publication records its verification date.
+## Scope and contributions
 
-## Contributing
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). Contributions should improve the model, evidence, or interpretation—not merely add prose.
+The market map is representative, not exhaustive. Company classifications and legal sources can become stale. See [`CONTRIBUTING.md`](CONTRIBUTING.md). Contributions should improve the model, evidence, or interpretation rather than add unsupported prose.
