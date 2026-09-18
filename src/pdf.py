@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from reportlab import rl_config
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.enums import TA_CENTER
@@ -30,6 +31,9 @@ PALE_ORANGE = HexColor("#FFF2DE")
 LINE = HexColor("#D8DEE7")
 PAPER = HexColor("#FBFCFE")
 WHITE = colors.white
+
+# Make committed PDFs reproducible: fixed metadata timestamps and document IDs.
+rl_config.invariant = 1
 
 base = getSampleStyleSheet()
 STYLES = {
@@ -175,16 +179,21 @@ def build_pdf(model: dict) -> Path:
     story += [matrix(["Bridge", "Bitcoin capabilities", "Institutional requirements", "Companies"], bridge_rows,
                      [34 * mm, 40 * mm, 54 * mm, 42 * mm]), PageBreak(),
               p("4. Evidence-backed claims", "h1"),
-              p("Claims are published with an explicit status and source set. Validation rejects unknown statuses and missing source references."),]
+              p("Claims are published with an explicit status, treatment signals, and pinned source passages. Each cited source is frozen by SHA-256; validation rejects unknown statuses, missing snapshots, and quotes that are absent from the frozen text."),]
 
     claim_rows = []
     for claim in model["claims"]:
         linked = "<br/>".join(
-            f"<b>{sources[t['source_id']]['title']}</b> ({t['treatment']})<br/>{sources[t['source_id']]['url']}"
+            f"<b>{sources[t['source_id']]['title']}</b> ({t['treatment']}, {t.get('locator', '-')})"
+            f"<br/><i>“{t.get('quote', '')[:140]}…”</i><br/>{sources[t['source_id']]['url']}"
             for t in claim["treatments"]
         )
         replaced = f"<br/>Superseded by: {', '.join(claim['superseded_by'])}" if claim.get("superseded_by") else ""
         claim_rows.append([f"<b>{claim['status'].upper()}</b>", claim["text"] + replaced, linked])
+    from src.evidence import load_manifest, snapshot_coverage
+
+    coverage = snapshot_coverage(load_manifest())
+    unavailable = ", ".join(coverage["unavailable"]) or "none"
     story += [matrix(["Status", "Claim", "Sources"], claim_rows, [29 * mm, 76 * mm, 65 * mm]),
               Spacer(1, 8 * mm), p("Current scope", "h2"),
               p(f"The model currently contains <b>{len(model['bitcoin_capabilities'])}</b> Bitcoin capabilities, "
@@ -192,7 +201,9 @@ def build_pdf(model: dict) -> Path:
                 f"<b>{len(model['legal_requirements'])}</b> legal requirements, "
                 f"<b>{len(model['bridges'])}</b> bridge categories, "
                 f"<b>{len(companies)}</b> companies, <b>{len(model['sources'])}</b> sources, and "
-                f"<b>{len(model['claims'])}</b> evidence-linked claims."),
+                f"<b>{len(model['claims'])}</b> evidence-linked claims. "
+                f"Frozen source snapshots: <b>{coverage['frozen']}/{coverage['total']}</b> "
+                f"(unavailable: {unavailable})."),
               callout("This PDF demonstrates the engine, not a finished market census. Its visible gaps are model gaps that can now be improved through versioned contributions.")]
 
     doc.build(story, onFirstPage=footer, onLaterPages=footer)

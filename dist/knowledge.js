@@ -334,6 +334,7 @@ window.KNOWLEDGE = {
         "id": "bip-322",
         "title": "BIP-322 Generic Signed Message Format",
         "url": "https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki",
+        "archive_url": "https://raw.githubusercontent.com/bitcoin/bips/master/bip-0322.mediawiki",
         "level": 5,
         "currency": "current",
         "checked_on": "2026-09-17"
@@ -403,11 +404,15 @@ window.KNOWLEDGE = {
         "treatments": [
           {
             "source_id": "bip-322",
-            "treatment": "supports"
+            "treatment": "supports",
+            "locator": "Abstract",
+            "quote": "A standard for interoperable signed messages based on the Bitcoin Script format, either for proving availability of funds, or for committing to a message as the intended recipient of funds sent to the invoice address."
           },
           {
             "source_id": "icaew-audit",
-            "treatment": "supports"
+            "treatment": "supports",
+            "locator": "Ownership and Control",
+            "quote": "Certain blockchain operations can also obviate the need for third-party intermediaries for the execution of transactions, limiting the information available to prove ownership."
           }
         ]
       },
@@ -417,8 +422,10 @@ window.KNOWLEDGE = {
         "status": "supported",
         "treatments": [
           {
-            "source_id": "occ-safekeeping",
-            "treatment": "supports"
+            "source_id": "nydfs-custody-2025",
+            "treatment": "supports",
+            "locator": "Industry Letter - September 30, 2025: Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency",
+            "quote": "New York’s virtual currency regulation, 23 NYCRR Part 200, requires BitLicensees to do the following, among other things: hold virtual currency in a manner that protects customer assets; maintain comprehensive books and records; properly disclose the material terms and conditions associated with their products and services, including custody services; and refrain from making any false, misleading, or deceptive representations or omissions in their marketing materials."
           }
         ]
       }
@@ -635,6 +642,119 @@ window.KNOWLEDGE = {
         "source_ids": [
           "occ-safekeeping"
         ]
+      }
+    ]
+  },
+  "evidence": {
+    "meta": {
+      "generated_on": "2026-09-17",
+      "frozen": 6,
+      "unavailable": 2
+    },
+    "snapshots": [
+      {
+        "source_id": "bip-322",
+        "status": "frozen",
+        "url": "https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki",
+        "archive_url": "https://raw.githubusercontent.com/bitcoin/bips/master/bip-0322.mediawiki",
+        "final_url": "https://raw.githubusercontent.com/bitcoin/bips/master/bip-0322.mediawiki",
+        "retrieved_at": "2026-09-17T22:29:48+00:00",
+        "sha256": "0eb91c5093ef81c462cadffdbe02d4d1638cb270d3ccb47301a6d82860aa0454",
+        "bytes": 21361,
+        "content_type": "text/plain; charset=utf-8",
+        "path": "evidence/sources/bip-322/0eb91c5093ef81c462cadffdbe02d4d1638cb270d3ccb47301a6d82860aa0454.mediawiki",
+        "text_path": "evidence/sources/bip-322/0eb91c5093ef81c462cadffdbe02d4d1638cb270d3ccb47301a6d82860aa0454.txt",
+        "text_sha256": "0eb91c5093ef81c462cadffdbe02d4d1638cb270d3ccb47301a6d82860aa0454",
+        "text_chars": 21361
+      },
+      {
+        "source_id": "bitcoin-transactions",
+        "status": "frozen",
+        "url": "https://developer.bitcoin.org/devguide/transactions.html",
+        "archive_url": "https://developer.bitcoin.org/devguide/transactions.html",
+        "final_url": "https://developer.bitcoin.org/devguide/transactions.html",
+        "retrieved_at": "2026-09-17T22:29:49+00:00",
+        "sha256": "d1a0cafb54f513f74437bfe78e180136a6d2535ebd33312aecce39cc0fe46565",
+        "bytes": 68805,
+        "content_type": "text/html",
+        "path": "evidence/sources/bitcoin-transactions/d1a0cafb54f513f74437bfe78e180136a6d2535ebd33312aecce39cc0fe46565.html",
+        "text_path": "evidence/sources/bitcoin-transactions/d1a0cafb54f513f74437bfe78e180136a6d2535ebd33312aecce39cc0fe46565.txt",
+        "text_sha256": "0a29e399de5b312e419c61365ce5685f51aed1130d7e6e8ec2a0b8b74ccafd03",
+        "text_chars": 33255
+      },
+      {
+        "source_id": "icaew-audit",
+        "status": "frozen",
+        "url": "https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies",
+        "archive_url": "https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies",
+        "final_url": "https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies",
+        "retrieved_at": "2026-09-17T22:31:09+00:00",
+        "sha256": "d372c0af5b76172f602a08279904aefd5c89167ef9088e9882019843cc0715a4",
+        "bytes": 495112,
+        "content_type": "text/html; charset=utf-8",
+        "path": "evidence/sources/icaew-audit/d372c0af5b76172f602a08279904aefd5c89167ef9088e9882019843cc0715a4.html",
+        "text_path": "evidence/sources/icaew-audit/d372c0af5b76172f602a08279904aefd5c89167ef9088e9882019843cc0715a4.txt",
+        "text_sha256": "641ca4b8f899ffe493ce6874eeea165b6be9c86c4aee3fa38277c479a45daae6",
+        "text_chars": 53581
+      },
+      {
+        "source_id": "nydfs-custody-2025",
+        "status": "frozen",
+        "url": "https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures",
+        "archive_url": "https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures",
+        "final_url": "https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures",
+        "retrieved_at": "2026-09-17T22:31:10+00:00",
+        "sha256": "4086ebb8667840585779e0bcc53ac30871ecb7df39bfa78d96bd2ae1879898f4",
+        "bytes": 45662,
+        "content_type": "text/html; charset=utf-8",
+        "path": "evidence/sources/nydfs-custody-2025/4086ebb8667840585779e0bcc53ac30871ecb7df39bfa78d96bd2ae1879898f4.html",
+        "text_path": "evidence/sources/nydfs-custody-2025/4086ebb8667840585779e0bcc53ac30871ecb7df39bfa78d96bd2ae1879898f4.txt",
+        "text_sha256": "00781b24d2cf1cb65771cecbf2d53123a10377f7f1cababe95befbf09f7004d0",
+        "text_chars": 13706
+      },
+      {
+        "source_id": "occ-il-1184",
+        "status": "unavailable",
+        "url": "https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf",
+        "attempted_at": "2026-09-17T22:32:30+00:00",
+        "error": "URLError: <urlopen error timed out>"
+      },
+      {
+        "source_id": "occ-safekeeping",
+        "status": "unavailable",
+        "url": "https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf",
+        "attempted_at": "2026-09-17T22:31:09+00:00",
+        "error": "URLError: <urlopen error timed out>"
+      },
+      {
+        "source_id": "w3c-prov-o",
+        "status": "frozen",
+        "url": "https://www.w3.org/TR/prov-o/",
+        "archive_url": "https://www.w3.org/TR/prov-o/",
+        "final_url": "https://www.w3.org/TR/prov-o/",
+        "retrieved_at": "2026-09-17T22:32:30+00:00",
+        "sha256": "6b96671ab84faf12ce3f041aca12c3f93a6df2ed242348810743179a68e69555",
+        "bytes": 464179,
+        "content_type": "text/html; charset=utf-8",
+        "path": "evidence/sources/w3c-prov-o/6b96671ab84faf12ce3f041aca12c3f93a6df2ed242348810743179a68e69555.html",
+        "text_path": "evidence/sources/w3c-prov-o/6b96671ab84faf12ce3f041aca12c3f93a6df2ed242348810743179a68e69555.txt",
+        "text_sha256": "84b4a4e96d424924291d182ea8f6f6b693a3dae52d98a4702c5f135b116c79d0",
+        "text_chars": 185642
+      },
+      {
+        "source_id": "w3c-vc-data-model",
+        "status": "frozen",
+        "url": "https://www.w3.org/TR/vc-data-model/",
+        "archive_url": "https://www.w3.org/TR/vc-data-model/",
+        "final_url": "https://www.w3.org/TR/vc-data-model/",
+        "retrieved_at": "2026-09-17T22:32:30+00:00",
+        "sha256": "a9196a3d0b6601356c4e127bad24f8c7f2c17f6ed22e41b35755a910104156f8",
+        "bytes": 1023165,
+        "content_type": "text/html; charset=utf-8",
+        "path": "evidence/sources/w3c-vc-data-model/a9196a3d0b6601356c4e127bad24f8c7f2c17f6ed22e41b35755a910104156f8.html",
+        "text_path": "evidence/sources/w3c-vc-data-model/a9196a3d0b6601356c4e127bad24f8c7f2c17f6ed22e41b35755a910104156f8.txt",
+        "text_sha256": "01f291475fb90c115e1210b61bdd86532f09967165dd5b2de623513324188bf0",
+        "text_chars": 361645
       }
     ]
   }

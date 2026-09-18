@@ -3,7 +3,7 @@ name = "bitcoin-bridge-research"
 version = "0.3.0"
 description = "Domain-as-code research mapping bridges between traditional finance, law, and Bitcoin"
 requires-python = ">=3.11"
-dependencies = ["reportlab>=4.0"]
+dependencies = ["pypdf>=5.0", "reportlab>=4.0"]
 
 [tool.unittest]
 start-directory = "tests"

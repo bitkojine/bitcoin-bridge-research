@@ -18,6 +18,7 @@ from pathlib import Path
 from src.assessment import load_profile, validate_profile
 from src.build_web import build as build_web
 from src.cli import build_markdown, claim_status_matches_treatments, load_facts, load_model, validate
+from src.evidence import load_manifest, snapshot_coverage
 from src.expert import load_rules, validate_rules
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -189,6 +190,21 @@ class ClaimHonestyTests(unittest.TestCase):
                 self.assertIn(treatment["source_id"], source_ids)
                 self.assertIn(treatment["treatment"], {"supports", "qualifies", "contradicts"})
 
+    def test_every_treatment_has_a_pin_cite_on_a_frozen_source(self):
+        from src.evidence import by_id
+
+        model = load_model()
+        snapshots = by_id(load_manifest())
+        for claim in model["claims"]:
+            for treatment in claim["treatments"]:
+                label = f"{claim['id']} -> {treatment['source_id']}"
+                self.assertTrue(treatment.get("locator"), f"{label} has no locator")
+                self.assertTrue(treatment.get("quote"), f"{label} has no quote")
+                self.assertEqual(
+                    (snapshots.get(treatment["source_id"]) or {}).get("status"), "frozen",
+                    f"{label} is not backed by a frozen snapshot",
+                )
+
 
 class PaperConsistencyTests(unittest.TestCase):
     def setUp(self):
@@ -291,6 +307,7 @@ class ArchitectureDocTests(unittest.TestCase):
             "bridges": len(model["bridges"]),
             "companies": len(model["companies"]),
             "sources": len(model["sources"]),
+            "archived source snapshots": snapshot_coverage(load_manifest())["frozen"],
             "claims": len(model["claims"]),
             "assessment requirements": len(profile["requirements"]),
             "inference rules": len(rules_doc["rules"]),

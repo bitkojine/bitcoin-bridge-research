@@ -21,12 +21,13 @@ Where this repository is today (seed), and the evidence-backed, decision-grade s
 | Companies | 15 | Coarse category assignments, not due diligence |
 | Material claims | 2 | Insufficient for broad conclusions |
 | Sources | 8 | A small evidence base with recorded check dates and citator currency |
+| Archived source snapshots | 6 of 8 | Hash-frozen with extracted text; two `occ.gov` documents unreachable from the archiving host |
 | Inference rules | 3 | Demonstrate mechanics, not domain coverage |
 | Fact registry | 20 | Shared vocabulary enforced across rules and assessment |
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 52 | Software tests, not professional validation |
+| Automated tests | 75 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
@@ -42,6 +43,7 @@ The interface is more substantial than the knowledge base behind it.
 - Evidence records that separate assertions, artifacts, issuers, provenance, jurisdiction and time scope, review activities, and reviewers.
 - Fact derivation only from structurally valid, accepted, applicable, unexpired evidence; incompatible accepted assertions produce a conflict.
 - Citator-style claim semantics borrowed from legal research (Shepard's/KeyCite): every citation records a treatment (`supports`, `qualifies`, `contradicts`), every source records whether it is still authoritative (`current`, `superseded`, `withdrawn`), and a claim's status is checked against those signals — `corroborated` needs two distinct current supporting sources, contradicting authority forces `contested`, a withdrawn source forces `retracted`, and `superseded` must name the replacement claims. The species and its precedents are recorded in [`research/precedents.md`](research/precedents.md).
+- A content-addressed evidence archive: `python3 -m src.cli archive` freezes each source at `evidence/sources/<id>/<sha256>.<ext>` with its extracted text, and validation refuses to let a claim cite an unfrozen source or a pin-cite quote absent from the frozen text. `python3 -m src.cli verify-evidence --drift` re-fetches and reports changed bytes; sources that cannot be fetched are recorded as unavailable rather than dropped.
 - Generated Markdown, PDF, and static web views, with regression tests that the generated snapshots are fresh, the web UI boots, and versions agree across knowledge files.
 - Client-side search and an interactive custody questionnaire.
 - A C4 architecture description (`docs/architecture-c4.md`) whose file references, Level 4 code anchors, CLI subcommands, and snapshot contract table are regression-tested so the document cannot drift from the code it describes.
@@ -68,7 +70,7 @@ The generated PDF is research output, not a certification, audit opinion, proof 
 
 The web UI is a static application in `dist/`. It has no server, database, accounts, API, persistence, semantic search, RAG, or LLM. It reads a generated snapshot; run `python3 -m src.build_web` after changing the domain files.
 
-Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. Source links open external pages, but the repository does not archive or hash their contents. The `Snapshot generated on` date shown by the UI is the snapshot build point; the `checked_on` dates recorded on sources and the assessment are metadata, not evidence that every record was rechecked on that date.
+Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. The repository now freezes the sources its claims cite: `python3 -m src.cli archive` stores hash-addressed snapshots under `evidence/sources/`, and validation refuses to let a claim cite an unfrozen source or a quote that is absent from the frozen text. The `Snapshot generated on` date shown by the UI is the snapshot build point; the `checked_on` dates recorded on sources and the assessment are metadata, not evidence that every record was rechecked on that date.
 
 ## Research thesis
 
@@ -160,14 +162,14 @@ Most current material is only referenced or project-interpreted.
 
 Epistemic weaknesses:
 
-- Citations usually identify whole documents, not passages or archived versions.
-- Attaching a source ID does not show that the source entails the claim or rule.
+- Citations identify passages in archived versions now; whole-document-only citations remain for the sources that could not be fetched, and for rules and assessment requirements that only carry `source_ids`.
+- Attaching a source ID does not show that the source entails the claim or rule; a matching pin-cite quote shows the words exist, not that the interpretation is correct.
 - The evidence-level number conflates authority, independence, relevance, and reproducibility.
 - Primary sources establish what an institution said, not necessarily that it is true.
 - Company material may describe features while remaining poor evidence of safety, solvency, effectiveness, or legal status.
 - Regulatory guidance may be nonbinding, jurisdiction-limited, superseded, or addressed only to particular entities.
-- Contrary evidence and source disagreement are not modeled systematically.
-- There are no source snapshots, hashes, passage citations, link checks, or supersession detection.
+- Contrary evidence and source disagreement are modeled by treatment signals, but the corpus still contains no contradicting or withdrawn source, so those paths are untested on real data.
+- Source bytes are now frozen and hash-checked for claim-cited sources, but two `occ.gov` documents could not be archived and link/freshness checking is not yet automated.
 - Claims do not identify individual extractors, interpreters, or reviewers.
 - `corroborated` has no formal independence, relevance, or sufficiency test.
 - Company classifications generally lack claim-level citations and dates.
@@ -217,10 +219,21 @@ Structured research lives in [`domain/model.json`](domain/model.json). Rules are
 
 ## Commands
 
-Python 3.11 or later is required. Core validation and inference use the standard library; PDF generation uses ReportLab.
+Python 3.11 or later is required. Install the project and its dependencies once in an isolated environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -e .
+```
+
+ReportLab generates PDFs and pypdf extracts searchable text from archived PDF sources. After installation:
 
 ```bash
 python3 -m src.cli validate
+python3 -m src.cli verify-evidence
+# Networked check; exits nonzero if a frozen source changed or cannot be fetched.
+python3 -m src.cli verify-evidence --drift
 python3 -m src.cli build
 python3 -m src.cli build-pdf
 python3 -m src.cli infer examples/institutional-custody.json
@@ -232,6 +245,7 @@ python3 -m unittest discover -s tests
 ```
 
 - `build` writes `generated/market-map.md`.
+- `verify-evidence` checks archived hashes and pin cites offline as part of validation; `--drift` additionally fetches live sources and fails on any difference or fetch error.
 - `build-pdf` writes `output/pdf/domain-map.pdf` from the model.
 - `infer` evaluates JSON facts against the rules and returns a trace.
 - `assess` runs the custody pre-review and then passes accepted, applicable evidence facts into the inference rules, reporting derived conclusions such as `custody_bridge_ready` and `legal_authority_gap`.
@@ -248,7 +262,7 @@ Validation now enforces the honesty standards as fail-fast checks: claim statuse
 
 ## Evidence policy
 
-Material claims should identify sources and carry a status: `unverified`, `supported`, `corroborated`, `contested`, `stale`, or `retracted`.
+Material claims must cite sources through treatments (`supports`, `qualifies`, `contradicts`) with a passage locator and quote, and carry a status: `unverified`, `supported`, `corroborated`, `contested`, `stale`, `retracted`, or `superseded`. Each cited source must be frozen in `evidence/sources/` with a matching hash, and source `currency` (`current`, `superseded`, `withdrawn`) constrains the status the citation can support.
 
 The current evidence levels are:
 

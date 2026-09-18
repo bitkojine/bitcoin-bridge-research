@@ -14,7 +14,7 @@ OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted", "superseded"}
 TREATMENTS = {"supports", "qualifies", "contradicts"}
 SOURCE_CURRENCIES = {"current", "superseded", "withdrawn"}
-COMMANDS = ["validate", "build", "build-pdf", "infer", "assess"]
+COMMANDS = ["validate", "build", "build-pdf", "infer", "assess", "archive", "verify-evidence"]
 
 
 def load_model() -> dict:
@@ -166,10 +166,18 @@ def validate(model: dict) -> list[str]:
                 claim.get("status", ""), treatments, source_by_id, superseded=bool(superseded_by)
             )
         )
+
+    from src.evidence import load_manifest, verify_pin_cites, verify_snapshots
+
+    errors += verify_snapshots(model, load_manifest())
+    errors += verify_pin_cites(model, load_manifest())
     return errors
 
 
 def build_markdown(model: dict) -> str:
+    from src.evidence import by_id, load_manifest
+
+    snapshots = by_id(load_manifest())
     bridge_by_id = {x["id"]: x for x in model["bridges"]}
     lines = [
         f"# {model['meta']['title']}", "",
@@ -191,7 +199,8 @@ def build_markdown(model: dict) -> str:
     lines += ["## Claims", ""]
     for claim in model["claims"]:
         treatments = ", ".join(
-            f"{t['source_id']} ({t['treatment']})" for t in claim["treatments"]
+            f"{t['source_id']} ({t['treatment']}, {t.get('locator', 'no locator')})"
+            for t in claim["treatments"]
         )
         replaced = f" Superseded by: {', '.join(claim['superseded_by'])}." if claim.get("superseded_by") else ""
         lines.append(f"- **{claim['status']}** - {claim['text']} Treatments: {treatments}.{replaced}")
@@ -200,9 +209,19 @@ def build_markdown(model: dict) -> str:
         replaced = ""
         if source.get("superseded_by"):
             replaced = f" Superseded by: {', '.join(source['superseded_by'])}."
+        snapshot = snapshots.get(source["id"])
+        if snapshot and snapshot.get("status") == "frozen":
+            archived = (
+                f" Archived: `sha256:{snapshot['sha256'][:16]}…`, "
+                f"retrieved `{snapshot['retrieved_at'][:10]}`."
+            )
+        elif snapshot:
+            archived = f" Archived: unavailable (`{snapshot.get('error', 'unknown error')}`)."
+        else:
+            archived = " Archived: no snapshot."
         lines.append(
             f"- **{source['title']}** (`{source['id']}`, level {source['level']}, currency {source['currency']}). "
-            f"Checked on: `{source['checked_on']}`.{replaced} {source['url']}"
+            f"Checked on: `{source['checked_on']}`.{archived}{replaced} {source['url']}"
         )
     lines.append("")
     return "\n".join(lines)
@@ -229,7 +248,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(prog="research")
     parser.add_argument("command", choices=COMMANDS)
     parser.add_argument("input", nargs="?", help="JSON facts file for the infer command")
+    parser.add_argument("--drift", action="store_true", help="re-fetch snapshots and report changed bytes")
     args = parser.parse_args()
+    if args.command == "archive":
+        from src.evidence import run_archive, snapshot_coverage
+
+        coverage = snapshot_coverage(run_archive(load_model()))
+        unavailable = ", ".join(coverage["unavailable"]) or "none"
+        print(f"Archived {coverage['frozen']}/{coverage['total']} sources; unavailable: {unavailable}")
+        return 1 if coverage["unavailable"] else 0
     model = load_model()
     errors = validate(model)
     from src.expert import validate_rules
@@ -250,6 +277,22 @@ def main() -> int:
         return 1
     if args.command == "validate":
         print("Domain model is valid.")
+        return 0
+    if args.command == "verify-evidence":
+        from src.evidence import check_drift, load_manifest, snapshot_coverage
+
+        manifest = load_manifest()
+        coverage = snapshot_coverage(manifest)
+        unavailable = ", ".join(coverage["unavailable"]) or "none"
+        print(f"Snapshots frozen: {coverage['frozen']}/{coverage['total']} (unavailable: {unavailable})")
+        if args.drift:
+            drift = check_drift(manifest)
+            for item in drift:
+                detail = item.get("error") or f"sha256 {item['recorded'][:12]} -> {item['current'][:12]}"
+                print(f"DRIFT {item['source_id']}: {detail}")
+            if not drift:
+                print("No drift: every frozen snapshot still matches its recorded hash.")
+            return 1 if drift else 0
         return 0
     if args.command == "infer":
         if not args.input:

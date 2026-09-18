@@ -31,17 +31,17 @@ Seed ──────► Sprout ──────► Sapling ─────�
 ```
 
 **This stage means**
-- A working, versioned kernel: `src/expert.py` open-world forward chaining with proof traces; a validated domain model, shared fact registry, rules, and assessment profile; citator-checked claim statuses; a C4 document that cannot drift; 52 tests that enforce all of it in CI.
-- The knowledge is deliberately small and honestly labeled: 3 Bitcoin capabilities, 7 bridge categories, 15 companies, 8 sources, 2 claims, 12 assessment requirements, 20 facts. Interface outruns knowledge; the docs say so.
+- A working, versioned kernel: `src/expert.py` open-world forward chaining with proof traces; a validated domain model, shared fact registry, rules, and assessment profile; citator-checked claim statuses; a content-addressed source archive; a C4 document that cannot drift; 75 tests that enforce all of it in CI.
+- The knowledge is deliberately small and honestly labeled: 3 Bitcoin capabilities, 7 bridge categories, 15 companies, 8 sources (6 frozen), 2 claims, 12 assessment requirements, 20 facts. Interface outruns knowledge; the docs say so.
 - Machinery is borrowed, never invented: claim statuses follow the treatment-signal model of legal citators, source currency follows "still good law" reporting, and future evidence grading will follow established audit and systematic-review standards. See `research/precedents.md`.
-- Sources are recorded as bare URLs (`Referenced`). Claims are mostly project-`Interpreted`. Nothing is archived, extracted at passage level, attested, or independently checked.
+- Sources are now frozen: 6 of 8 are archived with `sha256` hashes and extracted text, and every claim treatment carries a passage locator and a verbatim quote checked against the frozen text. The two `occ.gov` documents could not be fetched from the archiving host and are recorded as unavailable. Claims remain project-`Interpreted`; nothing is independently attested.
 
 **This stage does NOT mean**
 - That any conclusion is true, applicable, or advisable. No real evidence exists: `evidence/claims/` is an empty directory. There are no reviewers, no node access, no API, no readers beyond the maintainer.
 
 **Gate to Sprout (partly automated)**
 - The automated gate, enforced by the test suite: `evidence/claims/` is no longer empty. The test suite verifies the `CURRENT-STAGE` marker above against the repository itself, so this document cannot drift.
-- The human gate: every claim and rule cites a passage of a content-addressed source snapshot (archive + `sha256`), with the extractor and interpreter attributed. Supersession detection is running (see the `Sprout` exit notes in the evidence ladder).
+- The human gate: every claim cites a passage of a content-addressed source snapshot (archive + `sha256`), with the extractor and interpreter attributed. Claims now meet the archive and passage-citation half; attribution of extractor and interpreter, and reproducible extraction, do not yet exist.
 
 ---
 

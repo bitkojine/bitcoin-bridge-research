@@ -72,16 +72,16 @@ Companies: **Casa**, **Unchained**
 
 ## Claims
 
-- **corroborated** - A valid signature does not by itself establish legal ownership or lawful authority. Treatments: bip-322 (supports), icaew-audit (supports).
-- **supported** - Institutional crypto safekeeping remains subject to existing custody, fiduciary, information-security, and legal requirements. Treatments: occ-safekeeping (supports).
+- **corroborated** - A valid signature does not by itself establish legal ownership or lawful authority. Treatments: bip-322 (supports, Abstract), icaew-audit (supports, Ownership and Control).
+- **supported** - Institutional crypto safekeeping remains subject to existing custody, fiduciary, information-security, and legal requirements. Treatments: nydfs-custody-2025 (supports, Industry Letter - September 30, 2025: Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency).
 
 ## Sources
 
-- **BIP-322 Generic Signed Message Format** (`bip-322`, level 5, currency current). Checked on: `2026-09-17`. https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki
-- **Bitcoin Developer Guide - Transactions** (`bitcoin-transactions`, level 5, currency current). Checked on: `2026-09-17`. https://developer.bitcoin.org/devguide/transactions.html
-- **Crypto-Asset Safekeeping by Banking Organizations** (`occ-safekeeping`, level 3, currency current). Checked on: `2026-09-17`. https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf
-- **Considerations for Auditing Cryptocurrencies** (`icaew-audit`, level 4, currency current). Checked on: `2026-09-17`. https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies
-- **Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency** (`nydfs-custody-2025`, level 3, currency current). Checked on: `2026-09-17`. https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures
-- **Interpretive Letter 1184: Crypto-Asset Custody and Execution Services** (`occ-il-1184`, level 3, currency current). Checked on: `2026-09-17`. https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf
-- **PROV-O: The PROV Ontology** (`w3c-prov-o`, level 2, currency current). Checked on: `2026-09-17`. https://www.w3.org/TR/prov-o/
-- **Verifiable Credentials Data Model v2.0** (`w3c-vc-data-model`, level 2, currency current). Checked on: `2026-09-17`. https://www.w3.org/TR/vc-data-model/
+- **BIP-322 Generic Signed Message Format** (`bip-322`, level 5, currency current). Checked on: `2026-09-17`. Archived: `sha256:0eb91c5093ef81c4…`, retrieved `2026-09-17`. https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki
+- **Bitcoin Developer Guide - Transactions** (`bitcoin-transactions`, level 5, currency current). Checked on: `2026-09-17`. Archived: `sha256:d1a0cafb54f513f7…`, retrieved `2026-09-17`. https://developer.bitcoin.org/devguide/transactions.html
+- **Crypto-Asset Safekeeping by Banking Organizations** (`occ-safekeeping`, level 3, currency current). Checked on: `2026-09-17`. Archived: unavailable (`URLError: <urlopen error timed out>`). https://www.occ.gov/news-issuances/news-releases/2025/nr-ia-2025-68a.pdf
+- **Considerations for Auditing Cryptocurrencies** (`icaew-audit`, level 4, currency current). Checked on: `2026-09-17`. Archived: `sha256:d372c0af5b76172f…`, retrieved `2026-09-17`. https://www.icaew.com/technical/technology/blockchain-and-cryptoassets/blockchain-helpsheets/considerations-for-auditing-cryptocurrencies
+- **Updated Guidance on Custodial Structures for Customer Protection in the Event of Insolvency** (`nydfs-custody-2025`, level 3, currency current). Checked on: `2026-09-17`. Archived: `sha256:4086ebb866784058…`, retrieved `2026-09-17`. https://www.dfs.ny.gov/industry-guidance/industry-letters/il20250930-updated-guidance-custodial-structures
+- **Interpretive Letter 1184: Crypto-Asset Custody and Execution Services** (`occ-il-1184`, level 3, currency current). Checked on: `2026-09-17`. Archived: unavailable (`URLError: <urlopen error timed out>`). https://www.occ.gov/topics/charters-and-licensing/interpretations-and-decisions/2025/int1184.pdf
+- **PROV-O: The PROV Ontology** (`w3c-prov-o`, level 2, currency current). Checked on: `2026-09-17`. Archived: `sha256:6b96671ab84faf12…`, retrieved `2026-09-17`. https://www.w3.org/TR/prov-o/
+- **Verifiable Credentials Data Model v2.0** (`w3c-vc-data-model`, level 2, currency current). Checked on: `2026-09-17`. Archived: `sha256:a9196a3d0b660135…`, retrieved `2026-09-17`. https://www.w3.org/TR/vc-data-model/

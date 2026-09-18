@@ -12,7 +12,12 @@ def build() -> Path:
     assessment = json.loads(
         (ROOT / "domain/assessments/custody-readiness.json").read_text(encoding="utf-8")
     )
-    payload = {"model": model, "rules": rules, "assessment": assessment}
+    manifest_path = ROOT / "evidence" / "sources" / "manifest.json"
+    evidence = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {
+        "meta": {},
+        "snapshots": [],
+    }
+    payload = {"model": model, "rules": rules, "assessment": assessment, "evidence": evidence}
     output = ROOT / "dist/knowledge.js"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(

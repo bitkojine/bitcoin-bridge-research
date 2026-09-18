@@ -20,7 +20,7 @@ flowchart LR
     Analyst["Analyst"] -->|runs CLI with evidence case files| SYS
     Reader["Reader"] -->|opens static web UI| SYS
 
-    SYS -->|references URLs only, never fetched at runtime| SOURCES[("Published sources on the internet")]
+    SYS -->|cites archived snapshots, fetched only by the archive command| SOURCES[("Published sources on the internet")]
     GitHub["GitHub"] -->|hosts repo, runs CI| SYS
     Node["Bitcoin network"] -. no connection .- SYS
 ```
@@ -43,6 +43,7 @@ Checked by `ArchitectureDocTests` in `tests/test_artifacts.py`; this table must 
 | bridges | 7 |
 | companies | 15 |
 | sources | 8 |
+| archived source snapshots | 6 |
 | claims | 2 |
 | assessment requirements | 12 |
 | inference rules | 3 |
@@ -55,6 +56,9 @@ flowchart LR
     KB["Domain knowledge base
         versioned JSON source of truth
         functions as the database"]
+    EV["Evidence archive
+        committed source snapshots
+        evidence/sources/<id>/<sha256>.<ext>"]
 
     CLI["Research CLI (Python)"]
     WEB["Static web UI (browser)"]
@@ -63,6 +67,8 @@ flowchart LR
 
     WEB -->|reads embedded data, generated at build time| ART
     CLI -->|validates and reads| KB
+    CLI -->|archive writes, validate reads| EV
+    KB -->|claim treatments cite frozen sources| EV
     CLI -->|writes| ART
     CLI -. "python -m src.build_web" .-> WEB
     CI -->|clone, validate, rebuild-and-diff, unittest| KB
@@ -73,9 +79,11 @@ flowchart LR
 
 **Domain knowledge base** — versioned, filesystem-backed source of truth, the repository's "database". Files: `domain/model.json`, `domain/rules.json`, `domain/facts.json`, `domain/assessments/custody-readiness.json`. Every other container reads it; nothing writes it at runtime (only the maintainer edits it).
 
+**Evidence archive** — committed source snapshots under `evidence/sources/`, described by `evidence/sources/manifest.json`. `archive` (the only networked command) fetches each source, stores the exact bytes at `evidence/sources/<id>/<sha256>.<ext>`, writes the extracted text beside them, and records the hash, size, retrieval time, and result. Sources that cannot be fetched are recorded as `unavailable` with the error — never silently dropped. `validate` and CI read the archive offline; `verify-evidence --drift` re-fetches to detect changed bytes. Only claim-cited sources must be frozen for `validate` to pass.
+
 **Research CLI** — the `src/` Python package. Everything except PDF generation runs on the Python standard library; `reportlab` is required only for `build-pdf`.
 
-- CLI subcommands: `validate`, `build`, `build-pdf`, `infer`, `assess`.
+- CLI subcommands: `validate`, `build`, `build-pdf`, `infer`, `assess`, `archive`, `verify-evidence`.
 - The argparse choices come from the `COMMANDS` constant in `src/cli.py`.
 
 `build_web` and `build_example_cases` are invoked as `python -m` modules instead of CLI subcommands.
@@ -104,12 +112,17 @@ flowchart LR
         pdf["pdf.py build_pdf, reportlab document"]
         bw["build_web.py build, dist/knowledge.js payload"]
         bc["build_example_cases.py builds synthetic evidence cases"]
+        ev["evidence.py
+            archive_source, run_archive,
+            verify_snapshots, verify_pin_cites, check_drift"]
     end
     KB["domain/*.json"] --> cli & asm & exp
     cli -->|assess and infer commands| asm & exp
     asm -->|accepted evidence facts| exp
     exp -->|proof trace and derived conclusions| asm
     cli --> pdf
+    cli -->|archive, verify-evidence, validate| ev
+    ev --> SNAP["evidence/sources/<id>/<sha256>.*"]
     bw --> ART["dist/knowledge.js"]
     bc --> EX["examples/*.json"]
 ```
@@ -120,6 +133,7 @@ flowchart LR
 - `src/pdf.py` renders the domain model to a PDF; the PDF footer states the model version to prevent it reading like an independent report.
 - `src/build_web.py` serializes model + rules + assessment into `dist/knowledge.js`.
 - `src/build_example_cases.py` regenerates the explicitly synthetic evidence cases in `examples/*.json`.
+- `src/evidence.py` freezes what claims cite: it archives source bytes, records hashes and extracted text, and verifies offline that every claim-cited source is frozen and every pin-cite quote appears in the frozen text.
 
 ### Container: Static web UI (client-side only)
 
@@ -158,21 +172,27 @@ classDiagram
 The following anchors are verified by `ArchitectureDocTests`: each `file:line` must exist, and the named function must be defined at that line.
 
 - `src/cli.py:24` — `claim_status_matches_treatments()`: a `corroborated` status requires at least two distinct current supporting sources; `contested`, `retracted`, and `stale` must match the cited treatments and source currency.
-- `src/cli.py:77` — `validate()`: duplicate ids, reference integrity, evidence levels, per-source `checked_on` dates, source currency and `superseded_by`, and claim treatments.
-- `src/cli.py:172` — `build_markdown()`: the "Snapshot generated on" header and Sources appendix.
-- `src/cli.py:215` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
+- `src/cli.py:77` — `validate()`: duplicate ids, reference integrity, evidence levels, per-source `checked_on` dates, source currency and `superseded_by`, claim treatments, frozen source snapshots, and pin-cite quotes.
+- `src/cli.py:177` — `build_markdown()`: the "Snapshot generated on" header, treatment locators, and the archived Sources appendix.
+- `src/cli.py:234` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
+- `src/evidence.py:135` — `archive_source()`: fetches a source, stores it at `evidence/sources/<id>/<sha256>.<ext>`, and records hash, size, and extracted text.
+- `src/evidence.py:198` — `run_archive()`: archives every source, recording unavailable fetches instead of hiding them.
+- `src/evidence.py:245` — `verify_snapshots()`: every frozen file must hash-match its manifest entry, and every claim-cited source must be frozen.
+- `src/evidence.py:270` — `verify_pin_cites()`: each treatment must carry a literal locator that appears before a quote found in the frozen source text.
+- `src/evidence.py:317` — `check_drift()`: re-fetches frozen sources and reports any whose bytes changed.
 - `src/assessment.py:20` — `validate_case()`: evidence records must carry artifact, issuer, provenance, scope, and review blocks.
 - `src/assessment.py:110` — `derive_facts()`: accepts evidence only if reviewed-accepted, jurisdiction-scoped, and time-valid; incompatible accepted assertions become a conflict.
 - `src/assessment.py:153` — `assess()`: outcome ladder (`conflict`, `not_ready`, `insufficient_information`, `ready_for_expert_review`), then feeds satisfied/failed evidence facts into rules for derived conclusions.
 - `src/assessment.py:277` — `validate_profile()`: assessment facts and control facts must be registered in the fact registry.
 - `src/expert.py:31` — `infer()`: open-world forward chaining with proof traces and explicit conflict reporting.
 - `src/expert.py:120` — `validate_rules()`: rule conditions and conclusions must reference registered facts.
-- `src/pdf.py:118` — `build_pdf()`: renders only what `domain/model.json` contains; footer prints the model version.
+- `src/pdf.py:122` — `build_pdf()`: renders only what `domain/model.json` contains; footer prints the model version.
 
 ## What this C4 hides (staying honest)
 
 - **The "system" is mostly data, not code.** The knowledge files in `domain/` outsize the Python by far; validation treats the data as the authority.
 - **Empty and degenerate surfaces:** `evidence/claims/` is empty, the paper-company index in `publications/v0.1.0/PAPER_COMPANIES.json` marks most companies illustrative-only, and the example evidence cases are synthetic.
+- **The archive is partial, and says so:** 6 of 8 sources are frozen with hashes and pin-cite quotes; the two OCC documents (both on `occ.gov`) were unreachable from the archiving host and are recorded as `unavailable` with their errors. Only claim-cited sources are required to be frozen, so requirement references to unfrozen sources remain. Pin cites are machine-checked against frozen text, but that text is extracted, not an independent attestation.
 - **No external consumers:** the three personas are aspirational; the only externally observable behavior is the CI pipeline.
 - **No persistence:** the web UI keeps questionnaire state only in the DOM; closing the tab loses it.
 - **The snapshot contract above is a point-in-time count**, not a guarantee of coverage; it exists so this document cannot silently drift from the model it describes.
