@@ -309,6 +309,13 @@ class ArchitectureDocTests(unittest.TestCase):
         model = load_model()
         rules_doc = json.loads((ROOT / "domain/rules.json").read_text(encoding="utf-8"))
         profile = load_profile(ROOT / "domain/assessments/custody-readiness.json")
+        philosophy = json.loads((ROOT / "domain/philosophy.json").read_text(encoding="utf-8"))
+        eligibility = json.loads(
+            (ROOT / "domain/legal/allianz-y3-eligibility.json").read_text(encoding="utf-8")
+        )
+        transition = json.loads(
+            (ROOT / "domain/cases/allianz-y3-bitcoin.json").read_text(encoding="utf-8")
+        )
         live = {
             "model version": model["meta"]["version"],
             "bitcoin capabilities": len(model["bitcoin_capabilities"]),
@@ -322,6 +329,13 @@ class ArchitectureDocTests(unittest.TestCase):
             "assessment requirements": len(profile["requirements"]),
             "inference rules": len(rules_doc["rules"]),
             "fact registry facts": len(load_facts()["facts"]),
+            "philosophy stages": len(philosophy["stages"]),
+            "philosophy gates": len(philosophy["gates"]),
+            "legal eligibility authorities": len(eligibility["authorities"]),
+            "legal eligibility provisions": len(eligibility["provisions"]),
+            "legal eligibility routes": len(eligibility["routes"]),
+            "transition verified facts": len(transition["verified_facts"]),
+            "transition pathways": len(transition["pathways"]),
         }
         self.assertEqual(set(expected), set(live), "snapshot metric names differ from live knowledge")
         for metric, value in live.items():
