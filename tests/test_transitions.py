@@ -45,6 +45,12 @@ class InstitutionalTransitionCaseTests(unittest.TestCase):
             self.assertTrue(hypothesis["counterevidence"])
             self.assertTrue(hypothesis["would_change_assessment"])
 
+    def test_bitcoin_classification_is_legally_explicit(self):
+        analysis = self.case["classification_analysis"]
+        self.assertIn("included", analysis["legal_answer"].lower())
+        self.assertIn("Article 45(3)", analysis["practical_effect"])
+        self.assertGreaterEqual(len(analysis["distinctions"]), 3)
+
     def test_rendered_study_contains_limits_and_sources(self):
         rendered = render_case_study(self.case)
         self.assertIn("not legal, pension, tax or investment advice", rendered)

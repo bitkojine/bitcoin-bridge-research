@@ -46,6 +46,13 @@ def validate_case_study(case: dict) -> list[str]:
             for field in ("claim", "status", "support", "counterevidence", "would_change_assessment"):
                 if not hypothesis.get(field):
                     errors.append(f"policy hypothesis {hypothesis.get('id')} has no {field}")
+    classification = case.get("classification_analysis", {})
+    if classification:
+        for field in ("question", "legal_answer", "community_claim", "practical_effect"):
+            if not classification.get(field):
+                errors.append(f"classification_analysis.{field} is required")
+        if not classification.get("distinctions"):
+            errors.append("classification_analysis.distinctions must not be empty")
     for fact in case.get("verified_facts", []):
         if fact.get("source_id") not in source_ids:
             errors.append(f"fact {fact.get('id')} references unknown source {fact.get('source_id')}")
@@ -99,6 +106,13 @@ def render_case_study(case: dict) -> str:
                       f"Counterevidence: {hypothesis['counterevidence']}", "",
                       f"Would change the assessment: {hypothesis['would_change_assessment']}", ""]
         lines += [f"**Limits:** {inquiry['limits']}", ""]
+    classification = case.get("classification_analysis")
+    if classification:
+        lines += ["", "## Is Bitcoin legally 'crypto'?", "", f"**Question:** {classification['question']}", "",
+                  f"**Legal answer:** {classification['legal_answer']}", "",
+                  f"**Bitcoiner claim:** {classification['community_claim']}", "", "### Distinctions", ""]
+        lines += [f"- **{item['level']}:** {item['meaning']}" for item in classification["distinctions"]]
+        lines += ["", f"**Practical effect:** {classification['practical_effect']}", ""]
     lines += ["", "## Blockers", ""]
     for blocker in case["blockers"]:
         lines += [f"### {blocker['id']} · {blocker['question']}", "", f"Status: **{blocker['status']}**", "",

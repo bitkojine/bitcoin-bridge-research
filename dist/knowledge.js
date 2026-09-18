@@ -921,6 +921,30 @@ window.KNOWLEDGE = {
           "source_id": "oecd-iops-crypto-pensions-2025",
           "locator": "Section 4.2, Regulatory status, page 16",
           "implication": "The policy trajectory appears to have moved from blocking direct holdings to closing at least some wrapper-based exposure. The survey is historical and must not be used as a statement of current Lithuanian law."
+        },
+        {
+          "id": "pension-law-imports-mica-definition",
+          "statement": "Lithuanian pension law defines 'crypto-asset' by directly incorporating MiCA Article 3(1)(5), rather than creating a narrower token-only or issuer-based definition.",
+          "quote": "Kriptoturtas – kaip apibrėžiama ... Reglamento (ES) 2023/1114 ... 3 straipsnio 1 dalies 5 punkte.",
+          "source_id": "lt-pension-law-current",
+          "locator": "Article 2(8¹)",
+          "implication": "The scope of Article 45(3) follows MiCA's technology-based definition unless another controlling provision creates an exception."
+        },
+        {
+          "id": "bitcoin-is-explicitly-a-crypto-asset",
+          "statement": "EU supervisory authorities expressly identify BTC (Bitcoin) as a crypto-asset; Lithuanian official material places Bitcoin in MiCA's residual category of crypto-assets other than asset-referenced or e-money tokens.",
+          "quote": "Well-known examples of crypto assets are BTC (Bitcoin) and ETH (Ethereum)",
+          "source_id": "esa-mica-consumer-factsheet",
+          "locator": "Section 'What is a crypto-asset?'",
+          "implication": "The community slogan 'Bitcoin is not crypto' does not alter Bitcoin's legal classification for the pension prohibition."
+        },
+        {
+          "id": "issuerlessness-changes-obligations-not-class",
+          "statement": "MiCA gives crypto-assets without an identifiable issuer special treatment: issuer-facing Titles II–IV and white-paper duties may not apply, while service providers dealing with those assets remain regulated.",
+          "quote": "crypto-assets without an identifiable issuer do not fall within the scope of Title II ... CASPs ... are not relieved from obtaining authorisation",
+          "source_id": "esma-qa-2552",
+          "locator": "European Commission answer, 18 February 2026",
+          "implication": "Bitcoin's decentralised, issuerless structure is legally relevant, but it does not remove Bitcoin from the underlying crypto-asset definition imported by Lithuanian pension law."
         }
       ],
       "policy_inquiry": {
@@ -970,6 +994,30 @@ window.KNOWLEDGE = {
           }
         ],
         "limits": "No reviewed primary source proves an intention to stop citizens buying 'sound money.' No constitutional, EU-law or proportionality judgment on Article 45(3) has been identified. The inquiry establishes an unexplained policy asymmetry, not corruption, unlawful conduct or motive."
+      },
+      "classification_analysis": {
+        "question": "Does the statement 'Bitcoin is not crypto' exclude Bitcoin from Lithuania's pension-fund crypto prohibition?",
+        "legal_answer": "No. Bitcoin is included in the legally defined class 'crypto-assets.' It is treated as a distinct member of that class—generally an issuerless crypto-asset other than an asset-referenced token or e-money token—but the pension statute does not carve that member out.",
+        "community_claim": "Bitcoiners commonly use 'crypto' to mean issuer-controlled tokens, venture-backed networks, stablecoins, securities-like projects or scams, and use 'Bitcoin' separately to emphasize fixed supply, proof of work, decentralisation and the absence of an issuer. That is a substantive technological and monetary distinction, but it is not the vocabulary chosen by MiCA or Lithuanian pension law.",
+        "distinctions": [
+          {
+            "level": "Technical and monetary",
+            "meaning": "Bitcoin can be distinguished from most tokens by its issuerless launch, proof-of-work consensus, capped issuance policy and lack of a controlling company. These features may matter to risk and policy analysis."
+          },
+          {
+            "level": "EU classification",
+            "meaning": "MiCA uses 'crypto-asset' as a broad technology-based umbrella. Bitcoin fits the umbrella but is neither an asset-referenced token nor an e-money token; it sits in the residual 'other crypto-assets' category."
+          },
+          {
+            "level": "Issuer obligations",
+            "meaning": "Because Bitcoin has no identifiable issuer, certain MiCA issuer and white-paper requirements do not apply. Regulated service-provider duties can still apply to exchanges, custodians and platforms handling Bitcoin."
+          },
+          {
+            "level": "Lithuanian pension law",
+            "meaning": "The statute imports MiCA Article 3(1)(5) wholesale and prohibits that class. It contains no Bitcoin, proof-of-work, issuerless-network or decentralised-asset exception."
+          }
+        ],
+        "practical_effect": "For Article 45(3), calling Bitcoin 'money,' 'digital property' or 'not crypto' does not create a legal pathway. A Bitcoin exception would require statutory text, a controlling judicial or regulatory interpretation, or legislative amendment. Bitcoin-specific differences remain relevant to the policy challenge: the legislature grouped materially different systems together without a Bitcoin-specific proportionality analysis found in the reviewed record."
       },
       "blockers": [
         {
@@ -1203,6 +1251,20 @@ window.KNOWLEDGE = {
           "title": "Supervision of pension investments: crypto-assets and other complex instruments",
           "url": "https://www.oecd.org/content/dam/iops/en/working-papers/WP-43-Supervision-of-pension-investments-overseas-OTC-derivatives-structured-crypto.pdf",
           "issuer": "OECD / International Organisation of Pension Supervisors",
+          "checked_on": "2026-09-18"
+        },
+        {
+          "id": "esa-mica-consumer-factsheet",
+          "title": "Crypto-assets explained: what MiCA means for consumers",
+          "url": "https://www.esma.europa.eu/sites/default/files/2025-10/Updated_Joint_ESAs_Factsheet_on_crypto-assets_CY_EN.pdf",
+          "issuer": "EBA, EIOPA and ESMA",
+          "checked_on": "2026-09-18"
+        },
+        {
+          "id": "esma-qa-2552",
+          "title": "MiCA Q&A 2552: crypto-assets without an identifiable issuer",
+          "url": "https://www.esma.europa.eu/publications-data/questions-answers/2552",
+          "issuer": "European Securities and Markets Authority / European Commission",
           "checked_on": "2026-09-18"
         }
       ]
