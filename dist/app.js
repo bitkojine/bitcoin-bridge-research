@@ -68,9 +68,10 @@ function renderCases(){
       <p class="detail-kicker">${c.meta.jurisdiction} · AS OF ${c.meta.as_of} · ${c.meta.status.toUpperCase()}</p>
       <h2>${c.meta.title}</h2><p>${c.meta.purpose}</p>
       <h3>Decision question</h3><p>${c.transition.decision_question}</p>
-      <h3>Established facts</h3>${c.verified_facts.map(f=>`<p><strong>${f.statement}</strong><br/>${f.implication}<br/><small><a href="${sourceById[f.source_id].url}" target="_blank" rel="noreferrer">${sourceById[f.source_id].title} ↗</a> · ${f.locator}</small></p>`).join('')}
+      <h3>Established facts</h3>${c.verified_facts.map(f=>`<p><strong>${f.statement}</strong><br/>${f.implication}<br/><small>Source text: “${f.quote}”</small><br/><small><a href="${sourceById[f.source_id].url}" target="_blank" rel="noreferrer">${sourceById[f.source_id].title} ↗</a> · ${f.locator}</small></p>`).join('')}
+      ${c.policy_inquiry?`<h3>Policy-consistency inquiry</h3><p><strong>${c.policy_inquiry.question}</strong><br/>${c.policy_inquiry.current_answer}</p><h4>What the evidence shows</h4><ul>${c.policy_inquiry.observations.map(o=>`<li>${o}</li>`).join('')}</ul><h4>Competing explanations</h4>${c.policy_inquiry.hypotheses.map(h=>`<p><span class="chip">${h.id} · ${h.status}</span> <strong>${h.claim}</strong><br/>Support: ${h.support}<br/><small>Counterevidence: ${h.counterevidence}</small><br/><small>Would change the assessment: ${h.would_change_assessment}</small></p>`).join('')}<p><small><strong>Limits:</strong> ${c.policy_inquiry.limits}</small></p>`:''}
       <h3>Blockers and unknowns</h3>${c.blockers.map(b=>`<p><span class="chip">${b.id} · ${b.status}</span> <strong>${b.question}</strong><br/>${b.finding}<br/><small>Unlock: ${b.unlock}</small></p>`).join('')}
-      <h3>Possible pathways</h3>${c.pathways.map(p=>`<p><span class="chip">${p.id} · ${p.state}</span> <strong>${p.name}</strong><br/>${p.meaning}<br/><small>${p.warning}</small></p>`).join('')}
+      <h3>Possible pathways</h3>${c.pathways.map(p=>`<p><span class="chip">${p.id} · ${p.state}</span> <strong>${p.name}</strong><br/>${p.meaning}<br/><small>${p.warning}</small>${p.legal_basis?`<br/><small>Legal basis: ${p.legal_basis}</small>`:''}</p>`).join('')}
       <h3>Actions you can take</h3><ol>${c.participant_actions.map(a=>`<li>${a}</li>`).join('')}</ol>
       <p class="detail-copy"><strong>Limit:</strong> ${c.meta.not_advice}</p>
     </article>`;

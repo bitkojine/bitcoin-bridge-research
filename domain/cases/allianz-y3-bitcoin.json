@@ -20,6 +20,7 @@
     {
       "id": "manager-controls-assets",
       "statement": "Allianz manages and disposes of fund assets on a trust basis; its investment group makes investment decisions.",
+      "quote": "Bendrovė pensijų turtą valdo, naudoja ir juo disponuoja turto patikėjimo teisės pagrindais ... Investicinius sprendimus priima Bendrovės investicijų grupė.",
       "source_id": "allianz-y3-strategy",
       "locator": "Sections 1.3 and 2.4",
       "implication": "A participant cannot instruct Allianz to purchase Bitcoin solely for that participant's pension account."
@@ -27,6 +28,7 @@
     {
       "id": "current-investment-perimeter",
       "statement": "The published strategy lists transferable securities, money-market instruments, deposits, venture-capital markets, limited derivatives, collective-investment units and cash as the investment perimeter.",
+      "quote": "Pensijų fondo turtas gali būti investuojamas į ... perleidžiamuosius vertybinius popierius ... pinigų rinkos priemones ... indėlius ... kolektyvinio investavimo subjektų vienetus ar akcijas.",
       "source_id": "allianz-y3-strategy",
       "locator": "Sections 3.1–3.7",
       "implication": "Direct Bitcoin is not expressly included in the published strategy; compatibility cannot be presumed."
@@ -34,6 +36,7 @@
     {
       "id": "strategy-can-change",
       "statement": "The strategy may be reviewed when previously excluded asset classes emerge and are considered more suitable.",
+      "quote": "atsiranda naujos turto klasės, į kurias iki tol nebuvo investuojama, ir kurios laikomos labiau tinkamomis",
       "source_id": "allianz-y3-strategy",
       "locator": "Section 5.3.2",
       "implication": "The published policy contains a governance path for considering a new asset class, but creates no duty to adopt it."
@@ -41,6 +44,7 @@
     {
       "id": "participant-transfer-right",
       "statement": "A participant may transfer to another fund managed by the same or another pension company, subject to the governing rules.",
+      "quote": "Dalyvis turi teisę pereiti į kitą Bendrovės valdomą pensijų fondą arba į kitos pensijų kaupimo bendrovės valdomą pensijų fondą.",
       "source_id": "lt-standard-rules-2026",
       "locator": "Sections 12.3–12.4 and 45–51",
       "implication": "The participant can choose among eligible pension funds, but the transfer does not place pension assets in a personal Bitcoin wallet."
@@ -48,6 +52,7 @@
     {
       "id": "depositary-required",
       "statement": "Pension-fund assets must be held with a depositary; the 2025 report identifies AB SEB bankas as depositary.",
+      "quote": "Pensijų turtas turi būti saugomas depozitoriume.",
       "source_id": "lt-standard-rules-2026",
       "locator": "Section 35",
       "implication": "Any direct or indirect Bitcoin route must fit the pension depositary and asset-safekeeping framework."
@@ -55,11 +60,156 @@
     {
       "id": "micar-is-not-investment-permission",
       "statement": "MiCAR regulates crypto-asset issuers and service providers and the Bank of Lithuania licenses and supervises covered providers.",
+      "quote": "The Bank of Lithuania is responsible for licensing and supervising crypto-asset service providers under MiCAR.",
       "source_id": "lb-micar",
       "locator": "Markets in Crypto-Assets, framework and authorisation sections",
       "implication": "A licensed crypto service provider is relevant infrastructure, but MiCAR licensing alone does not prove that a pension fund may invest in Bitcoin."
+    },
+    {
+      "id": "statutory-crypto-prohibition",
+      "statement": "Current Lithuanian pension law prohibits pension assets from being invested in crypto-assets and in securities granting rights to crypto-assets.",
+      "quote": "Pensijų turtas negali būti investuotas į ... kriptoturtą ir į suteikiančius į jį teises vertybinius popierius.",
+      "source_id": "lt-pension-law-current",
+      "locator": "Article 45(3), consolidated version effective 2 May 2026",
+      "implication": "Neither a manager decision nor a strategy amendment can make direct Bitcoin or a crypto-right security eligible while this prohibition remains in force."
+    },
+    {
+      "id": "transitional-exit-window",
+      "statement": "A participant who joined by 31 December 2025 and has not signed a pension payout agreement may leave the second pillar from 1 January 2026 through 31 December 2027.",
+      "quote": "visi pensijų kaupimo dalyviai, pradėję dalyvauti pensijų kaupime iki 2025 m. gruodžio 31 d., bet dar nepasirašę pensijų išmokos sutarties, turės galimybę pasitraukti",
+      "source_id": "socmin-pension-system-2026",
+      "locator": "Section 'Galimybė pasitraukti ... 2026–2027', paragraphs 1–3",
+      "implication": "For an eligible participant, a lawful payout is a currently open bridge from the pension wrapper to personally controlled money; it is not a fund-level Bitcoin allocation."
+    },
+    {
+      "id": "exit-payout-composition",
+      "statement": "On transitional exit, the participant receives personally paid contributions and investment return; state and Sodra contributions are converted into additional Sodra pension accounting units.",
+      "quote": "galės atsiimti savo lėšomis sumokėtas įmokas ir visą investicinį prieaugį; Už „Sodros“ ir (ar) valstybės biudžeto ... įmokas bus apskaičiuojami papildomi pensijų apskaitos vienetai",
+      "source_id": "socmin-pension-system-2026",
+      "locator": "Section 'Ką dalyvis atgaus', items 1–2",
+      "implication": "The cash amount is not necessarily the portal's entire displayed balance and must be obtained from Allianz before comparing options."
+    },
+    {
+      "id": "partial-withdrawal-right",
+      "statement": "Once during participation, a participant may withdraw 25% of accumulated pension assets, capped by qualifying personal 3%-of-salary contributions; a 3% deduction applies before retirement age.",
+      "quote": "atsiimti 25 proc. savo pensijų fonde sukaupto turto ... negalės būti didesnė nei bendra paties dalyvio įmokėta suma",
+      "source_id": "lb-pension-reform-2026",
+      "locator": "Section 3, paragraphs 476–482",
+      "implication": "This is a narrower bridge to personal liquidity and has future annuity consequences; it is not equivalent to moving 25% of the total balance into Bitcoin."
+    },
+    {
+      "id": "crypto-ban-was-deliberate",
+      "statement": "The legislative materials describe the crypto prohibition as an express policy choice made while expanding pension funds' access to other alternative assets.",
+      "quote": "įtvirtinti draudimą pensijų fondams investuoti į kriptoturtą ir į suteikiančius į jį teises vertybinius popierius",
+      "source_id": "lt-pension-amendment-explanatory",
+      "locator": "Proposed measures, item 4",
+      "implication": "The prohibition is not an accidental omission from an otherwise closed list; the legislature considered and expressly excluded this asset category."
+    },
+    {
+      "id": "current-y3-portfolio",
+      "statement": "The latest public Y3 portfolio summary uses a 90% MSCI World / 10% short euro-government-bond benchmark and reports holdings through equity funds, index funds, cash and money-market instruments.",
+      "quote": "2026 m. 90% MSCI World Index ... 10% Bloomberg Barclays Series-E Euro Govt 1-5 Yr Bond Index",
+      "source_id": "allianz-y3-holdings-2025",
+      "locator": "Benchmark structure and largest-investments tables, 31 December 2025",
+      "implication": "The fund is currently implemented through conventional pooled instruments; no explicit Bitcoin allocation appears in the public summary. This does not prove zero incidental exposure inside underlying companies or funds."
+    },
+    {
+      "id": "alternative-assets-have-limits-not-bans",
+      "statement": "The same Lithuanian reform that prohibited crypto proposed controlled access to unlisted securities, real estate, infrastructure and wider derivative use, using exposure limits and risk controls rather than categorical bans.",
+      "quote": "į nebiržinius vertybinius popierius – iki 20 procentų ... į nekilnojamąjį turtą ir infrastruktūrą ... iki 30 procentų ... bendra ... suma negali būti didesnė kaip 40 procentų",
+      "source_id": "lt-pension-amendment-explanatory",
+      "locator": "Proposed measures, items 1–5",
+      "implication": "The legislature demonstrated that it knew how to regulate difficult assets proportionally, yet assigned crypto and crypto-right securities a zero limit."
+    },
+    {
+      "id": "eu-prudent-person-portfolio-test",
+      "statement": "The EU occupational-pension model applies a prudent-person test to the portfolio as a whole: long-term member interests, security, quality, liquidity, profitability and diversification.",
+      "quote": "the assets shall be invested in such a manner as to ensure the security, quality, liquidity and profitability of the portfolio as a whole",
+      "source_id": "eu-iorp-ii",
+      "locator": "Article 19(1)(a), (c), (d) and (f)",
+      "implication": "At EU occupational-pension level, prudence is principally a governed portfolio standard rather than an automatic zero allocation for every unconventional asset."
+    },
+    {
+      "id": "eiopa-crypto-can-face-prudent-person-test",
+      "statement": "EIOPA stated that an occupational pension fund investing in crypto-assets should explain how the investment complies with the prudent-person rule; it did not describe EU law as imposing an automatic crypto ban.",
+      "quote": "IORPs investing in crypto-assets should explain ... how their decision to invest in crypto-assets complies with ... the Prudent Person Rule",
+      "source_id": "eiopa-qa-2128",
+      "locator": "Final answer to Q&A 2128",
+      "implication": "A risk-governed crypto allocation is conceptually possible in the EU occupational-pension framework, although national law and the legal category of Lithuania's second pillar may impose stricter rules."
+    },
+    {
+      "id": "ec-warns-asset-bans-can-harm-savers",
+      "statement": "The European Commission has warned that national asset restrictions can prevent pension beneficiaries from accessing potentially higher returns or more diversified strategies.",
+      "quote": "This may prevent members and beneficiaries from accessing potentially higher returns or more diversified investment strategies.",
+      "source_id": "ec-supplementary-pensions-2025",
+      "locator": "Prudent-person principle discussion, page 12",
+      "implication": "Categorical prohibitions themselves require prudential justification; restriction is not automatically synonymous with member protection."
+    },
+    {
+      "id": "official-crypto-risk-case",
+      "statement": "The Bank of Lithuania identifies crypto price volatility, cybersecurity and key-loss risk, speculation, possible total loss and weaker MiCA protections than traditional investments.",
+      "quote": "Didelis kainų svyravimas ... galimi kibernetiniai išpuoliai, piniginės praradimas ... galite prarasti visas investuotas lėšas",
+      "source_id": "lb-crypto-risks",
+      "locator": "Risk and retail-investor suitability sections",
+      "implication": "There is a genuine prudential case for strict controls; the unresolved question is why those risks require zero exposure instead of sizing, custody and governance constraints."
+    },
+    {
+      "id": "indirect-route-was-reported-open",
+      "statement": "An OECD/IOPS survey published before the current Lithuanian amendment reported that Lithuania prohibited direct cryptocurrency investment but allowed crypto-related funds; the current statute is stricter because it also excludes securities granting rights to crypto-assets.",
+      "quote": "In Hungary and Lithuania, while direct investment in cryptocurrencies is prohibited, investment in crypto asset-related funds is allowed.",
+      "source_id": "oecd-iops-crypto-pensions-2025",
+      "locator": "Section 4.2, Regulatory status, page 16",
+      "implication": "The policy trajectory appears to have moved from blocking direct holdings to closing at least some wrapper-based exposure. The survey is historical and must not be used as a statement of current Lithuanian law."
     }
   ],
+  "policy_inquiry": {
+    "question": "Why is the permitted Bitcoin allocation exactly zero when illiquid, leveraged or difficult-to-value assets can be admitted under limits and controls?",
+    "current_answer": "The asymmetry is established; a public, Bitcoin-specific proportionality analysis justifying a zero limit has not been found. Official risk concerns are real, but the reviewed legislative material states the ban without demonstrating why less restrictive controls would be inadequate.",
+    "observations": [
+      "Lithuania permits or expanded access to unlisted securities, real estate, infrastructure, derivatives and alternative-asset channels subject to exposure limits, valuation rules and governance controls.",
+      "Crypto-assets and securities granting rights to them receive a categorical zero allocation rather than a concentration limit.",
+      "The Bank of Lithuania's stated crypto risks are volatility, cyber and key-loss risk, speculation, total-loss risk and weaker investor protections; these support caution but do not by themselves prove that every non-zero institutional allocation is imprudent.",
+      "EU occupational-pension doctrine uses a portfolio-level prudent-person test, and EIOPA has described crypto investment as something that must be justified under that test rather than universally prohibited.",
+      "The European Commission has separately warned that categorical national asset restrictions can reduce diversification or expected returns.",
+      "An OECD/IOPS survey described Lithuania's earlier position as allowing crypto-related funds despite banning direct cryptocurrency; the 2026 law's added ban on crypto-right securities evidences subsequent tightening.",
+      "The older gold prohibition shows that Lithuania's rule historically excludes certain non-sovereign monetary or commodity assets; this pattern predates Bitcoin and is not proof of an anti-Bitcoin motive."
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The zero limit is a proportionate retirement-saver protection measure.",
+        "status": "plausible_but_not_demonstrated",
+        "support": "Crypto has high volatility, operational/key risks, uneven market integrity and weaker investor compensation and reporting protections than conventional instruments.",
+        "counterevidence": "The law manages other severe liquidity, valuation, leverage and concentration risks through limits and controls, and the public legislative material reviewed does not compare a ban with lower-allocation alternatives.",
+        "would_change_assessment": "A published impact or risk analysis showing that capped exposure, regulated custody, valuation and governance controls fail to protect this pension population."
+      },
+      {
+        "id": "H2",
+        "claim": "The ban reflects administrative simplicity and supervisory capacity rather than a conclusion that every allocation is economically irrational.",
+        "status": "credible_inference",
+        "support": "A bright-line ban is easier for managers and depositaries to police than instrument classification, wallet controls, look-through analysis and continuous exposure measurement.",
+        "counterevidence": "Lithuania simultaneously accepted supervisory complexity for private assets, real estate, infrastructure and derivatives and expanded the permitted depositary set.",
+        "would_change_assessment": "Official records identifying supervisory capacity, implementation cost or depositary readiness as the reason for selecting a ban."
+      },
+      {
+        "id": "H3",
+        "claim": "The rule structurally favours issuer-based financial assets over bearer-like monetary assets such as gold and Bitcoin.",
+        "status": "effect_established_motive_unproven",
+        "support": "Gold, gold-right securities, crypto and crypto-right securities are excluded, while claims on governments, companies, funds, property and alternative structures remain investable within rules.",
+        "counterevidence": "The same pattern can arise from custody, valuation and cash-flow concerns without any intention to protect fiat finance or suppress monetary alternatives.",
+        "would_change_assessment": "Legislative correspondence, debate or impact analysis explicitly discussing monetary competition, capital-channel objectives or protection of incumbent intermediaries."
+      },
+      {
+        "id": "H4",
+        "claim": "The zero limit is inconsistent with a technology-neutral prudent-person framework.",
+        "status": "strong_policy_critique_not_legal_conclusion",
+        "support": "EU occupational-pension sources frame prudence around total-portfolio risk, diversification and governance; EIOPA contemplated crypto being assessed under that framework.",
+        "counterevidence": "Lithuania's second pillar is a specific national, state-supported scheme and the cited IORP material is a comparator, not proof that Article 45(3) is unlawful or directly governed by IORP II.",
+        "would_change_assessment": "A controlling EU or Lithuanian legal analysis establishing either that the schemes are comparable and the ban lacks prudential justification, or that their differences fully justify categorical treatment."
+      }
+    ],
+    "limits": "No reviewed primary source proves an intention to stop citizens buying 'sound money.' No constitutional, EU-law or proportionality judgment on Article 45(3) has been identified. The inquiry establishes an unexplained policy asymmetry, not corruption, unlawful conduct or motive."
+  },
   "blockers": [
     {
       "id": "B1",
@@ -77,17 +227,17 @@
     },
     {
       "id": "B3",
-      "status": "unknown",
+      "status": "established",
       "question": "May a Lithuanian second-pillar pension fund hold Bitcoin directly?",
-      "finding": "Not established by the sources reviewed so far.",
-      "unlock": "Current Lithuanian-law analysis and confirmation from the Bank of Lithuania or qualified Lithuanian pension counsel."
+      "finding": "No under the current statute: Article 45(3) expressly prohibits investing pension assets in crypto-assets.",
+      "unlock": "A legislative amendment or authoritative change in the governing law, followed by strategy, fiduciary, custody and depositary approval."
     },
     {
       "id": "B4",
-      "status": "unknown",
-      "question": "Could an eligible transferable security or collective-investment vehicle provide Bitcoin exposure?",
-      "finding": "Potentially compatible in form, but eligibility, concentration, valuation, liquidity and look-through treatment are unverified.",
-      "unlock": "Instrument-level legal, regulatory, accounting, risk and depositary review."
+      "status": "established",
+      "question": "Could a security granting rights to Bitcoin bypass the direct-crypto prohibition?",
+      "finding": "No under the statutory text: Article 45(3) separately prohibits securities granting rights to crypto-assets.",
+      "unlock": "A legislative amendment or an authoritative ruling that a specifically analysed instrument is outside that category."
     },
     {
       "id": "B5",
@@ -102,26 +252,35 @@
       "question": "Would the allocation satisfy participant-interest and lifecycle-risk duties?",
       "finding": "No allocation case, risk budget or fiduciary analysis has been established.",
       "unlock": "A documented investment thesis, sizing rule, liquidity/stress analysis, benchmark treatment and governance approval."
+    },
+    {
+      "id": "B7",
+      "status": "unknown",
+      "question": "Is ordinary equity or a collective-investment unit with incidental Bitcoin exposure outside Article 45(3)?",
+      "finding": "The reviewed public sources do not establish the boundary between a prohibited security granting rights to crypto and an otherwise eligible instrument whose issuer or portfolio happens to hold Bitcoin.",
+      "unlock": "Instrument-specific classification, look-through analysis and written Lithuanian regulatory or qualified-counsel interpretation."
     }
   ],
   "pathways": [
     {
       "id": "P1",
       "name": "Manager adds direct Bitcoin",
-      "state": "blocked",
+      "state": "prohibited_under_current_law",
       "on_chain": true,
       "requires": ["B1", "B2", "B3", "B5", "B6"],
       "meaning": "The fund or its controlled custody chain owns Bitcoin represented by on-chain outputs.",
-      "warning": "This is the strongest on-chain route and currently the least legally and operationally established."
+      "warning": "A strategy vote, licensed custodian or technical control design cannot override the statutory prohibition.",
+      "legal_basis": "Lithuanian Law on Pension Accumulation, Article 45(3)."
     },
     {
       "id": "P2",
-      "name": "Manager buys an eligible Bitcoin-linked fund or security",
-      "state": "researchable",
+      "name": "Manager buys a security granting rights to Bitcoin",
+      "state": "prohibited_under_current_law",
       "on_chain": false,
       "requires": ["B1", "B2", "B4", "B5", "B6"],
-      "meaning": "The pension fund owns a conventional financial instrument whose value references Bitcoin; an upstream issuer or custodian may hold Bitcoin.",
-      "warning": "This creates price exposure, not participant ownership or control of on-chain Bitcoin."
+      "meaning": "The pension fund owns a conventional security that grants a claim or right tied to crypto-assets; an upstream issuer or custodian may hold Bitcoin.",
+      "warning": "Using a conventional wrapper does not evade the express statutory category, and it would create exposure rather than participant control of Bitcoin.",
+      "legal_basis": "Lithuanian Law on Pension Accumulation, Article 45(3)."
     },
     {
       "id": "P3",
@@ -130,25 +289,43 @@
       "on_chain": false,
       "requires": [],
       "meaning": "The participant moves pension units to another eligible manager or fund if one offers a preferable lawful policy.",
-      "warning": "No Lithuanian second-pillar fund with verified Bitcoin exposure has yet been identified in this case."
+      "warning": "Every Lithuanian second-pillar fund is subject to the same statutory prohibition, so changing manager does not remove it."
     },
     {
       "id": "P4",
-      "name": "Participant obtains a legally permitted payout and buys Bitcoin personally",
-      "state": "personal_eligibility_unknown",
+      "name": "Eligible participant exits during the 2026–2027 window",
+      "state": "potentially_available_subject_to_conditions",
       "on_chain": true,
       "requires": [],
-      "meaning": "Only assets lawfully paid out cease to be governed as pension-fund assets and could then be used personally.",
-      "warning": "Eligibility, amount, timing, deductions and tax consequences depend on current law and personal circumstances."
+      "meaning": "Personally paid contributions plus investment return are paid to the participant; after payment, those funds are outside the pension fund and may be used personally.",
+      "warning": "This exits the pension system rather than changing it. The cash payout is not the whole displayed balance; state and Sodra contributions become pension accounting units. Personal eligibility and consequences must be confirmed."
+    },
+    {
+      "id": "P5",
+      "name": "Participant uses the one-time partial-withdrawal right",
+      "state": "available_subject_to_personal_limits",
+      "on_chain": true,
+      "requires": [],
+      "meaning": "A qualifying participant receives up to 25% of accumulated assets, limited by qualifying personal contributions, after applicable deductions; only the paid cash could then be used personally.",
+      "warning": "This reduces retirement assets, can affect the later annuity calculation and is not evidence that buying Bitcoin is suitable."
+    },
+    {
+      "id": "P6",
+      "name": "Manager considers ordinary securities with incidental Bitcoin exposure",
+      "state": "researchable",
+      "on_chain": false,
+      "requires": ["B1", "B2", "B5", "B6", "B7"],
+      "meaning": "The fund buys an otherwise eligible company share or collective-investment unit whose issuer or portfolio has Bitcoin exposure but which may not itself grant rights to crypto-assets.",
+      "warning": "This boundary is unresolved in the reviewed public record, may be caught by regulatory interpretation or look-through rules, and does not move participant money on-chain."
     }
   ],
   "participant_actions": [
-    "Ask Allianz whether direct crypto-assets or Bitcoin-linked ETPs are legally eligible for Y3 and request the exact legal basis for the answer.",
-    "Ask whether the investment group has evaluated Bitcoin as a new asset class under strategy section 5.3.2.",
-    "Ask which depositary, valuation, liquidity, counterparty and custody requirements would apply to each route.",
-    "Ask the Bank of Lithuania whether current second-pillar rules permit direct Bitcoin, a Bitcoin ETP, or a qualifying collective-investment vehicle.",
-    "Compare all eligible Lithuanian pension funds for documented Bitcoin exposure; do not infer exposure from generic technology or fintech holdings.",
-    "Obtain personal advice before any transfer, contribution suspension or withdrawal decision."
+    "Ask Allianz for an itemised estimate of the cash payable under the 2026–2027 exit route: personal contributions, investment result, state/Sodra component converted to accounting units, timing and any deductions.",
+    "Confirm whether participation began by 31 December 2025 and whether any pension payout agreement has been signed.",
+    "Ask Allianz for the maximum one-time partial withdrawal, the 3% deduction if applicable and the effect on later annuity calculations.",
+    "Ask the Bank of Lithuania for a written interpretation of Article 45(3) for a named instrument before treating any ETP, fund or company share as eligible.",
+    "Treat a strategy amendment as downstream of law reform, not as a substitute for it.",
+    "Obtain personal pension, tax and investment advice before exit, withdrawal or Bitcoin purchase; this case maps options and does not recommend one."
   ],
   "sources": [
     {
@@ -177,6 +354,76 @@
       "title": "Markets in Crypto-Assets",
       "url": "https://www.lb.lt/en/markets-in-crypto-assets",
       "issuer": "Bank of Lithuania",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "lt-pension-law-current",
+      "title": "Law on Pension Accumulation, consolidated version effective 2 May 2026",
+      "url": "https://www.e-tar.lt/rs/actualedition/TAR.DDA1BD559D9B/yQdnAHlyLa/format/ISO_PDF/",
+      "issuer": "Register of Legal Acts of Lithuania",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "lb-pension-reform-2026",
+      "title": "Current information on pension-system reform from 2026",
+      "url": "https://www.lb.lt/aktuali-informacija-apie-pensiju-sistemos-pertvarka-nuo-2026-m",
+      "issuer": "Bank of Lithuania",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "socmin-pension-system-2026",
+      "title": "Pension accumulation system from 1 January 2026",
+      "url": "https://socmin.lrv.lt/lt/veiklos-sritys/socialinis-draudimas/pensiju-kaupimo-sistema-nuo-2026-01-01/",
+      "issuer": "Lithuanian Ministry of Social Security and Labour",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "lt-pension-amendment-explanatory",
+      "title": "Explanatory material for pension-accumulation investment amendments",
+      "url": "https://e-seimas.lrs.lt/rs/legalact/TAK/1ab9e8313a1911f0a19dcea0bcc863ad/",
+      "issuer": "Seimas of the Republic of Lithuania",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "allianz-y3-holdings-2025",
+      "title": "Allianz Y3 investment-direction summary at 31 December 2025",
+      "url": "https://www.allianz.lt/content/dam/onemarketing/cee/avlt/dokumentai/pf/investavimo-krypciu-aprasymai/2025-12-31/Y3-pensiju-fondas.pdf",
+      "issuer": "Allianz Lietuva gyvybės draudimas UAB",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "eu-iorp-ii",
+      "title": "Directive (EU) 2016/2341 on occupational retirement provision",
+      "url": "https://eur-lex.europa.eu/eli/dir/2016/2341/2024-01-09/eng",
+      "issuer": "European Parliament and Council",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "eiopa-qa-2128",
+      "title": "EIOPA Q&A 2128: occupational pension investment in crypto-assets",
+      "url": "https://www.eiopa.europa.eu/qa-regulation/questions-and-answers-database/2128_en",
+      "issuer": "European Insurance and Occupational Pensions Authority",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "ec-supplementary-pensions-2025",
+      "title": "European Commission communication on supplementary pensions",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:52025DC0839",
+      "issuer": "European Commission",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "lb-crypto-risks",
+      "title": "Crypto-assets: uses, regulation and risks",
+      "url": "https://www.lb.lt/lt/kriptoturtas",
+      "issuer": "Bank of Lithuania",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "oecd-iops-crypto-pensions-2025",
+      "title": "Supervision of pension investments: crypto-assets and other complex instruments",
+      "url": "https://www.oecd.org/content/dam/iops/en/working-papers/WP-43-Supervision-of-pension-investments-overseas-OTC-derivatives-structured-crypto.pdf",
+      "issuer": "OECD / International Organisation of Pension Supervisors",
       "checked_on": "2026-09-18"
     }
   ]

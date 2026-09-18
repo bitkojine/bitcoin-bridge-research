@@ -6,7 +6,12 @@ from pathlib import Path
 
 BLOCKER_STATES = {"established", "unknown", "contested"}
 PATHWAY_STATES = {
-    "blocked", "researchable", "legally_available_in_principle", "personal_eligibility_unknown"
+    "blocked",
+    "prohibited_under_current_law",
+    "researchable",
+    "legally_available_in_principle",
+    "potentially_available_subject_to_conditions",
+    "available_subject_to_personal_limits",
 }
 
 
@@ -28,10 +33,23 @@ def validate_case_study(case: dict) -> list[str]:
         errors.append("blockers must not be empty")
     if not case.get("pathways"):
         errors.append("pathways must not be empty")
+    inquiry = case.get("policy_inquiry", {})
+    if inquiry:
+        for field in ("question", "current_answer", "limits"):
+            if not inquiry.get(field):
+                errors.append(f"policy_inquiry.{field} is required")
+        if not inquiry.get("observations"):
+            errors.append("policy_inquiry.observations must not be empty")
+        if not inquiry.get("hypotheses"):
+            errors.append("policy_inquiry.hypotheses must not be empty")
+        for hypothesis in inquiry.get("hypotheses", []):
+            for field in ("claim", "status", "support", "counterevidence", "would_change_assessment"):
+                if not hypothesis.get(field):
+                    errors.append(f"policy hypothesis {hypothesis.get('id')} has no {field}")
     for fact in case.get("verified_facts", []):
         if fact.get("source_id") not in source_ids:
             errors.append(f"fact {fact.get('id')} references unknown source {fact.get('source_id')}")
-        for field in ("statement", "locator", "implication"):
+        for field in ("statement", "quote", "locator", "implication"):
             if not fact.get(field):
                 errors.append(f"fact {fact.get('id')} has no {field}")
     for blocker in case.get("blockers", []):
@@ -48,6 +66,14 @@ def validate_case_study(case: dict) -> list[str]:
         for blocker_id in pathway.get("requires", []):
             if blocker_id not in blocker_ids:
                 errors.append(f"pathway {pathway.get('id')} references unknown blocker {blocker_id}")
+    prohibited = {
+        pathway.get("id") for pathway in case.get("pathways", [])
+        if pathway.get("state") == "prohibited_under_current_law"
+    }
+    for pathway_id in prohibited:
+        pathway = next(item for item in case["pathways"] if item.get("id") == pathway_id)
+        if not pathway.get("legal_basis"):
+            errors.append(f"pathway {pathway_id} has no legal_basis")
     return errors
 
 
@@ -60,6 +86,19 @@ def render_case_study(case: dict) -> str:
     ]
     for fact in case["verified_facts"]:
         lines.append(f"- **{fact['statement']}** {fact['implication']} [{fact['source_id']}, {fact['locator']}]")
+        lines.append(f"  - Source text: “{fact['quote']}”")
+    inquiry = case.get("policy_inquiry")
+    if inquiry:
+        lines += ["", "## Policy-consistency inquiry", "", f"**Question:** {inquiry['question']}", "",
+                  f"**Current answer:** {inquiry['current_answer']}", "", "### Observations", ""]
+        lines += [f"- {item}" for item in inquiry["observations"]]
+        lines += ["", "### Competing explanations", ""]
+        for hypothesis in inquiry["hypotheses"]:
+            lines += [f"#### {hypothesis['id']} · {hypothesis['claim']}", "",
+                      f"Status: **{hypothesis['status']}**", "", f"Support: {hypothesis['support']}", "",
+                      f"Counterevidence: {hypothesis['counterevidence']}", "",
+                      f"Would change the assessment: {hypothesis['would_change_assessment']}", ""]
+        lines += [f"**Limits:** {inquiry['limits']}", ""]
     lines += ["", "## Blockers", ""]
     for blocker in case["blockers"]:
         lines += [f"### {blocker['id']} · {blocker['question']}", "", f"Status: **{blocker['status']}**", "",
@@ -70,6 +109,8 @@ def render_case_study(case: dict) -> str:
         required = ", ".join(pathway["requires"]) or "no case blockers; personal eligibility still applies"
         lines += [f"### {pathway['id']} · {pathway['name']}", "", f"State: **{pathway['state']}** · Form: {chain}", "",
                   pathway["meaning"], "", f"Requires: {required}", "", f"Warning: {pathway['warning']}", ""]
+        if pathway.get("legal_basis"):
+            lines += [f"Legal basis: {pathway['legal_basis']}", ""]
     lines += ["## Actions for the participant", ""]
     lines += [f"{index}. {action}" for index, action in enumerate(case["participant_actions"], 1)]
     lines += ["", "## Sources", ""]
