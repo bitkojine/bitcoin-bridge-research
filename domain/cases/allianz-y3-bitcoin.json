@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "id": "allianz-y3-bitcoin",
+    "title": "Allianz Y3: pathway to Bitcoin exposure",
+    "as_of": "2026-09-18",
+    "jurisdiction": "Lithuania / European Union",
+    "status": "research",
+    "purpose": "Help a pension-fund participant understand what would have to change for Allianz Y3 to obtain lawful Bitcoin exposure or hold Bitcoin-related assets.",
+    "not_advice": "Research and question-generation only; not legal, pension, tax or investment advice."
+  },
+  "transition": {
+    "actor": "Allianz Y3 1996–2002 target-group pension fund",
+    "manager": "Allianz Lietuva gyvybės draudimas UAB",
+    "participant_role": "Beneficiary and unit holder; not portfolio manager or owner of a separately identified wallet balance",
+    "from": "A lifecycle pension portfolio implemented primarily through regulated financial instruments and collective-investment vehicles",
+    "to": "A portfolio with a defined, lawful and operationally controlled allocation to direct Bitcoin or a Bitcoin-linked financial instrument",
+    "decision_question": "Can the manager lawfully and prudently add Bitcoin exposure, through which instrument and custody structure, under whose approval, and with what participant rights?"
+  },
+  "verified_facts": [
+    {
+      "id": "manager-controls-assets",
+      "statement": "Allianz manages and disposes of fund assets on a trust basis; its investment group makes investment decisions.",
+      "source_id": "allianz-y3-strategy",
+      "locator": "Sections 1.3 and 2.4",
+      "implication": "A participant cannot instruct Allianz to purchase Bitcoin solely for that participant's pension account."
+    },
+    {
+      "id": "current-investment-perimeter",
+      "statement": "The published strategy lists transferable securities, money-market instruments, deposits, venture-capital markets, limited derivatives, collective-investment units and cash as the investment perimeter.",
+      "source_id": "allianz-y3-strategy",
+      "locator": "Sections 3.1–3.7",
+      "implication": "Direct Bitcoin is not expressly included in the published strategy; compatibility cannot be presumed."
+    },
+    {
+      "id": "strategy-can-change",
+      "statement": "The strategy may be reviewed when previously excluded asset classes emerge and are considered more suitable.",
+      "source_id": "allianz-y3-strategy",
+      "locator": "Section 5.3.2",
+      "implication": "The published policy contains a governance path for considering a new asset class, but creates no duty to adopt it."
+    },
+    {
+      "id": "participant-transfer-right",
+      "statement": "A participant may transfer to another fund managed by the same or another pension company, subject to the governing rules.",
+      "source_id": "lt-standard-rules-2026",
+      "locator": "Sections 12.3–12.4 and 45–51",
+      "implication": "The participant can choose among eligible pension funds, but the transfer does not place pension assets in a personal Bitcoin wallet."
+    },
+    {
+      "id": "depositary-required",
+      "statement": "Pension-fund assets must be held with a depositary; the 2025 report identifies AB SEB bankas as depositary.",
+      "source_id": "lt-standard-rules-2026",
+      "locator": "Section 35",
+      "implication": "Any direct or indirect Bitcoin route must fit the pension depositary and asset-safekeeping framework."
+    },
+    {
+      "id": "micar-is-not-investment-permission",
+      "statement": "MiCAR regulates crypto-asset issuers and service providers and the Bank of Lithuania licenses and supervises covered providers.",
+      "source_id": "lb-micar",
+      "locator": "Markets in Crypto-Assets, framework and authorisation sections",
+      "implication": "A licensed crypto service provider is relevant infrastructure, but MiCAR licensing alone does not prove that a pension fund may invest in Bitcoin."
+    }
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "status": "established",
+      "question": "Who has investment authority?",
+      "finding": "The manager's investment group has authority; the participant does not direct individual holdings.",
+      "unlock": "A manager-approved strategy and investment decision."
+    },
+    {
+      "id": "B2",
+      "status": "established",
+      "question": "Does the current published strategy include direct Bitcoin?",
+      "finding": "No express inclusion was found.",
+      "unlock": "A documented legal interpretation that it is already eligible, or a formally approved strategy change."
+    },
+    {
+      "id": "B3",
+      "status": "unknown",
+      "question": "May a Lithuanian second-pillar pension fund hold Bitcoin directly?",
+      "finding": "Not established by the sources reviewed so far.",
+      "unlock": "Current Lithuanian-law analysis and confirmation from the Bank of Lithuania or qualified Lithuanian pension counsel."
+    },
+    {
+      "id": "B4",
+      "status": "unknown",
+      "question": "Could an eligible transferable security or collective-investment vehicle provide Bitcoin exposure?",
+      "finding": "Potentially compatible in form, but eligibility, concentration, valuation, liquidity and look-through treatment are unverified.",
+      "unlock": "Instrument-level legal, regulatory, accounting, risk and depositary review."
+    },
+    {
+      "id": "B5",
+      "status": "unknown",
+      "question": "Can the depositary safeguard or oversee the proposed structure?",
+      "finding": "No evidence reviewed establishes SEB's willingness or operational arrangement for this fund.",
+      "unlock": "Depositary acceptance, control design, valuation process and reconciliation evidence."
+    },
+    {
+      "id": "B6",
+      "status": "unknown",
+      "question": "Would the allocation satisfy participant-interest and lifecycle-risk duties?",
+      "finding": "No allocation case, risk budget or fiduciary analysis has been established.",
+      "unlock": "A documented investment thesis, sizing rule, liquidity/stress analysis, benchmark treatment and governance approval."
+    }
+  ],
+  "pathways": [
+    {
+      "id": "P1",
+      "name": "Manager adds direct Bitcoin",
+      "state": "blocked",
+      "on_chain": true,
+      "requires": ["B1", "B2", "B3", "B5", "B6"],
+      "meaning": "The fund or its controlled custody chain owns Bitcoin represented by on-chain outputs.",
+      "warning": "This is the strongest on-chain route and currently the least legally and operationally established."
+    },
+    {
+      "id": "P2",
+      "name": "Manager buys an eligible Bitcoin-linked fund or security",
+      "state": "researchable",
+      "on_chain": false,
+      "requires": ["B1", "B2", "B4", "B5", "B6"],
+      "meaning": "The pension fund owns a conventional financial instrument whose value references Bitcoin; an upstream issuer or custodian may hold Bitcoin.",
+      "warning": "This creates price exposure, not participant ownership or control of on-chain Bitcoin."
+    },
+    {
+      "id": "P3",
+      "name": "Participant transfers to another pension fund",
+      "state": "legally_available_in_principle",
+      "on_chain": false,
+      "requires": [],
+      "meaning": "The participant moves pension units to another eligible manager or fund if one offers a preferable lawful policy.",
+      "warning": "No Lithuanian second-pillar fund with verified Bitcoin exposure has yet been identified in this case."
+    },
+    {
+      "id": "P4",
+      "name": "Participant obtains a legally permitted payout and buys Bitcoin personally",
+      "state": "personal_eligibility_unknown",
+      "on_chain": true,
+      "requires": [],
+      "meaning": "Only assets lawfully paid out cease to be governed as pension-fund assets and could then be used personally.",
+      "warning": "Eligibility, amount, timing, deductions and tax consequences depend on current law and personal circumstances."
+    }
+  ],
+  "participant_actions": [
+    "Ask Allianz whether direct crypto-assets or Bitcoin-linked ETPs are legally eligible for Y3 and request the exact legal basis for the answer.",
+    "Ask whether the investment group has evaluated Bitcoin as a new asset class under strategy section 5.3.2.",
+    "Ask which depositary, valuation, liquidity, counterparty and custody requirements would apply to each route.",
+    "Ask the Bank of Lithuania whether current second-pillar rules permit direct Bitcoin, a Bitcoin ETP, or a qualifying collective-investment vehicle.",
+    "Compare all eligible Lithuanian pension funds for documented Bitcoin exposure; do not infer exposure from generic technology or fintech holdings.",
+    "Obtain personal advice before any transfer, contribution suspension or withdrawal decision."
+  ],
+  "sources": [
+    {
+      "id": "allianz-y3-strategy",
+      "title": "Allianz Y3 investment strategy, effective 1 January 2024",
+      "url": "https://www.allianz.lt/content/dam/onemarketing/cee/avlt/dokumentai/pf/investavimo_strategijos/allianz-Y3-1996-2002-tikslines-grupes-pensiju-fondo-investavimo-strategija-20224-01-01.pdf",
+      "issuer": "Allianz Lietuva gyvybės draudimas UAB",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "lt-standard-rules-2026",
+      "title": "Standard target-group pension-fund rules, consolidated from 1 January 2026",
+      "url": "https://www.allianz.lt/content/dam/onemarketing/cee/avlt/dokumentai/pf/standartines_taisykles/Standartines-pensiju-fondu-taisykles-nuo-2026-01-01.pdf",
+      "issuer": "Bank of Lithuania",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "allianz-y3-2025-report",
+      "title": "Allianz Y3 annual report 2025",
+      "url": "https://www.allianz.lt/content/dam/onemarketing/cee/avlt/dokumentai/ataskaitos/pensiju_fondu_ataskaitos/2025/Allianz-Y3-1996-2002-pensiju-fondo-ataskaita-2025.pdf",
+      "issuer": "Allianz Lietuva gyvybės draudimas UAB",
+      "checked_on": "2026-09-18"
+    },
+    {
+      "id": "lb-micar",
+      "title": "Markets in Crypto-Assets",
+      "url": "https://www.lb.lt/en/markets-in-crypto-assets",
+      "issuer": "Bank of Lithuania",
+      "checked_on": "2026-09-18"
+    }
+  ]
+}

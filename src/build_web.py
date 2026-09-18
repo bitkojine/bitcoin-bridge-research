@@ -17,7 +17,14 @@ def build() -> Path:
         "meta": {},
         "snapshots": [],
     }
-    payload = {"model": model, "rules": rules, "assessment": assessment, "evidence": evidence}
+    case_studies = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted((ROOT / "domain" / "cases").glob("*.json"))
+    ]
+    payload = {
+        "model": model, "rules": rules, "assessment": assessment,
+        "evidence": evidence, "case_studies": case_studies,
+    }
     output = ROOT / "dist/knowledge.js"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(

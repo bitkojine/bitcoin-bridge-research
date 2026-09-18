@@ -27,7 +27,8 @@ Where this repository is today (seed), and the evidence-backed, decision-grade s
 | Assessment profiles | 1 | US-oriented custody pre-review |
 | Assessment requirements | 12 | Research prompts, not a compliance checklist |
 | Scenario cases | 12 | Project-authored regressions, not reviewed cases |
-| Automated tests | 75 | Software tests, not professional validation |
+| Institutional transition studies | 1 | Source-linked research case, not legal or investment advice |
+| Automated tests | 80 | Software tests, not professional validation |
 
 The interface is more substantial than the knowledge base behind it.
 
@@ -239,6 +240,7 @@ python3 -m src.cli build-pdf
 python3 -m src.cli infer examples/institutional-custody.json
 python3 -m src.cli assess examples/custody-readiness-complete.json
 python3 -m src.cli assess examples/custody-readiness-gaps.json
+python3 -m src.cli study allianz-y3-bitcoin
 python3 -m src.build_example_cases
 python3 -m src.build_web
 python3 -m unittest discover -s tests
@@ -249,6 +251,7 @@ python3 -m unittest discover -s tests
 - `build-pdf` writes `output/pdf/domain-map.pdf` from the model.
 - `infer` evaluates JSON facts against the rules and returns a trace.
 - `assess` runs the custody pre-review and then passes accepted, applicable evidence facts into the inference rules, reporting derived conclusions such as `custody_bridge_ready` and `legal_authority_gap`.
+- `study` renders a validated institutional-transition case with established facts, blockers, pathways, participant actions and explicit unknowns. The first case is `allianz-y3-bitcoin`.
 - `build_example_cases` regenerates the explicitly synthetic evidence cases.
 - `build_web` refreshes `dist/knowledge.js` for the static UI.
 

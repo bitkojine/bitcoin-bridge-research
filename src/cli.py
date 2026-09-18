@@ -14,7 +14,7 @@ OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted", "superseded"}
 TREATMENTS = {"supports", "qualifies", "contradicts"}
 SOURCE_CURRENCIES = {"current", "superseded", "withdrawn"}
-COMMANDS = ["validate", "build", "build-pdf", "infer", "assess", "archive", "verify-evidence"]
+COMMANDS = ["validate", "build", "build-pdf", "infer", "assess", "study", "archive", "verify-evidence"]
 
 
 def load_model() -> dict:
@@ -171,6 +171,10 @@ def validate(model: dict) -> list[str]:
 
     errors += verify_snapshots(model, load_manifest())
     errors += verify_pin_cites(model, load_manifest())
+    from src.transitions import load_case, validate_case_study
+
+    for path in sorted((ROOT / "domain" / "cases").glob("*.json")):
+        errors += [f"case study {path.stem}: {error}" for error in validate_case_study(load_case(path))]
     return errors
 
 
@@ -311,6 +315,15 @@ def main() -> int:
         facts = json.loads(Path(args.input).read_text(encoding="utf-8"))
         result = assess(profile, facts, rules)
         print(render_markdown(result))
+        return 0
+    if args.command == "study":
+        from src.transitions import load_case, render_case_study
+
+        case_id = args.input or "allianz-y3-bitcoin"
+        path = Path(case_id)
+        if not path.suffix:
+            path = ROOT / "domain" / "cases" / f"{case_id}.json"
+        print(render_case_study(load_case(path)))
         return 0
     if args.command == "build-pdf":
         from src.pdf import build_pdf

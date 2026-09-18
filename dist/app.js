@@ -1,4 +1,4 @@
-const { model, rules, assessment, evidence } = window.KNOWLEDGE;
+const { model, rules, assessment, evidence, case_studies = [] } = window.KNOWLEDGE;
 const types = {
   bitcoin_capabilities: 'Bitcoin capability', finance_requirements: 'Finance requirement',
   legal_requirements: 'Legal requirement', bridges: 'Bridge', companies: 'Company', claims: 'Claim'
@@ -15,7 +15,7 @@ document.querySelector('#assessment-scope').textContent = assessment.scope;
 document.querySelector('#metrics').innerHTML = [
   ['Capabilities', model.bitcoin_capabilities.length], ['Requirements', model.finance_requirements.length + model.legal_requirements.length],
   ['Bridges', model.bridges.length], ['Companies', model.companies.length], ['Claims', model.claims.length], ['Sources', model.sources.length],
-  ['Frozen sources', (evidence.snapshots || []).filter(x => x.status === 'frozen').length]
+  ['Frozen sources', (evidence.snapshots || []).filter(x => x.status === 'frozen').length], ['Cases', case_studies.length]
 ].map(([label,value]) => `<div class="metric"><b>${value}</b><span>${label}</span></div>`).join('');
 
 const filterDefs = [['all','All'], ...Object.entries(types).map(([key,label]) => [key,label.replace(' requirement','')])];
@@ -57,8 +57,25 @@ document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){
 
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('.nav-item,.view').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelector(`#${btn.dataset.view}`).classList.add('active');
-  document.querySelector('#page-title').textContent={explore:'Explore what the system knows',assessment:'Run an evidence-gap assessment',sources:'Inspect the evidence register',system:'Audit the system itself'}[btn.dataset.view];window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelector('#page-title').textContent={explore:'Explore what the system knows',assessment:'Run an evidence-gap assessment',cases:'Study a real institutional transition',sources:'Inspect the evidence register',system:'Audit the system itself'}[btn.dataset.view];window.scrollTo({top:0,behavior:'smooth'});
 }));
+
+function renderCases(){
+  const root=document.querySelector('#case-studies');
+  root.innerHTML=case_studies.map(c=>{
+    const sourceById=Object.fromEntries(c.sources.map(s=>[s.id,s]));
+    return `<article class="detail-panel" style="margin-bottom:24px">
+      <p class="detail-kicker">${c.meta.jurisdiction} · AS OF ${c.meta.as_of} · ${c.meta.status.toUpperCase()}</p>
+      <h2>${c.meta.title}</h2><p>${c.meta.purpose}</p>
+      <h3>Decision question</h3><p>${c.transition.decision_question}</p>
+      <h3>Established facts</h3>${c.verified_facts.map(f=>`<p><strong>${f.statement}</strong><br/>${f.implication}<br/><small><a href="${sourceById[f.source_id].url}" target="_blank" rel="noreferrer">${sourceById[f.source_id].title} ↗</a> · ${f.locator}</small></p>`).join('')}
+      <h3>Blockers and unknowns</h3>${c.blockers.map(b=>`<p><span class="chip">${b.id} · ${b.status}</span> <strong>${b.question}</strong><br/>${b.finding}<br/><small>Unlock: ${b.unlock}</small></p>`).join('')}
+      <h3>Possible pathways</h3>${c.pathways.map(p=>`<p><span class="chip">${p.id} · ${p.state}</span> <strong>${p.name}</strong><br/>${p.meaning}<br/><small>${p.warning}</small></p>`).join('')}
+      <h3>Actions you can take</h3><ol>${c.participant_actions.map(a=>`<li>${a}</li>`).join('')}</ol>
+      <p class="detail-copy"><strong>Limit:</strong> ${c.meta.not_advice}</p>
+    </article>`;
+  }).join('')||'<div class="empty-state"><strong>No cases yet.</strong><span>Add a validated case under domain/cases.</span></div>';
+}
 
 const form=document.querySelector('#assessment-form');
 form.innerHTML=assessment.requirements.map((r,i)=>`<div class="question" data-fact="${r.fact}" ${r.applies_when?`data-condition="${r.applies_when.fact}"`:''}><div class="question-top"><label>${String(i+1).padStart(2,'0')} · ${r.label}</label></div><p>${r.evidence_expected}</p><div class="choice"><input type="radio" id="${r.fact}-u" name="${r.fact}" value="unknown" checked><label for="${r.fact}-u">No record</label><input type="radio" id="${r.fact}-y" name="${r.fact}" value="true"><label for="${r.fact}-y">Claimed pass</label><input type="radio" id="${r.fact}-n" name="${r.fact}" value="false"><label for="${r.fact}-n">Claimed gap</label></div></div>`).join('')+`<div class="question"><label>Sub-custodian or custody technology provider used?</label><p>This controls whether third-party diligence is applicable.</p><div class="choice"><input type="radio" id="sub-u" name="subcustodian_used" value="unknown" checked><label for="sub-u">Unknown</label><input type="radio" id="sub-y" name="subcustodian_used" value="true"><label for="sub-y">Yes</label><input type="radio" id="sub-n" name="subcustodian_used" value="false"><label for="sub-n">No</label></div></div>`;
@@ -79,4 +96,4 @@ const can=['Represent the current domain as structured data','Search concepts, c
 const cannot=['Authenticate the facts entered by a user','Determine legal ownership from key control','Give legal, compliance, tax or investment advice','Prove that every wallet, key copy or liability was disclosed','Track regulatory changes or news automatically','Claim expert-level coverage or professional validation'];
 document.querySelector('#can-list').innerHTML=can.map(x=>`<li>${x}</li>`).join('');document.querySelector('#cannot-list').innerHTML=cannot.map(x=>`<li>${x}</li>`).join('');
 document.querySelector('#rule-list').innerHTML=rules.rules.map(r=>`<article><span class="rule-id">${r.id}</span><span class="rule-desc">${r.description}</span><span class="priority">Priority ${r.priority}</span></article>`).join('');
-renderCatalog();renderDetail(null);renderAssessment();
+renderCatalog();renderDetail(null);renderAssessment();renderCases();

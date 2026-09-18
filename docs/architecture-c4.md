@@ -83,7 +83,7 @@ flowchart LR
 
 **Research CLI** — the `src/` Python package. Everything except PDF generation runs on the Python standard library; `reportlab` is required only for `build-pdf`.
 
-- CLI subcommands: `validate`, `build`, `build-pdf`, `infer`, `assess`, `archive`, `verify-evidence`.
+- CLI subcommands: `validate`, `build`, `build-pdf`, `infer`, `assess`, `study`, `archive`, `verify-evidence`.
 - The argparse choices come from the `COMMANDS` constant in `src/cli.py`.
 
 `build_web` and `build_example_cases` are invoked as `python -m` modules instead of CLI subcommands.
@@ -140,7 +140,7 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph WEB["dist/"]
-        idx["index.html - four views: Explore, Assess, Sources, System"]
+        idx["index.html - five views: Explore, Assess, Cases, Sources, System"]
         app["app.js
             renderCatalog, renderDetail, renderAssessment,
             source grid, system card"]
@@ -173,8 +173,8 @@ The following anchors are verified by `ArchitectureDocTests`: each `file:line` m
 
 - `src/cli.py:24` — `claim_status_matches_treatments()`: a `corroborated` status requires at least two distinct current supporting sources; `contested`, `retracted`, and `stale` must match the cited treatments and source currency.
 - `src/cli.py:77` — `validate()`: duplicate ids, reference integrity, evidence levels, per-source `checked_on` dates, source currency and `superseded_by`, claim treatments, frozen source snapshots, and pin-cite quotes.
-- `src/cli.py:177` — `build_markdown()`: the "Snapshot generated on" header, treatment locators, and the archived Sources appendix.
-- `src/cli.py:234` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
+- `src/cli.py:181` — `build_markdown()`: the "Snapshot generated on" header, treatment locators, and the archived Sources appendix.
+- `src/cli.py:238` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
 - `src/evidence.py:135` — `archive_source()`: fetches a source, stores it at `evidence/sources/<id>/<sha256>.<ext>`, and records hash, size, and extracted text.
 - `src/evidence.py:198` — `run_archive()`: archives every source, recording unavailable fetches instead of hiding them.
 - `src/evidence.py:245` — `verify_snapshots()`: every frozen file must hash-match its manifest entry, and every claim-cited source must be frozen.
@@ -191,7 +191,7 @@ The following anchors are verified by `ArchitectureDocTests`: each `file:line` m
 ## What this C4 hides (staying honest)
 
 - **The "system" is mostly data, not code.** The knowledge files in `domain/` outsize the Python by far; validation treats the data as the authority.
-- **Empty and degenerate surfaces:** `evidence/claims/` is empty, the paper-company index in `publications/v0.1.0/PAPER_COMPANIES.json` marks most companies illustrative-only, and the example evidence cases are synthetic.
+- **Empty and degenerate surfaces:** `evidence/claims/` is empty, the paper-company index in `publications/v0.1.0/PAPER_COMPANIES.json` marks most companies illustrative-only, and the assessment evidence cases are synthetic. The Allianz Y3 transition study is source-linked research, not a submitted institutional case or professional conclusion.
 - **The archive is partial, and says so:** 6 of 8 sources are frozen with hashes and pin-cite quotes; the two OCC documents (both on `occ.gov`) were unreachable from the archiving host and are recorded as `unavailable` with their errors. Only claim-cited sources are required to be frozen, so requirement references to unfrozen sources remain. Pin cites are machine-checked against frozen text, but that text is extracted, not an independent attestation.
 - **No external consumers:** the three personas are aspirational; the only externally observable behavior is the CI pipeline.
 - **No persistence:** the web UI keeps questionnaire state only in the DOM; closing the tab loses it.
