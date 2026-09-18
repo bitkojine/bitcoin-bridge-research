@@ -39,9 +39,9 @@ function renderCatalog(){
 }
 function refs(ids=[]){ return ids.map(id=>`<span class="chip">${byId[id]?.name||id}</span>`).join(''); }
 function renderDetail(item){
-  const d=document.querySelector('#detail'); if(!item){d.innerHTML='<p class="detail-kicker">Select an entry</p><h2>Inspect the knowledge</h2><p>Choose any concept, company, bridge, or claim to see what the repository actually records and how it connects.</p>';return;}
+  const d=document.querySelector('#detail'); if(!item){d.innerHTML='<p class="detail-kicker">Select an entry</p><h2>Inspect a record</h2><p>Choose a concept, company, bridge, or claim to see its stored fields and relationships.</p>';return;}
   let body=`<p class="detail-kicker">${item._type} · ${item.id}</p><h2>${item.name||'Research claim'}</h2>`;
-  if(item.formula) body+=`<div class="formula">${item.formula}</div><h3>Every term explained</h3>${Object.entries(item.terms).map(([k,v])=>`<p><strong>${k}</strong> — ${v}</p>`).join('')}`;
+  if(item.formula) body+=`<div class="formula">${item.formula}</div><h3>Terms</h3>${Object.entries(item.terms).map(([k,v])=>`<p><strong>${k}</strong> — ${v}</p>`).join('')}`;
   if(item.establishes) body+=`<h3>What it establishes</h3><p>${item.establishes}</p>`;
   if(item.does_not_establish) body+=`<h3>What it does not establish</h3>${item.does_not_establish.map(x=>`<span class="chip">${x}</span>`).join('')}`;
   if(item.bitcoin_capabilities) body+=`<h3>Bitcoin capabilities</h3>${refs(item.bitcoin_capabilities)}<h3>Finance requirements</h3>${refs(item.finance_requirements)}<h3>Legal requirements</h3>${refs(item.legal_requirements)}`;

@@ -12,7 +12,7 @@ This is an early prototype, not a decision system. “Expert system” describes
 
 ### Mission and roadmap
 
-Where this repository is today (seed), and the evidence-backed, decision-grade system it is trying to become, is tracked honestly in [`docs/roadmap.md`](docs/roadmap.md) — including the test that refuses to let that document claim progress the repository has not earned.
+The current stage and later milestones are defined in [`docs/roadmap.md`](docs/roadmap.md). A test checks the stage marker against whether real claim-evidence records exist.
 
 ### Current inventory
 
@@ -48,7 +48,7 @@ The interface is more substantial than the knowledge base behind it.
 - A custody pre-review that separates supported requirements, explicit gaps, missing facts, invalid values, and conditional sub-custodian requirements.
 - Evidence records that separate assertions, artifacts, issuers, provenance, jurisdiction and time scope, review activities, and reviewers.
 - Fact derivation only from structurally valid, accepted, applicable, unexpired evidence; incompatible accepted assertions produce a conflict.
-- Citator-style claim semantics borrowed from legal research (Shepard's/KeyCite): every citation records a treatment (`supports`, `qualifies`, `contradicts`), every source records whether it is still authoritative (`current`, `superseded`, `withdrawn`), and a claim's status is checked against those signals — `corroborated` needs two distinct current supporting sources, contradicting authority forces `contested`, a withdrawn source forces `retracted`, and `superseded` must name the replacement claims. The species and its precedents are recorded in [`research/precedents.md`](research/precedents.md).
+- Citator-style claim semantics borrowed from legal research (Shepard's/KeyCite): every citation records a treatment (`supports`, `qualifies`, `contradicts`), every source records whether it is still authoritative (`current`, `superseded`, `withdrawn`), and a claim's status is checked against those signals. `corroborated` needs two distinct current supporting sources; contradicting authority forces `contested`; a withdrawn source forces `retracted`; and `superseded` must name replacement claims. The precedents are recorded in [`research/precedents.md`](research/precedents.md).
 - A content-addressed evidence archive: `python3 -m src.cli archive` freezes each source at `evidence/sources/<id>/<sha256>.<ext>` with its extracted text, and validation refuses to let a claim cite an unfrozen source or a pin-cite quote absent from the frozen text. `python3 -m src.cli verify-evidence --drift` re-fetches and reports changed bytes; sources that cannot be fetched are recorded as unavailable rather than dropped.
 - Generated Markdown, PDF, and static web views, with regression tests that the generated snapshots are fresh, the web UI boots, and versions agree across knowledge files.
 - Client-side search and an interactive custody questionnaire.
@@ -76,7 +76,7 @@ The generated PDF is research output, not a certification, audit opinion, proof 
 
 The web UI is a static application in `dist/`. It has no server, database, accounts, API, persistence, semantic search, RAG, or LLM. It reads a generated snapshot; run `python3 -m src.build_web` after changing the domain files.
 
-The Eligibility view is deliberately narrow. It can match direct Bitcoin and a security granting Bitcoin rights to the recorded text of Article 45(3), and it preserves ordinary-company-share and diversified-fund routes as interpretation questions. Its `recorded_in_force` result means that curator-entered dates from an official source pass a temporal check; it is not independent authentication, a citator service, or a legal opinion. ELI supplies the vocabulary and official identifiers; the project does not claim that ELI decides applicability.
+The Eligibility view covers five predefined routes. It matches direct Bitcoin and a security granting Bitcoin rights to the recorded text of Article 45(3). Ordinary-company-share and diversified-fund routes remain interpretation questions. `recorded_in_force` means curator-entered dates pass a temporal check; it is not independent authentication, a citator service, or a legal opinion. ELI supplies vocabulary and identifiers, not an applicability decision.
 
 Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. The repository now freezes the sources its claims cite: `python3 -m src.cli archive` stores hash-addressed snapshots under `evidence/sources/`, and validation refuses to let a claim cite an unfrozen source or a quote that is absent from the frozen text. The `Snapshot generated on` date shown by the UI is the snapshot build point; the `checked_on` dates recorded on sources and the assessment are metadata, not evidence that every record was rechecked on that date.
 
@@ -88,7 +88,7 @@ This framing assumes that moving traditionally governed capital onto Bitcoin is 
 
 ## Ontology, epistemology, and axiology
 
-This is now an executable architecture, not only a statement of principles. [`domain/philosophy.json`](domain/philosophy.json) defines the ordered chain `ontology → data → epistemology → axiology → action`, its typed inputs and outputs, allowed relations, gates, failure states, and invariants. [`src/philosophy.py`](src/philosophy.py) validates that architecture and applies the final action gate: prohibited or unauthorized actions, unsupported required claims, and undeclared values are blocked. A passing result is only `eligible_for_human_decision`, never an automatic recommendation. The System view exposes the same generated model in the browser.
+[`domain/philosophy.json`](domain/philosophy.json) defines `ontology → data → epistemology → axiology → action`, with typed inputs, outputs, relations, gates and failure states. [`src/philosophy.py`](src/philosophy.py) validates the structure and implements the final action gate. It blocks prohibited or unauthorized actions, unsupported required claims and undeclared values. Passing produces `eligible_for_human_decision`, not a recommendation. The System view displays the model.
 
 Brutal limitation: only the action gate has runtime evaluation today. The ontology, data, epistemic, and axiological gates are validated as a coherent specification, but they are not yet applied to every existing claim, rule, case, or assessment record. The architecture can prevent a narrow class of dishonest action outputs; it cannot yet prove that all upstream knowledge is well-typed, sufficient, or ethically legitimate.
 

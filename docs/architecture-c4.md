@@ -1,8 +1,8 @@
 # Bitcoin Bridge Research — C4 Architecture
 
-This is a C4 (Context, Containers, Components, Code) description of the repository, written to be honest about what this system is and is not. It is a discipline document that is itself checked by tests, not a promotional architecture diagram.
+This C4 document describes the repository's context, containers, components and key code. Tests check its file references, code anchors, command list and inventory counts.
 
-## Honest framing
+## Scope
 
 This repository is **not a server-based software product**. There is no application API, database server, user authentication, persistent browser state, legal-data feed, or Bitcoin-node access. The static UI is deployable to GitHub Pages; all reasoning remains client-side or in the separately run CLI. Normal inference and browser use are offline except when the UI reader opens an external source link; the explicit `archive` and `verify-evidence --drift` operations make outbound HTTP requests. C4's "containers" are therefore the repository's actual *runnable and deployable artifacts* plus versioned files that function as its database. The web UI never calls the Python assessment, philosophy, or legal-eligibility engines, and nothing queries a Bitcoin node.
 
@@ -233,7 +233,7 @@ The following anchors are verified by `ArchitectureDocTests`: each `file:line` m
 - `src/legal_eligibility.py:55` — `evaluate_route()`: classifies only predefined routes and never treats absence of a matching prohibition as established permission.
 - `src/transitions.py:22` — `validate_case_study()`: checks case structure, source references, blockers and pathway vocabulary, but not source authenticity or legal correctness.
 
-## What this C4 hides (staying honest)
+## Limits not visible in the diagrams
 
 - **The "system" is mostly data, not code.** The knowledge files in `domain/` outsize the Python by far; validation treats the data as the authority.
 - **Empty and degenerate surfaces:** `evidence/claims/` is empty, the paper-company index in `publications/v0.1.0/PAPER_COMPANIES.json` marks most companies illustrative-only, and assessment evidence cases are synthetic. The Allianz Y3 transition study is project-authored, source-linked research—not a submitted institutional case, legal opinion, regulatory determination or investment recommendation.
