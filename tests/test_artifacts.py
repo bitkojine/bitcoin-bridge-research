@@ -33,6 +33,16 @@ def knowledge_payload() -> dict:
 
 
 class WebArtefactTests(unittest.TestCase):
+    def test_pages_workflow_deploys_only_static_dist_after_checks(self):
+        workflow = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
+        self.assertIn("pages: write", workflow)
+        self.assertIn("id-token: write", workflow)
+        self.assertIn("python -m src.cli validate", workflow)
+        self.assertIn("python -m unittest discover -s tests", workflow)
+        self.assertIn("path: dist", workflow)
+        self.assertIn("actions/deploy-pages@v4", workflow)
+        self.assertTrue((DIST / ".nojekyll").exists())
+
     def test_every_selector_in_app_js_exists_in_index_html(self):
         app = (DIST / "app.js").read_text(encoding="utf-8")
         index = (DIST / "index.html").read_text(encoding="utf-8")

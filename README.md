@@ -2,6 +2,10 @@
 
 An open, versioned research project about the interfaces between Bitcoin, traditional finance, and law. The repository stores a domain model, a small rule engine, a custody pre-review, generated research outputs, and a local browser interface.
 
+GitHub Pages URL: **https://bitkojine.github.io/bitcoin-bridge-research/** — Pages is configured to publish with GitHub Actions; the site becomes live after the committed `pages` workflow completes successfully.
+
+The `pages` GitHub Actions workflow validates the repository, regenerates the browser snapshot, refuses deployment if the committed snapshot differs, runs the full test suite, and then publishes only `dist/`. A successful workflow proves that those build checks passed and that GitHub accepted the deployment; it does not validate the legal or investment conclusions displayed by the site.
+
 ## Status
 
 This is an early prototype, not a decision system. “Expert system” describes the intended architecture, not the present level of knowledge or validation. Do not rely on its output for legal, fiduciary, audit, accounting, investment, custody, compliance, or cybersecurity decisions.

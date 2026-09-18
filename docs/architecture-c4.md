@@ -4,7 +4,7 @@ This is a C4 (Context, Containers, Components, Code) description of the reposito
 
 ## Honest framing
 
-This repository is **not a server-based software product**. There is no application API, database server, user authentication, persistent browser state, legal-data feed, or Bitcoin-node access. Normal inference and browser use are offline; the explicit `archive` and `verify-evidence --drift` operations make outbound HTTP requests. C4's "containers" are therefore the repository's actual *runnable and deployable artifacts* plus versioned files that function as its database. The web UI never calls the Python assessment, philosophy, or legal-eligibility engines, and nothing queries a Bitcoin node.
+This repository is **not a server-based software product**. There is no application API, database server, user authentication, persistent browser state, legal-data feed, or Bitcoin-node access. The static UI is deployable to GitHub Pages; all reasoning remains client-side or in the separately run CLI. Normal inference and browser use are offline except when the UI reader opens an external source link; the explicit `archive` and `verify-evidence --drift` operations make outbound HTTP requests. C4's "containers" are therefore the repository's actual *runnable and deployable artifacts* plus versioned files that function as its database. The web UI never calls the Python assessment, philosophy, or legal-eligibility engines, and nothing queries a Bitcoin node.
 
 ## Level 1 — System Context
 
@@ -21,13 +21,13 @@ flowchart LR
     Reader["Reader"] -->|opens static web UI| SYS
 
     SYS -->|archive or explicit drift check only| SOURCES[("Published sources on the internet")]
-    GitHub["GitHub"] -->|hosts repo, runs CI| SYS
+    GitHub["GitHub"] -->|hosts repo, runs CI and serves dist via Pages| SYS
     Node["Bitcoin network"] -. no connection .- SYS
 ```
 
 Honest notes:
 
-- Three roles are drawn, but the repository has no accounts, usage records, production deployment or evidence of adoption. The maintainer is the only demonstrated curator; analyst and reader are supported interaction modes, not established user populations. `evidence/claims/` is empty.
+- Three roles are drawn, but the repository has no accounts, usage records or evidence of adoption. GitHub Pages provides public static hosting after a successful deployment; it does not establish a user population. The maintainer is the only demonstrated curator; analyst and reader are supported interaction modes. `evidence/claims/` is empty.
 - The Bitcoin network is deliberately not a dependency; nothing verifies signatures, descriptors, transactions, UTXOs or chain state.
 - GitHub CI is an external integration. Source archiving and explicit drift checking are the only application operations designed to contact source websites; the static UI opens external links only when a reader chooses one.
 
@@ -72,6 +72,8 @@ flowchart LR
     WEB["Static web UI (browser)"]
     ART["Committed artifacts"]
     CI["CI pipeline"]
+    PAGES["GitHub Pages
+        public static hosting of dist only"]
 
     WEB -->|reads embedded data, generated at build time| ART
     CLI -->|validates, reads, generates| KB
@@ -82,6 +84,8 @@ flowchart LR
     KB --> BUILDER
     EV --> BUILDER
     CI -->|validate, regenerate, compare, test| KB & EV & ART
+    CI -->|upload dist after checks| PAGES
+    Reader["Browser reader"] -->|HTTPS GET| PAGES
 ```
 
 ### Containers listed
@@ -102,6 +106,8 @@ flowchart LR
 **Committed artifacts** — `dist/knowledge.js`, `generated/market-map.md` and `output/pdf/domain-map.pdf` are regenerated and compared by CI. The hand-written UI shell and JavaScript are tested for selector integrity, not generated. The synthetic cases in `examples/*.json` are regenerable. The older publication PDF under `publications/v0.1.0/` is a release artifact, not rebuilt by current CI.
 
 **CI pipeline** — `.github/workflows/ci.yml` validates knowledge files, rebuilds the three current generated artifacts, compares them for drift, runs the complete unit suite, then runs the C4 contract tests separately. CI does not fetch live legal sources, run `archive`, run `verify-evidence --drift`, deploy the UI, or obtain professional review.
+
+**Pages deployment** — `.github/workflows/pages.yml` runs on pushes to `main` and manual dispatch. It installs the project, validates knowledge, regenerates `dist/knowledge.js`, fails if that file differs, runs the full tests, uploads only `dist/`, and deploys through GitHub Pages using OIDC. Pages was enabled for `bitkojine/bitcoin-bridge-research` with GitHub Actions as its publishing source on 18 September 2026. The normal workflow token cannot enable Pages on a different repository where it is disabled. Until a commit containing the workflow is pushed and the workflow succeeds, the URL remains configured but not proven live. The project URL is `https://bitkojine.github.io/bitcoin-bridge-research/`.
 
 ## Level 3 — Components
 
@@ -236,7 +242,7 @@ The following anchors are verified by `ArchitectureDocTests`: each `file:line` m
 - **ELI-aligned is not ELI validation:** the legal JSON borrows a few ELI property names. It is not RDF/JSON-LD, has not been checked against the ELI ontology or validator, and does not ingest an ELI feed. Akoma Ntoso is listed as a possible future representation but is not installed or used.
 - **The philosophy is mostly a contract:** five stages and gates are modeled and validated, but only the final action gate has executable record evaluation. Existing claims, cases, rules and assessments have not been migrated through all five gates.
 - **Duplicated browser logic can drift:** the web assessment and eligibility checker are hand-written JavaScript approximations, not clients of the Python engines. Generated data freshness is enforced; full behavior equivalence is not.
-- **No established external consumers:** roles in the context diagram express supported use, not adoption. There are no accounts, analytics, saved sessions, submitted institutional evidence, expert sign-offs or production service-level claims.
+- **No established external consumers:** public hosting makes the UI reachable, not adopted. There are no accounts, analytics, saved sessions, submitted institutional evidence, expert sign-offs or production service-level claims.
 - **No persistence:** browser inputs live only in the DOM; closing or refreshing the tab loses them. There is no audit log of browser activity.
 - **No automatic legal or market surveillance:** CI is offline with respect to official sources. The system cannot warn that a law, fund document, company product, link or factual claim changed unless a maintainer explicitly runs a networked check and curates the result.
 - **No recommendation engine:** outcomes such as `prohibited`, `professional_interpretation_required` and `eligible_for_human_decision` are pre-screen labels. They do not establish suitability, fiduciary compliance, expected return, proportionality, or what Allianz should do.
