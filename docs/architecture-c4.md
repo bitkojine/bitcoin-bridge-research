@@ -77,13 +77,13 @@ flowchart LR
 
 ### Containers listed
 
-**Domain knowledge base** — versioned, filesystem-backed source of truth, the repository's "database". Files: `domain/model.json`, `domain/rules.json`, `domain/facts.json`, `domain/assessments/custody-readiness.json`. Every other container reads it; nothing writes it at runtime (only the maintainer edits it).
+**Domain knowledge base** — versioned, filesystem-backed source of truth, the repository's "database". Files: `domain/model.json`, `domain/rules.json`, `domain/facts.json`, `domain/philosophy.json`, `domain/legal/allianz-y3-eligibility.json`, `domain/assessments/custody-readiness.json`. Every other container reads it; nothing writes it at runtime (only the maintainer edits it).
 
 **Evidence archive** — committed source snapshots under `evidence/sources/`, described by `evidence/sources/manifest.json`. `archive` (the only networked command) fetches each source, stores the exact bytes at `evidence/sources/<id>/<sha256>.<ext>`, writes the extracted text beside them, and records the hash, size, retrieval time, and result. Sources that cannot be fetched are recorded as `unavailable` with the error — never silently dropped. `validate` and CI read the archive offline; `verify-evidence --drift` re-fetches to detect changed bytes. Only claim-cited sources must be frozen for `validate` to pass.
 
 **Research CLI** — the `src/` Python package. Everything except PDF generation runs on the Python standard library; `reportlab` is required only for `build-pdf`.
 
-- CLI subcommands: `validate`, `build`, `build-pdf`, `infer`, `assess`, `study`, `archive`, `verify-evidence`.
+- CLI subcommands: `validate`, `build`, `build-pdf`, `infer`, `assess`, `study`, `eligibility`, `archive`, `verify-evidence`.
 - The argparse choices come from the `COMMANDS` constant in `src/cli.py`.
 
 `build_web` and `build_example_cases` are invoked as `python -m` modules instead of CLI subcommands.
@@ -131,7 +131,7 @@ flowchart LR
 - `src/assessment.py` validates evidence cases, derives facts only from accepted, applicable, in-scope, non-expired evidence, and maps them onto assessment requirements.
 - `src/expert.py` runs deterministic open-world forward chaining ("missing facts remain unknown, never false") and produces proof traces.
 - `src/pdf.py` renders the domain model to a PDF; the PDF footer states the model version to prevent it reading like an independent report.
-- `src/build_web.py` serializes model + rules + assessment into `dist/knowledge.js`.
+- `src/build_web.py` serializes the model, rules, assessment, decision architecture and legal-eligibility model into `dist/knowledge.js`.
 - `src/build_example_cases.py` regenerates the explicitly synthetic evidence cases in `examples/*.json`.
 - `src/evidence.py` freezes what claims cite: it archives source bytes, records hashes and extracted text, and verifies offline that every claim-cited source is frozen and every pin-cite quote appears in the frozen text.
 
@@ -140,11 +140,11 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph WEB["dist/"]
-        idx["index.html - five views: Explore, Assess, Cases, Sources, System"]
+        idx["index.html - six views: Explore, Assess, Cases, Eligibility, Sources, System"]
         app["app.js
             renderCatalog, renderDetail, renderAssessment,
             source grid, system card"]
-        kb["knowledge.js - window.KNOWLEDGE = model + rules + assessment,
+        kb["knowledge.js - window.KNOWLEDGE = domain + legal models,
             embedded at build time"]
     end
     app -->|reads| kb
@@ -171,10 +171,10 @@ classDiagram
 
 The following anchors are verified by `ArchitectureDocTests`: each `file:line` must exist, and the named function must be defined at that line.
 
-- `src/cli.py:24` — `claim_status_matches_treatments()`: a `corroborated` status requires at least two distinct current supporting sources; `contested`, `retracted`, and `stale` must match the cited treatments and source currency.
-- `src/cli.py:77` — `validate()`: duplicate ids, reference integrity, evidence levels, per-source `checked_on` dates, source currency and `superseded_by`, claim treatments, frozen source snapshots, and pin-cite quotes.
-- `src/cli.py:181` — `build_markdown()`: the "Snapshot generated on" header, treatment locators, and the archived Sources appendix.
-- `src/cli.py:238` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
+- `src/cli.py:26` — `claim_status_matches_treatments()`: a `corroborated` status requires at least two distinct current supporting sources; `contested`, `retracted`, and `stale` must match the cited treatments and source currency.
+- `src/cli.py:79` — `validate()`: duplicate ids, reference integrity, evidence levels, per-source `checked_on` dates, source currency and `superseded_by`, claim treatments, frozen source snapshots, and pin-cite quotes.
+- `src/cli.py:183` — `build_markdown()`: the "Snapshot generated on" header, treatment locators, and the archived Sources appendix.
+- `src/cli.py:240` — `validate_versions()`: model, rules, assessment and fact-registry versions must agree.
 - `src/evidence.py:135` — `archive_source()`: fetches a source, stores it at `evidence/sources/<id>/<sha256>.<ext>`, and records hash, size, and extracted text.
 - `src/evidence.py:198` — `run_archive()`: archives every source, recording unavailable fetches instead of hiding them.
 - `src/evidence.py:245` — `verify_snapshots()`: every frozen file must hash-match its manifest entry, and every claim-cited source must be frozen.

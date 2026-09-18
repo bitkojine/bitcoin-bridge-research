@@ -645,6 +645,330 @@ window.KNOWLEDGE = {
       }
     ]
   },
+  "philosophy": {
+    "meta": {
+      "id": "decision-philosophy",
+      "title": "Ontology-to-action decision architecture",
+      "status": "project_method",
+      "purpose": "Make every recommendation traceable through what exists, what was observed, what is justified, what matters, and what action is permitted.",
+      "warning": "This is a project-authored reasoning method, not an externally validated philosophical theory or professional decision standard."
+    },
+    "stages": [
+      {
+        "id": "ontology",
+        "question": "What exists in the domain?",
+        "accepts": [
+          "entity_type",
+          "relation_type",
+          "constraint_type",
+          "jurisdiction",
+          "effective_period"
+        ],
+        "produces": [
+          "typed_concept",
+          "allowed_relation"
+        ],
+        "failure": "The system cannot tell whether two records refer to the same kind of thing or whether a relationship is meaningful."
+      },
+      {
+        "id": "data",
+        "question": "What was observed or recorded?",
+        "accepts": [
+          "document",
+          "ledger_event",
+          "filing",
+          "measurement",
+          "testimony",
+          "user_input"
+        ],
+        "produces": [
+          "observation"
+        ],
+        "failure": "A concept is mistaken for evidence, or an unlocated statement is treated as an observation."
+      },
+      {
+        "id": "epistemology",
+        "question": "What does the evidence justify us believing?",
+        "accepts": [
+          "observation",
+          "source",
+          "locator",
+          "treatment",
+          "scope",
+          "currency"
+        ],
+        "produces": [
+          "claim",
+          "confidence_state",
+          "counterevidence",
+          "unknown"
+        ],
+        "failure": "The system turns missing data into falsehood, inference into fact, or one source into certainty."
+      },
+      {
+        "id": "axiology",
+        "question": "What matters, to whom, and with what priority?",
+        "accepts": [
+          "value",
+          "stakeholder",
+          "objective",
+          "tradeoff",
+          "risk_tolerance"
+        ],
+        "produces": [
+          "explicit_priority",
+          "value_conflict",
+          "decision_criterion"
+        ],
+        "failure": "The system hides a political, fiduciary, financial or ethical preference inside apparently neutral analysis."
+      },
+      {
+        "id": "action",
+        "question": "What should be done, by whom, under which authority?",
+        "accepts": [
+          "supported_claim",
+          "decision_criterion",
+          "legal_state",
+          "actor_authority",
+          "consequence"
+        ],
+        "produces": [
+          "recommendation",
+          "research_task",
+          "blocked_action",
+          "decision_record"
+        ],
+        "failure": "The system recommends an unsupported, prohibited, unauthorised or value-incoherent action."
+      }
+    ],
+    "relations": [
+      {
+        "id": "instantiates",
+        "from": "observation",
+        "to": "typed_concept",
+        "meaning": "The record concerns a defined kind of thing."
+      },
+      {
+        "id": "supports",
+        "from": "observation",
+        "to": "claim",
+        "meaning": "The observation raises the justification for the claim within a stated scope."
+      },
+      {
+        "id": "contradicts",
+        "from": "observation",
+        "to": "claim",
+        "meaning": "The observation counts against the claim within a stated scope."
+      },
+      {
+        "id": "qualifies",
+        "from": "observation",
+        "to": "claim",
+        "meaning": "The observation narrows or conditions the claim."
+      },
+      {
+        "id": "serves",
+        "from": "action_option",
+        "to": "value",
+        "meaning": "The option advances an explicit value or objective."
+      },
+      {
+        "id": "harms",
+        "from": "action_option",
+        "to": "value",
+        "meaning": "The option creates a cost or conflict against an explicit value."
+      },
+      {
+        "id": "requires",
+        "from": "action_option",
+        "to": "claim",
+        "meaning": "The option is not justified unless the required claim reaches its required state."
+      },
+      {
+        "id": "constrained_by",
+        "from": "action_option",
+        "to": "constraint",
+        "meaning": "Law, authority, mandate, capability or risk limits the option."
+      }
+    ],
+    "gates": [
+      {
+        "id": "G-ONTOLOGY",
+        "stage": "ontology",
+        "passes_when": [
+          "every object has a registered type",
+          "every relation has compatible endpoints",
+          "jurisdiction and effective time are explicit when material"
+        ],
+        "on_failure": "reject_as_ill_typed"
+      },
+      {
+        "id": "G-DATA",
+        "stage": "data",
+        "passes_when": [
+          "every observation identifies its source or origin",
+          "documentary observations include a locator",
+          "observations are separated from interpretations"
+        ],
+        "on_failure": "retain_as_unverified_input"
+      },
+      {
+        "id": "G-EPISTEMIC",
+        "stage": "epistemology",
+        "passes_when": [
+          "every supported claim has evidence",
+          "supporting and contradicting treatments remain visible",
+          "unknown is distinct from false",
+          "scope and currency are recorded"
+        ],
+        "on_failure": "do_not_promote_to_supported_claim"
+      },
+      {
+        "id": "G-AXIOLOGY",
+        "stage": "axiology",
+        "passes_when": [
+          "affected stakeholders are named",
+          "objectives and priorities are explicit",
+          "material value conflicts are disclosed"
+        ],
+        "on_failure": "do_not_present_preference_as_neutral"
+      },
+      {
+        "id": "G-ACTION",
+        "stage": "action",
+        "passes_when": [
+          "required claims satisfy their minimum state",
+          "the actor has authority",
+          "the action is not legally prohibited",
+          "consequences and reversibility are recorded",
+          "the action serves at least one explicit value"
+        ],
+        "on_failure": "return_blocker_or_research_task"
+      }
+    ],
+    "minimum_action_record": [
+      "id",
+      "actor",
+      "action",
+      "requires_claims",
+      "serves_values",
+      "legal_state",
+      "authority_state",
+      "consequences",
+      "reversibility"
+    ],
+    "invariants": [
+      "No observation becomes a fact merely because it is stored.",
+      "No claim becomes supported without traceable evidence treatment.",
+      "No missing fact is silently converted to false.",
+      "No recommendation is value-free; its objectives must be named.",
+      "No legally prohibited option is rendered as an executable recommendation.",
+      "No actor may be assigned an action outside its recorded authority.",
+      "Every decision must preserve a why, why-not, and what-would-change-it explanation."
+    ]
+  },
+  "eligibility": {
+    "meta": {
+      "id": "allianz-y3-eligibility",
+      "title": "Allianz Y3 Bitcoin exposure eligibility",
+      "as_of": "2026-09-18",
+      "jurisdiction": "LT",
+      "purpose": "Pre-screen routes by matching official legal text to an instrument classification without pretending to replace legal interpretation.",
+      "not_advice": "Research pre-screen only. Recorded force and a text match do not establish complete legal applicability."
+    },
+    "standards": [
+      {
+        "id": "ELI",
+        "name": "European Legislation Identifier ontology",
+        "role": "Identifiers, jurisdiction, publication, force dates and relationships between legal resources",
+        "url": "https://eur-lex.europa.eu/eli-register/what_is_eli.html"
+      },
+      {
+        "id": "AKN",
+        "name": "OASIS LegalDocML Akoma Ntoso",
+        "role": "Optional future structured-document representation; not required by this checker",
+        "url": "https://github.com/oasis-open/legaldocml-akomantoso"
+      }
+    ],
+    "authorities": [
+      {
+        "id": "lt-pension-law",
+        "title": "Lithuanian Law on Pension Accumulation",
+        "publisher": "Register of Legal Acts of Lithuania",
+        "source_kind": "official_register",
+        "official_uri": "https://www.e-tar.lt/portal/lt/legalAct/TAR.DDA1BD559D9B",
+        "retrieved_expression": "https://www.e-tar.lt/rs/actualedition/TAR.DDA1BD559D9B/yQdnAHlyLa/format/ISO_PDF/",
+        "eli_mapping": {
+          "eli:jurisdiction": "LT",
+          "eli:id_local": "TAR.DDA1BD559D9B",
+          "eli:version_date": "2026-05-02"
+        }
+      }
+    ],
+    "provisions": [
+      {
+        "id": "lt-pension-45-3-crypto",
+        "authority_id": "lt-pension-law",
+        "citation": "Article 45(3)",
+        "text": "Pensijų turtas negali būti investuotas į tauriuosius metalus arba į suteikiančius į juos teises vertybinius popierius, kriptoturtą ir į suteikiančius į jį teises vertybinius popierius.",
+        "effect": "prohibits",
+        "targets": [
+          "crypto_asset",
+          "security_granting_rights_to_crypto_asset"
+        ],
+        "publication_state": "official_source_recorded",
+        "force": {
+          "first_date_in_force": "2026-05-02",
+          "date_no_longer_in_force": null,
+          "recorded_status": "in_force",
+          "checked_on": "2026-09-18"
+        },
+        "interpretation_limits": "The text directly covers crypto-assets and securities granting rights to them. It does not itself resolve every boundary involving ordinary company shares or diversified funds with incidental issuer-level Bitcoin exposure."
+      }
+    ],
+    "routes": [
+      {
+        "id": "direct-bitcoin",
+        "label": "Fund holds Bitcoin directly",
+        "instrument_class": "crypto_asset",
+        "classification_basis": "Lithuanian pension law imports MiCA Article 3(1)(5); official EU supervisory material identifies BTC as a crypto-asset.",
+        "classification_state": "established",
+        "desired_effect": "fund_level_bitcoin_exposure"
+      },
+      {
+        "id": "bitcoin-right-security",
+        "label": "Fund buys a security granting rights to Bitcoin",
+        "instrument_class": "security_granting_rights_to_crypto_asset",
+        "classification_basis": "The route is defined by the express second prohibited category in Article 45(3).",
+        "classification_state": "established",
+        "desired_effect": "fund_level_bitcoin_exposure"
+      },
+      {
+        "id": "ordinary-bitcoin-company-share",
+        "label": "Fund buys ordinary shares of a company that owns Bitcoin",
+        "instrument_class": "ordinary_equity_with_issuer_bitcoin_exposure",
+        "classification_basis": "The reviewed official material does not establish whether this is outside the crypto-right-security category or subject to another restriction or look-through rule.",
+        "classification_state": "interpretation_required",
+        "desired_effect": "indirect_economic_exposure"
+      },
+      {
+        "id": "diversified-fund-incidental-exposure",
+        "label": "Fund buys a diversified vehicle with incidental Bitcoin exposure",
+        "instrument_class": "collective_investment_with_incidental_crypto_exposure",
+        "classification_basis": "Instrument-specific rights, mandate and any look-through treatment have not been established.",
+        "classification_state": "interpretation_required",
+        "desired_effect": "indirect_economic_exposure"
+      },
+      {
+        "id": "participant-exit-then-personal-bitcoin",
+        "label": "Eligible participant exits, then buys Bitcoin personally",
+        "instrument_class": "personal_purchase_after_lawful_payout",
+        "classification_basis": "This is outside the fund after payment; personal eligibility, payout amount, tax and suitability are separate questions.",
+        "classification_state": "conditional",
+        "desired_effect": "personal_bitcoin_ownership"
+      }
+    ]
+  },
   "evidence": {
     "meta": {
       "generated_on": "2026-09-17",

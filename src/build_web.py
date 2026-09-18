@@ -12,6 +12,8 @@ def build() -> Path:
     assessment = json.loads(
         (ROOT / "domain/assessments/custody-readiness.json").read_text(encoding="utf-8")
     )
+    philosophy = json.loads((ROOT / "domain/philosophy.json").read_text(encoding="utf-8"))
+    eligibility = json.loads((ROOT / "domain/legal/allianz-y3-eligibility.json").read_text(encoding="utf-8"))
     manifest_path = ROOT / "evidence" / "sources" / "manifest.json"
     evidence = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {
         "meta": {},
@@ -22,7 +24,8 @@ def build() -> Path:
         for path in sorted((ROOT / "domain" / "cases").glob("*.json"))
     ]
     payload = {
-        "model": model, "rules": rules, "assessment": assessment,
+        "model": model, "rules": rules, "assessment": assessment, "philosophy": philosophy,
+        "eligibility": eligibility,
         "evidence": evidence, "case_studies": case_studies,
     }
     output = ROOT / "dist/knowledge.js"

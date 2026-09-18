@@ -15,8 +15,9 @@
       <button class="nav-item active" data-view="explore"><span>01</span> Explore</button>
       <button class="nav-item" data-view="assessment"><span>02</span> Assess</button>
       <button class="nav-item" data-view="cases"><span>03</span> Cases</button>
-      <button class="nav-item" data-view="sources"><span>04</span> Sources</button>
-      <button class="nav-item" data-view="system"><span>05</span> System</button>
+      <button class="nav-item" data-view="eligibility"><span>04</span> Eligibility</button>
+      <button class="nav-item" data-view="sources"><span>05</span> Sources</button>
+      <button class="nav-item" data-view="system"><span>06</span> System</button>
     </nav>
     <div class="scope-note"><strong>Research scope</strong><br>Bitcoin × finance × law<br><span id="version"></span></div>
   </aside>
@@ -63,8 +64,21 @@
       <div class="empty-state"><strong>News is not tracked yet.</strong><span>The repository has no dated news-ingestion or change-detection pipeline. This is a known gap, not an empty feed.</span></div>
     </section>
 
+    <section id="eligibility" class="view">
+      <div class="section-intro"><p class="eyebrow">LITHUANIAN PENSION PRE-SCREEN</p><h2>Which Bitcoin routes survive the legal text?</h2><p>This checker matches defined instrument classes to recorded provisions in force on the research date. It does not turn an unresolved classification into permission.</p></div>
+      <div class="eligibility-layout">
+        <div id="eligibility-routes" class="route-list"></div>
+        <article id="eligibility-detail" class="detail-panel" aria-live="polite"></article>
+      </div>
+    </section>
+
     <section id="system" class="view">
       <div class="section-intro"><p class="eyebrow">SYSTEM CARD</p><h2>What this system is—and is not</h2><p>A transparent kernel with a small knowledge base. The rules are inspectable; the knowledge is not yet professionally complete.</p></div>
+      <div class="philosophy-section">
+        <div><p class="eyebrow">REASONING ARCHITECTURE</p><h2>From reality to accountable action</h2><p class="detail-copy">Each stage has typed inputs, outputs, a quality gate, and an explicit failure state. Passing the chain makes an option eligible for human judgment; it never makes the decision automatically.</p></div>
+        <div id="philosophy-model" class="philosophy-model"></div>
+        <div id="philosophy-invariants" class="invariant-grid"></div>
+      </div>
       <div class="truth-grid">
         <article><span class="truth-label can">CAN</span><h3>Demonstrated now</h3><ul id="can-list"></ul></article>
         <article><span class="truth-label cannot">CANNOT</span><h3>Not established yet</h3><ul id="cannot-list"></ul></article>

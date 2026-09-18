@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "id": "allianz-y3-eligibility",
+    "title": "Allianz Y3 Bitcoin exposure eligibility",
+    "as_of": "2026-09-18",
+    "jurisdiction": "LT",
+    "purpose": "Pre-screen routes by matching official legal text to an instrument classification without pretending to replace legal interpretation.",
+    "not_advice": "Research pre-screen only. Recorded force and a text match do not establish complete legal applicability."
+  },
+  "standards": [
+    {
+      "id": "ELI",
+      "name": "European Legislation Identifier ontology",
+      "role": "Identifiers, jurisdiction, publication, force dates and relationships between legal resources",
+      "url": "https://eur-lex.europa.eu/eli-register/what_is_eli.html"
+    },
+    {
+      "id": "AKN",
+      "name": "OASIS LegalDocML Akoma Ntoso",
+      "role": "Optional future structured-document representation; not required by this checker",
+      "url": "https://github.com/oasis-open/legaldocml-akomantoso"
+    }
+  ],
+  "authorities": [
+    {
+      "id": "lt-pension-law",
+      "title": "Lithuanian Law on Pension Accumulation",
+      "publisher": "Register of Legal Acts of Lithuania",
+      "source_kind": "official_register",
+      "official_uri": "https://www.e-tar.lt/portal/lt/legalAct/TAR.DDA1BD559D9B",
+      "retrieved_expression": "https://www.e-tar.lt/rs/actualedition/TAR.DDA1BD559D9B/yQdnAHlyLa/format/ISO_PDF/",
+      "eli_mapping": {
+        "eli:jurisdiction": "LT",
+        "eli:id_local": "TAR.DDA1BD559D9B",
+        "eli:version_date": "2026-05-02"
+      }
+    }
+  ],
+  "provisions": [
+    {
+      "id": "lt-pension-45-3-crypto",
+      "authority_id": "lt-pension-law",
+      "citation": "Article 45(3)",
+      "text": "Pensijų turtas negali būti investuotas į tauriuosius metalus arba į suteikiančius į juos teises vertybinius popierius, kriptoturtą ir į suteikiančius į jį teises vertybinius popierius.",
+      "effect": "prohibits",
+      "targets": ["crypto_asset", "security_granting_rights_to_crypto_asset"],
+      "publication_state": "official_source_recorded",
+      "force": {
+        "first_date_in_force": "2026-05-02",
+        "date_no_longer_in_force": null,
+        "recorded_status": "in_force",
+        "checked_on": "2026-09-18"
+      },
+      "interpretation_limits": "The text directly covers crypto-assets and securities granting rights to them. It does not itself resolve every boundary involving ordinary company shares or diversified funds with incidental issuer-level Bitcoin exposure."
+    }
+  ],
+  "routes": [
+    {
+      "id": "direct-bitcoin",
+      "label": "Fund holds Bitcoin directly",
+      "instrument_class": "crypto_asset",
+      "classification_basis": "Lithuanian pension law imports MiCA Article 3(1)(5); official EU supervisory material identifies BTC as a crypto-asset.",
+      "classification_state": "established",
+      "desired_effect": "fund_level_bitcoin_exposure"
+    },
+    {
+      "id": "bitcoin-right-security",
+      "label": "Fund buys a security granting rights to Bitcoin",
+      "instrument_class": "security_granting_rights_to_crypto_asset",
+      "classification_basis": "The route is defined by the express second prohibited category in Article 45(3).",
+      "classification_state": "established",
+      "desired_effect": "fund_level_bitcoin_exposure"
+    },
+    {
+      "id": "ordinary-bitcoin-company-share",
+      "label": "Fund buys ordinary shares of a company that owns Bitcoin",
+      "instrument_class": "ordinary_equity_with_issuer_bitcoin_exposure",
+      "classification_basis": "The reviewed official material does not establish whether this is outside the crypto-right-security category or subject to another restriction or look-through rule.",
+      "classification_state": "interpretation_required",
+      "desired_effect": "indirect_economic_exposure"
+    },
+    {
+      "id": "diversified-fund-incidental-exposure",
+      "label": "Fund buys a diversified vehicle with incidental Bitcoin exposure",
+      "instrument_class": "collective_investment_with_incidental_crypto_exposure",
+      "classification_basis": "Instrument-specific rights, mandate and any look-through treatment have not been established.",
+      "classification_state": "interpretation_required",
+      "desired_effect": "indirect_economic_exposure"
+    },
+    {
+      "id": "participant-exit-then-personal-bitcoin",
+      "label": "Eligible participant exits, then buys Bitcoin personally",
+      "instrument_class": "personal_purchase_after_lawful_payout",
+      "classification_basis": "This is outside the fund after payment; personal eligibility, payout amount, tax and suitability are separate questions.",
+      "classification_state": "conditional",
+      "desired_effect": "personal_bitcoin_ownership"
+    }
+  ]
+}

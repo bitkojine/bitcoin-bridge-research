@@ -9,12 +9,14 @@ MODEL_PATH = ROOT / "domain" / "model.json"
 RULES_PATH = ROOT / "domain" / "rules.json"
 ASSESSMENT_PATH = ROOT / "domain" / "assessments" / "custody-readiness.json"
 FACTS_PATH = ROOT / "domain" / "facts.json"
+PHILOSOPHY_PATH = ROOT / "domain" / "philosophy.json"
+ELIGIBILITY_PATH = ROOT / "domain" / "legal" / "allianz-y3-eligibility.json"
 OUTPUT_PATH = ROOT / "generated" / "market-map.md"
 
 VALID_STATUSES = {"unverified", "supported", "corroborated", "contested", "stale", "retracted", "superseded"}
 TREATMENTS = {"supports", "qualifies", "contradicts"}
 SOURCE_CURRENCIES = {"current", "superseded", "withdrawn"}
-COMMANDS = ["validate", "build", "build-pdf", "infer", "assess", "study", "archive", "verify-evidence"]
+COMMANDS = ["validate", "build", "build-pdf", "infer", "assess", "study", "eligibility", "archive", "verify-evidence"]
 
 
 def load_model() -> dict:
@@ -274,6 +276,13 @@ def main() -> int:
 
     profile = load_profile(ASSESSMENT_PATH)
     errors += validate_profile(profile, source_ids, fact_names)
+    from src.philosophy import load_philosophy, validate_philosophy
+
+    errors += validate_philosophy(load_philosophy(PHILOSOPHY_PATH))
+    from src.legal_eligibility import load_eligibility, validate_eligibility
+
+    eligibility = load_eligibility(ELIGIBILITY_PATH)
+    errors += validate_eligibility(eligibility)
     errors += validate_versions(model, rules_doc, profile)
     if errors:
         for error in errors:
@@ -324,6 +333,12 @@ def main() -> int:
         if not path.suffix:
             path = ROOT / "domain" / "cases" / f"{case_id}.json"
         print(render_case_study(load_case(path)))
+        return 0
+    if args.command == "eligibility":
+        from src.legal_eligibility import evaluate_all, evaluate_route
+
+        result = evaluate_route(eligibility, args.input) if args.input else evaluate_all(eligibility)
+        print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
     if args.command == "build-pdf":
         from src.pdf import build_pdf

@@ -45,6 +45,16 @@ class WebArtefactTests(unittest.TestCase):
         fresh = build_web().read_text(encoding="utf-8")
         self.assertEqual((DIST / "knowledge.js").read_text(encoding="utf-8"), fresh)
 
+    def test_web_exposes_executable_philosophy_model(self):
+        payload = knowledge_payload()
+        self.assertEqual(
+            [stage["id"] for stage in payload["philosophy"]["stages"]],
+            ["ontology", "data", "epistemology", "axiology", "action"],
+        )
+        app = (DIST / "app.js").read_text(encoding="utf-8")
+        self.assertIn("philosophy.gates", app)
+        self.assertIn("philosophy.invariants", app)
+
     def test_market_map_is_fresh(self):
         current = (GENERATED / "market-map.md").read_text(encoding="utf-8")
         self.assertEqual(build_markdown(load_model()), current)

@@ -1,4 +1,4 @@
-const { model, rules, assessment, evidence, case_studies = [] } = window.KNOWLEDGE;
+const { model, rules, assessment, philosophy, eligibility, evidence, case_studies = [] } = window.KNOWLEDGE;
 const types = {
   bitcoin_capabilities: 'Bitcoin capability', finance_requirements: 'Finance requirement',
   legal_requirements: 'Legal requirement', bridges: 'Bridge', companies: 'Company', claims: 'Claim'
@@ -57,7 +57,7 @@ document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){
 
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('.nav-item,.view').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelector(`#${btn.dataset.view}`).classList.add('active');
-  document.querySelector('#page-title').textContent={explore:'Explore what the system knows',assessment:'Run an evidence-gap assessment',cases:'Study a real institutional transition',sources:'Inspect the evidence register',system:'Audit the system itself'}[btn.dataset.view];window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelector('#page-title').textContent={explore:'Explore what the system knows',assessment:'Run an evidence-gap assessment',cases:'Study a real institutional transition',eligibility:'Check pension-fund Bitcoin routes',sources:'Inspect the evidence register',system:'Audit the system itself'}[btn.dataset.view];window.scrollTo({top:0,behavior:'smooth'});
 }));
 
 function renderCases(){
@@ -79,6 +79,21 @@ function renderCases(){
   }).join('')||'<div class="empty-state"><strong>No cases yet.</strong><span>Add a validated case under domain/cases.</span></div>';
 }
 
+function routeStatus(route){
+  if(route.classification_state==='interpretation_required')return 'professional_interpretation_required';
+  if(route.classification_state==='conditional')return 'personal_route_subject_to_conditions';
+  const match=eligibility.provisions.find(p=>p.targets.includes(route.instrument_class)&&p.force.recorded_status==='in_force');
+  return match?.effect==='prohibits'?'prohibited':'permission_not_established';
+}
+function renderEligibility(selected=eligibility.routes[0]?.id){
+  const rows=eligibility.routes.map(route=>({...route,_status:routeStatus(route)}));
+  document.querySelector('#eligibility-routes').innerHTML=rows.map(route=>`<button class="route-card ${route.id===selected?'active':''}" data-route="${route.id}"><span class="status ${route._status}">${route._status.replaceAll('_',' ')}</span><strong>${route.label}</strong><small>${route.instrument_class}</small></button>`).join('');
+  const route=rows.find(item=>item.id===selected);
+  const matches=eligibility.provisions.filter(p=>p.targets.includes(route.instrument_class)&&p.force.recorded_status==='in_force');
+  document.querySelector('#eligibility-detail').innerHTML=`<p class="detail-kicker">AS OF ${eligibility.meta.as_of} · ${eligibility.meta.jurisdiction}</p><h2>${route.label}</h2><div class="outcome ${route._status==='prohibited'?'not-ready':''}"><span>PRE-SCREEN RESULT</span><b>${route._status.replaceAll('_',' ')}</b></div><h3>Instrument classification</h3><p>${route.instrument_class}</p><p>${route.classification_basis}</p><h3>Matched law</h3>${matches.map(p=>`<p><strong>${p.citation}</strong> · recorded in force from ${p.force.first_date_in_force}</p><blockquote class="pin-cite">${p.text}</blockquote><p><small>${p.interpretation_limits}</small></p>`).join('')||'<p>No direct provision match is asserted. That is not permission.</p>'}<h3>Authority</h3>${eligibility.authorities.map(a=>`<p><a href="${a.retrieved_expression}" target="_blank" rel="noreferrer">${a.publisher} ↗</a><br/><small>${a.official_uri} · ELI-aligned version date ${a.eli_mapping['eli:version_date']}</small></p>`).join('')}<p class="detail-copy"><strong>Limit:</strong> ${eligibility.meta.not_advice}</p>`;
+  document.querySelectorAll('[data-route]').forEach(button=>button.addEventListener('click',()=>renderEligibility(button.dataset.route)));
+}
+
 const form=document.querySelector('#assessment-form');
 form.innerHTML=assessment.requirements.map((r,i)=>`<div class="question" data-fact="${r.fact}" ${r.applies_when?`data-condition="${r.applies_when.fact}"`:''}><div class="question-top"><label>${String(i+1).padStart(2,'0')} · ${r.label}</label></div><p>${r.evidence_expected}</p><div class="choice"><input type="radio" id="${r.fact}-u" name="${r.fact}" value="unknown" checked><label for="${r.fact}-u">No record</label><input type="radio" id="${r.fact}-y" name="${r.fact}" value="true"><label for="${r.fact}-y">Claimed pass</label><input type="radio" id="${r.fact}-n" name="${r.fact}" value="false"><label for="${r.fact}-n">Claimed gap</label></div></div>`).join('')+`<div class="question"><label>Sub-custodian or custody technology provider used?</label><p>This controls whether third-party diligence is applicable.</p><div class="choice"><input type="radio" id="sub-u" name="subcustodian_used" value="unknown" checked><label for="sub-u">Unknown</label><input type="radio" id="sub-y" name="subcustodian_used" value="true"><label for="sub-y">Yes</label><input type="radio" id="sub-n" name="subcustodian_used" value="false"><label for="sub-n">No</label></div></div>`;
 form.addEventListener('change',renderAssessment);
@@ -97,5 +112,11 @@ document.querySelector('#source-grid').innerHTML=model.sources.sort((a,b)=>b.lev
 const can=['Represent the current domain as structured data','Search concepts, companies, claims and relationships','Trace claims and assessment requirements to sources','Run a deterministic custody-readiness pre-screen','Distinguish explicit gaps from missing information'];
 const cannot=['Authenticate the facts entered by a user','Determine legal ownership from key control','Give legal, compliance, tax or investment advice','Prove that every wallet, key copy or liability was disclosed','Track regulatory changes or news automatically','Claim expert-level coverage or professional validation'];
 document.querySelector('#can-list').innerHTML=can.map(x=>`<li>${x}</li>`).join('');document.querySelector('#cannot-list').innerHTML=cannot.map(x=>`<li>${x}</li>`).join('');
+const gatesByStage=Object.fromEntries(philosophy.gates.map(g=>[g.stage,g]));
+document.querySelector('#philosophy-model').innerHTML=philosophy.stages.map((stage,index)=>{
+  const gate=gatesByStage[stage.id];
+  return `<article class="philosophy-stage"><span class="stage-number">${String(index+1).padStart(2,'0')}</span><div><p class="detail-kicker">${stage.id}</p><h3>${stage.question}</h3><p><strong>Accepts:</strong> ${stage.accepts.join(', ')}</p><p><strong>Produces:</strong> ${stage.produces.join(', ')}</p><details><summary>${gate.id} · inspect gate</summary><p><strong>Passes when:</strong> ${gate.passes_when.join('; ')}.</p><p><strong>On failure:</strong> <code>${gate.on_failure}</code></p><p><strong>Failure prevented:</strong> ${stage.failure}</p></details></div></article>`;
+}).join('');
+document.querySelector('#philosophy-invariants').innerHTML=`<article><p class="eyebrow">NON-NEGOTIABLE INVARIANTS</p><ul>${philosophy.invariants.map(x=>`<li>${x}</li>`).join('')}</ul></article><article><p class="eyebrow">TYPED RELATIONS</p><p class="detail-copy">${philosophy.relations.map(x=>`<code>${x.from} ${x.id} ${x.to}</code>`).join(' · ')}</p></article>`;
 document.querySelector('#rule-list').innerHTML=rules.rules.map(r=>`<article><span class="rule-id">${r.id}</span><span class="rule-desc">${r.description}</span><span class="priority">Priority ${r.priority}</span></article>`).join('');
-renderCatalog();renderDetail(null);renderAssessment();renderCases();
+renderCatalog();renderDetail(null);renderAssessment();renderCases();renderEligibility();

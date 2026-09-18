@@ -39,6 +39,7 @@ The interface is more substantial than the knowledge base behind it.
 - Deterministic forward chaining with open-world semantics: missing is not false.
 - Proof traces, conflict reporting, and a basic explanation of unmet prerequisites.
 - A shared fact registry (`domain/facts.json`) that inference rules and the assessment must both use; validation fails on vocabulary drift.
+- A Lithuanian pension-route eligibility pre-screen (`domain/legal/allianz-y3-eligibility.json`) using ELI-aligned legal identity/version fields, official-register provenance, temporal force checks and closed outcomes that never equate “no prohibition matched” with permission.
 - An evidence-backed pre-review that passes its accepted, applicable facts into the inference rules and reports derived conclusions such as `custody_bridge_ready` and `legal_authority_gap`. A rule never fires on missing facts.
 - A custody pre-review that separates supported requirements, explicit gaps, missing facts, invalid values, and conditional sub-custodian requirements.
 - Evidence records that separate assertions, artifacts, issuers, provenance, jurisdiction and time scope, review activities, and reviewers.
@@ -71,6 +72,8 @@ The generated PDF is research output, not a certification, audit opinion, proof 
 
 The web UI is a static application in `dist/`. It has no server, database, accounts, API, persistence, semantic search, RAG, or LLM. It reads a generated snapshot; run `python3 -m src.build_web` after changing the domain files.
 
+The Eligibility view is deliberately narrow. It can match direct Bitcoin and a security granting Bitcoin rights to the recorded text of Article 45(3), and it preserves ordinary-company-share and diversified-fund routes as interpretation questions. Its `recorded_in_force` result means that curator-entered dates from an official source pass a temporal check; it is not independent authentication, a citator service, or a legal opinion. ELI supplies the vocabulary and official identifiers; the project does not claim that ELI decides applicability.
+
 Assessment selections are not saved. The UI cannot upload or inspect evidence, query a Bitcoin node, check signatures, or inspect transactions. Its questionnaire is explicitly an unverified learning sandbox; it does not run the evidence-backed Python assessment. The repository now freezes the sources its claims cite: `python3 -m src.cli archive` stores hash-addressed snapshots under `evidence/sources/`, and validation refuses to let a claim cite an unfrozen source or a quote that is absent from the frozen text. The `Snapshot generated on` date shown by the UI is the snapshot build point; the `checked_on` dates recorded on sources and the assessment are metadata, not evidence that every record was rechecked on that date.
 
 ## Research thesis
@@ -80,6 +83,10 @@ Bitcoin supplies narrow, machine-verifiable guarantees: signature validity, scri
 This framing assumes that moving traditionally governed capital onto Bitcoin is worth studying. It does not establish that such a move is desirable in a particular case.
 
 ## Ontology, epistemology, and axiology
+
+This is now an executable architecture, not only a statement of principles. [`domain/philosophy.json`](domain/philosophy.json) defines the ordered chain `ontology → data → epistemology → axiology → action`, its typed inputs and outputs, allowed relations, gates, failure states, and invariants. [`src/philosophy.py`](src/philosophy.py) validates that architecture and applies the final action gate: prohibited or unauthorized actions, unsupported required claims, and undeclared values are blocked. A passing result is only `eligible_for_human_decision`, never an automatic recommendation. The System view exposes the same generated model in the browser.
+
+Brutal limitation: only the action gate has runtime evaluation today. The ontology, data, epistemic, and axiological gates are validated as a coherent specification, but they are not yet applied to every existing claim, rule, case, or assessment record. The architecture can prevent a narrow class of dishonest action outputs; it cannot yet prove that all upstream knowledge is well-typed, sufficient, or ethically legitimate.
 
 These identify different failure modes:
 
@@ -216,7 +223,7 @@ Every future rule or assessment should answer:
 
 ## Domain model
 
-Structured research lives in [`domain/model.json`](domain/model.json). Rules are in [`domain/rules.json`](domain/rules.json); the current assessment is in [`domain/assessments/custody-readiness.json`](domain/assessments/custody-readiness.json).
+Structured research lives in [`domain/model.json`](domain/model.json). The decision architecture is in [`domain/philosophy.json`](domain/philosophy.json). Rules are in [`domain/rules.json`](domain/rules.json); the current assessment is in [`domain/assessments/custody-readiness.json`](domain/assessments/custody-readiness.json).
 
 ## Commands
 
@@ -241,6 +248,8 @@ python3 -m src.cli infer examples/institutional-custody.json
 python3 -m src.cli assess examples/custody-readiness-complete.json
 python3 -m src.cli assess examples/custody-readiness-gaps.json
 python3 -m src.cli study allianz-y3-bitcoin
+python3 -m src.cli eligibility
+python3 -m src.cli eligibility ordinary-bitcoin-company-share
 python3 -m src.build_example_cases
 python3 -m src.build_web
 python3 -m unittest discover -s tests
